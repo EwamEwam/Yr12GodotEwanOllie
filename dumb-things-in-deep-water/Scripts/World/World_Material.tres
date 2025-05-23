@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dlmex6cutmye0"]
+
+[ext_resource type="Shader" uid="uid://xvrcalxrf4db" path="res://Scripts/World/Filter.gdshader" id="1_75aba"]
+
+[resource]
+shader = ExtResource("1_75aba")
+shader_parameter/num_colors = 16.0
+shader_parameter/dither_strength = 1.0

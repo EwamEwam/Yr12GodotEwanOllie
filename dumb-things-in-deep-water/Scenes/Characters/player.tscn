@@ -1,0 +1,45 @@
+[gd_scene load_steps=6 format=3 uid="uid://c4wqxs7funv7h"]
+
+[ext_resource type="Script" uid="uid://dwx7hesu8s04w" path="res://Scripts/Characters/player.gd" id="1_3etf2"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j6hkg"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_3etf2"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_40svl"]
+radius = 0.798686
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_al8ar"]
+height = 0.5
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_3etf2")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_j6hkg")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_3etf2")
+
+[node name="Item_Detection" type="Area3D" parent="Mesh"]
+monitorable = false
+
+[node name="Collision_2" type="CollisionShape3D" parent="Mesh/Item_Detection"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, -0.878215)
+shape = SubResource("CapsuleShape3D_40svl")
+
+[node name="Camera_Pivot" type="Node3D" parent="."]
+
+[node name="Yaw" type="Node3D" parent="Camera_Pivot"]
+
+[node name="Pitch" type="Node3D" parent="Camera_Pivot/Yaw"]
+
+[node name="Camera_Spring" type="SpringArm3D" parent="Camera_Pivot/Yaw/Pitch"]
+collision_mask = 128
+
+[node name="Camera3D" type="Camera3D" parent="Camera_Pivot/Yaw/Pitch/Camera_Spring"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 8, 4.5)
+
+[node name="Ground_Check" type="ShapeCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.136434, 0)
+shape = SubResource("CylinderShape3D_al8ar")

@@ -1,0 +1,60 @@
+[gd_scene load_steps=8 format=3 uid="uid://dobik07wuoko6"]
+
+[ext_resource type="Material" uid="uid://dlmex6cutmye0" path="res://Scripts/World/World_Material.tres" id="1_i55uj"]
+[ext_resource type="Texture2D" uid="uid://blqfqlxdrwusi" path="res://Assets/Textures/Joesph_Mcfarland.jpg" id="2_obpuu"]
+[ext_resource type="PackedScene" uid="uid://c4wqxs7funv7h" path="res://Scenes/Characters/player.tscn" id="3_v40u7"]
+
+[sub_resource type="Environment" id="Environment_erj1f"]
+background_mode = 1
+background_color = Color(0.0558, 0.18693, 0.93, 1)
+background_energy_multiplier = 0.25
+ambient_light_energy = 0.55
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5t2hj"]
+albedo_texture = ExtResource("2_obpuu")
+
+[sub_resource type="BoxMesh" id="BoxMesh_puo1i"]
+material = SubResource("StandardMaterial3D_5t2hj")
+size = Vector3(25, 0.1, 25)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rtqk3"]
+size = Vector3(25, 0.25, 25)
+
+[node name="Test" type="Node"]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+offset_right = 640.0
+offset_bottom = 480.0
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(640, 480)
+render_target_update_mode = 4
+
+[node name="ColorRect" type="ColorRect" parent="SubViewportContainer/SubViewport"]
+material = ExtResource("1_i55uj")
+offset_right = 640.0
+offset_bottom = 480.0
+
+[node name="Environment" type="Node3D" parent="SubViewportContainer/SubViewport"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/Environment"]
+environment = SubResource("Environment_erj1f")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport/Environment"]
+transform = Transform3D(1, 0, 0, 0, 0.0196686, 0.999807, 0, -0.999807, 0.0196686, 0, 42.1927, 0)
+light_color = Color(0.6806, 0.70151, 0.82, 1)
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="SubViewportContainer/SubViewport"]
+collision_layer = 129
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Floor"]
+mesh = SubResource("BoxMesh_puo1i")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/Floor"]
+shape = SubResource("BoxShape3D_rtqk3")
+
+[node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_v40u7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, -2)
