@@ -50,12 +50,15 @@ func _physics_process(delta: float) -> void:
 	
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Playerstats.current_state == Playerstats.game_states.PLAYING:
-		yaw += -event.relative.x * Playerstats.sensitivity
-		pitch += -event.relative.y * Playerstats.sensitivity
+		yaw += -event.relative.x * Playerstats.sensitivity * Playerstats.screen_factor
+		pitch += -event.relative.y * Playerstats.sensitivity * Playerstats.screen_factor
 		pitch = clamp(pitch, -60,65)
 		
 	if event.is_action("Escape"):
 		get_tree().quit()
+		
+	if event.is_action("E"):
+		pass
 
 func set_speed() -> void:
 	if Input.is_action_pressed("Shift"):

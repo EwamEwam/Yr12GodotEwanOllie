@@ -16,12 +16,19 @@ config/features=PackedStringArray("4.4", "Forward Plus")
 [autoload]
 
 Playerstats="*res://Scripts/Characters/Playerstats.gd"
+ItemData="*res://Scripts/Other/ItemData.gd"
 
 [display]
 
 window/size/viewport_width=640
 window/size/viewport_height=480
+window/size/mode=2
 window/stretch/mode="viewport"
+
+[global_group]
+
+Player=""
+Prop=""
 
 [input]
 
@@ -87,8 +94,22 @@ Shift={
 
 [physics]
 
+common/physics_ticks_per_second=90
+common/max_physics_steps_per_frame=20
 3d/physics_engine="Jolt Physics"
+jolt_physics_3d/simulation/velocity_steps=16
+jolt_physics_3d/simulation/position_steps=16
+jolt_physics_3d/simulation/continuous_cd_movement_threshold=0.5
+jolt_physics_3d/simulation/continuous_cd_max_penetration=0.05
+jolt_physics_3d/limits/max_linear_velocity=60.0
+jolt_physics_3d/limits/max_angular_velocity=6.28319
+3d/default_gravity=14.0
+3d/solver/solver_iterations=64
+common/physics_interpolation=true
 
 [rendering]
 
 textures/canvas_textures/default_texture_filter=3
+textures/default_filters/use_nearest_mipmap_filter=true
+textures/decals/filter=4
+textures/light_projectors/filter=4
