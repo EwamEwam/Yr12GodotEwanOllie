@@ -19,7 +19,7 @@ material = SubResource("StandardMaterial3D_5t2hj")
 size = Vector3(25, 0.1, 25)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rtqk3"]
-size = Vector3(25, 0.1, 25)
+size = Vector3(25, 0.1, 24.9897)
 
 [node name="Test" type="Node"]
 
@@ -55,6 +55,7 @@ collision_layer = 129
 mesh = SubResource("BoxMesh_puo1i")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/Environment/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.00512695)
 shape = SubResource("BoxShape3D_rtqk3")
 
 [node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_rdphb")]
