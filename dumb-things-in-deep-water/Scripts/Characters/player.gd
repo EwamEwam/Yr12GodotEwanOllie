@@ -1,4 +1,4 @@
-extends CharacterBody3D
+extends CharacterBody2D
 #The main player's script, holds a lot of the game's and player's basic logic, kind of a mess though.
 var speed :float = 7.5
 var acceleration :float = 45.0
@@ -29,7 +29,7 @@ func _physics_process(delta: float) -> void:
 		var direction :Vector3 = (camera_offset * Vector3(current_direction_held.x, 0, current_direction_held.y)).normalized()
 		
 		if is_on_floor():
-			if not current_direction_held == Vector2.ZERO:
+			if not current_direction_held == Vector3.ZERO:
 				last_direction_facing.x = move_toward(last_direction_facing.x,direction.x, 6 * delta)
 				last_direction_facing.z = move_toward(last_direction_facing.z,direction.z, 6 * delta)
 			calculated_velocity.x = move_toward(calculated_velocity.x, speed * direction.x, acceleration * delta)

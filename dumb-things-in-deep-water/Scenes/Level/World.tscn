@@ -1,9 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://dobik07wuoko6"]
+[gd_scene load_steps=11 format=3 uid="uid://dobik07wuoko6"]
 
 [ext_resource type="Material" uid="uid://dlmex6cutmye0" path="res://Scripts/World/World_Material.tres" id="1_w7klp"]
 [ext_resource type="Texture2D" uid="uid://blqfqlxdrwusi" path="res://Assets/Textures/Joesph_Mcfarland.jpg" id="2_37drw"]
 [ext_resource type="PackedScene" uid="uid://c4wqxs7funv7h" path="res://Scenes/Characters/player.tscn" id="3_rdphb"]
 [ext_resource type="PackedScene" uid="uid://culqao60nt1mv" path="res://Scenes/Props/Placeholder(1).tscn" id="4_37drw"]
+[ext_resource type="PackedScene" uid="uid://cf07uc867n20i" path="res://Assets/Level_Models/templatething.glb" id="5_rdphb"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_rdphb"]
+vertices = PackedVector3Array(-12, -0.757901, -12, -12, -0.757901, 12, 12, -0.757901, 12, 12, -0.757901, -12)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
 
 [sub_resource type="Environment" id="Environment_erj1f"]
 background_mode = 1
@@ -38,26 +43,6 @@ material = ExtResource("1_w7klp")
 offset_right = 640.0
 offset_bottom = 480.0
 
-[node name="Environment" type="Node3D" parent="SubViewportContainer/SubViewport"]
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/Environment"]
-environment = SubResource("Environment_erj1f")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport/Environment"]
-transform = Transform3D(1, 0, 0, 0, 0.0196686, 0.999807, 0, -0.999807, 0.0196686, 0, 42.1927, 0)
-light_color = Color(0.6806, 0.70151, 0.82, 1)
-shadow_enabled = true
-
-[node name="Floor" type="StaticBody3D" parent="SubViewportContainer/SubViewport/Environment"]
-collision_layer = 129
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Environment/Floor"]
-mesh = SubResource("BoxMesh_puo1i")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/Environment/Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.00512695)
-shape = SubResource("BoxShape3D_rtqk3")
-
 [node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_rdphb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, -2)
 
@@ -65,3 +50,31 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, -2)
 
 [node name="Box_Prop" parent="SubViewportContainer/SubViewport/Props" instance=ExtResource("4_37drw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.64156, 4.11621, -0.974679)
+
+[node name="templatething" parent="." instance=ExtResource("5_rdphb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.78746, 1.05, -7.45604)
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2079, 0)
+navigation_mesh = SubResource("NavigationMesh_rdphb")
+
+[node name="Environment" type="Node3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.2079, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="NavigationRegion3D/Environment"]
+environment = SubResource("Environment_erj1f")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="NavigationRegion3D/Environment"]
+transform = Transform3D(1, 0, 0, 0, 0.0196686, 0.999807, 0, -0.999807, 0.0196686, 0, 42.1927, 0)
+light_color = Color(0.6806, 0.70151, 0.82, 1)
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="NavigationRegion3D/Environment"]
+collision_layer = 129
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Environment/Floor"]
+mesh = SubResource("BoxMesh_puo1i")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Environment/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.00512695)
+shape = SubResource("BoxShape3D_rtqk3")
