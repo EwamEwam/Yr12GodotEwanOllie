@@ -13,11 +13,20 @@ var yaw :float = 0.0
 var pitch :float = 0.0
 var last_direction_facing :Vector3 = Vector3.ZERO
 
+var camera_bob :Vector2 = Vector2.ZERO
+var head_bob_timer :float = 0.0
+
+enum movement_states {NORMAL,AIMING}
+var movement_state :movement_states = movement_states.NORMAL
+
 @onready var camera_yaw :Node3D = $Camera_Pivot/Yaw
 @onready var camera_pitch :Node3D = $Camera_Pivot/Yaw/Pitch
 @onready var pivot :Node3D = $Camera_Pivot
 @onready var camera_spring :SpringArm3D = $Camera_Pivot/Yaw/Pitch/Camera_Spring
 @onready var camera :Camera3D = $Camera_Pivot/Yaw/Pitch/Camera_Spring/Camera3D
+@onready var item_detection :Area3D = $Mesh/Item_Detection
+@onready var hand :Marker3D = $Mesh/Hand
+@onready var mesh :MeshInstance3D = $Mesh
 
 func _physics_process(delta: float) -> void:
 	set_speed()
@@ -42,11 +51,17 @@ func _physics_process(delta: float) -> void:
 			calculated_velocity.x = move_toward(calculated_velocity.x, (speed * direction.x)/3 + last_velocity_grounded.x/1.5, acceleration/2 * delta)
 			calculated_velocity.z = move_toward(calculated_velocity.z, (speed * direction.z)/3 + last_velocity_grounded.z/1.5, acceleration/2 * delta)
 		
+		if last_direction_facing != Vector3.ZERO and movement_state == movement_states.NORMAL:
+			$Mesh.basis = Basis.looking_at(last_direction_facing)
+		
 	if not is_on_floor():
 		calculated_velocity.y -= gravity * delta
 		
 	velocity = calculated_velocity
 	move_and_slide()
+	set_camera_bob(delta)
+	set_movement_mode()
+	Playerstats.object_detected = item_check()
 	
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Playerstats.current_state == Playerstats.game_states.PLAYING:
@@ -59,6 +74,39 @@ func _input(event: InputEvent) -> void:
 		
 	if event.is_action("E"):
 		pass
+		
+	if event.is_action("Left_Click"):
+		if Playerstats.object_detected != null:
+			if Playerstats.object_detected.get_parent().grabbable:
+				Playerstats.object_held = Playerstats.object_detected
+				Playerstats.object_detected.get_parent().hold()
+		
+	if event.is_action_pressed("Right_Click"):
+		if Playerstats.object_held != null:
+			Playerstats.object_held.get_parent().drop()
+
+func item_check() -> Object:
+	var closest_object :Object = null
+	if Playerstats.object_held == null:
+		var objects :Array[Node3D] = item_detection.get_overlapping_bodies()
+		var closest_distance :float = 50
+		for item in objects:
+			var distance :float = (item.global_position - global_position).length()
+			if distance < closest_distance:
+				closest_distance = distance
+				closest_object = item
+	else:
+		Playerstats.object_held.get_parent().hold()
+	return closest_object
+
+func set_camera_bob(delta :float) -> void:
+	if Playerstats.head_bobbing:
+		if is_on_floor():
+			head_bob_timer += delta * (velocity.length()/2 + 1.25)
+		else:
+			head_bob_timer += delta * 3
+		camera_bob.x = sin(head_bob_timer + PI/2)/12
+		camera_bob.y = abs(sin(head_bob_timer)) /12
 
 func set_speed() -> void:
 	if Input.is_action_pressed("Shift"):
@@ -68,7 +116,9 @@ func set_speed() -> void:
 
 func set_camera() -> Basis:
 	var camera_offset
-	if Playerstats.current_state == Playerstats.game_states.PLAYING:
+	if Playerstats.current_state == Playerstats.game_states.PLAYING and movement_state == movement_states.NORMAL:
+			camera.h_offset = camera_bob.x
+			camera.v_offset = camera_bob.y
 			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 			var screen_size : Vector2 = get_viewport().get_texture().get_size()
@@ -81,7 +131,25 @@ func set_camera() -> Basis:
 			camera_spring.spring_length = lerp(camera_spring.spring_length, abs(velocity.length())/7.5 + 6.5, 0.05)
 			camera_spring.spring_length = clamp(camera_spring.spring_length,2,8)
 			camera.fov = move_toward(camera.fov,80 + abs(velocity.length()/3), 1.5)
+	elif Playerstats.current_state == Playerstats.game_states.PLAYING:
+			speed /= 2
+			camera.h_offset = camera_bob.x/2
+			camera.v_offset = camera_bob.y/2
+			mesh.rotation.y = deg_to_rad(yaw)
+			last_direction_facing *= mesh.rotation
+			pivot.position.x = move_toward(pivot.position.x, 0.605 * cos(mesh.rotation.y), 0.1)
+			pivot.position.z = move_toward(pivot.position.z, -0.561 * sin(mesh.rotation.y), 0.1)
+			pivot.position.y = move_toward(pivot.position.y, 1.25 ,0.1)
+			camera_yaw.rotation_degrees.y = lerp(camera_yaw.rotation_degrees.y, yaw, camera_speed)
+			camera_pitch.rotation_degrees.x = lerp(camera_pitch.rotation_degrees.x, pitch, camera_speed)
+			camera_spring.spring_length = lerp(camera_spring.spring_length, 2.0, 0.075)
+			camera.fov = move_toward(camera.fov,80 + abs(velocity.length()/3), 1.5)
 			
 	camera_offset = camera_yaw.transform.basis
 	return camera_offset
 	
+func set_movement_mode():
+	if Input.is_action_pressed("Alt"):
+		movement_state = movement_states.AIMING
+	else:
+		movement_state = movement_states.NORMAL

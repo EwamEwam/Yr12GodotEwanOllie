@@ -49,7 +49,7 @@ light_color = Color(0.6806, 0.70151, 0.82, 1)
 shadow_enabled = true
 
 [node name="Floor" type="StaticBody3D" parent="SubViewportContainer/SubViewport/Environment"]
-collision_layer = 129
+collision_layer = 131
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Environment/Floor"]
 mesh = SubResource("BoxMesh_puo1i")

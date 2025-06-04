@@ -16,8 +16,14 @@ size = Vector3(1.025, 1.025, 1.025)
 
 [node name="Box_Prop" type="Marker3D" groups=["Prop"]]
 script = ExtResource("1_k831n")
+pick_up_position = Vector3(0, 0, -0.5)
+pick_up_rotation = Vector3(8, 2, 3)
 
 [node name="Body" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.576496)
+collision_layer = 3
+collision_mask = 2
+continuous_cd = true
 
 [node name="Model" type="MeshInstance3D" parent="Body"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
