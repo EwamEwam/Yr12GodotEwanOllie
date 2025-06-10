@@ -12,7 +12,7 @@ extends Marker3D
 var grabbable :bool = true
 var outline_shader :StandardMaterial3D
 
-func _ready():
+func _ready() -> void:
 	outline_shader = outline.material_overlay
 	pick_up_rotation = Vector3(deg_to_rad(pick_up_rotation.x),deg_to_rad(pick_up_rotation.y),deg_to_rad(pick_up_rotation.z))
 	set_props()
@@ -29,7 +29,7 @@ func _physics_process(_delta: float) -> void:
 		body.can_sleep = true
 		model.visible = false
 	
-func hold():
+func hold() -> void:
 	if Playerstats.object_held == body:
 		global_position = Playerstats.player.hand.global_position
 		Playerstats.object_mass = body.mass
@@ -40,7 +40,7 @@ func hold():
 		body.freeze = true
 		grabbable = false
 		
-func drop():
+func drop() -> void:
 	global_position = Playerstats.player.hand.global_position
 	Playerstats.object_ID = 0
 	grabbable = false
@@ -53,7 +53,20 @@ func drop():
 	grabbable = true
 	Playerstats.object_mass = 0.0
 	
-func set_props():
+func throw(power :float) -> void:
+	if Playerstats.object_held == body:
+		global_position = Playerstats.player.hand.global_position
+		Playerstats.object_ID = 0
+		grabbable = false
+		Playerstats.object_held = null
+		body.freeze = false
+		collision.disabled = false
+		body.apply_central_impulse(5 * Playerstats.strength * power * Vector3(-sin(Playerstats.player.camera_yaw.rotation.y) ,(Playerstats.player.pitch-2)/60, -cos(Playerstats.player.camera_yaw.rotation.y)))
+		body.angular_velocity = (0.25 + Playerstats.strength/35) * power * Vector3(1.5,1.5,1.5) / (2.2 + (body.mass/(5 * Playerstats.strength)))
+		await get_tree().create_timer(0.75).timeout
+		grabbable = true
+	
+func set_props() -> void:
 	var data :Dictionary = ItemData.itemdata[str(ID)]
 	body.mass = data["Mass"]
 	model.mesh = load(data["Model"])

@@ -58,7 +58,7 @@ shape = SubResource("CylinderShape3D_3etf2")
 mesh = SubResource("CapsuleMesh_3etf2")
 
 [node name="Hand" type="Marker3D" parent="Mesh"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.568604, 0.191685, -0.591492)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.615256, 0.191685, -0.714787)
 
 [node name="Sphere" type="MeshInstance3D" parent="Mesh/Hand"]
 material_overlay = SubResource("StandardMaterial3D_40svl")
