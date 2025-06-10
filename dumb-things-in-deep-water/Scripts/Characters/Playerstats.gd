@@ -5,7 +5,7 @@ enum camera_states {THIRD,FIRST}
 var current_state :game_states = game_states.PLAYING
 var current_camera :camera_states = camera_states.THIRD
 
-var sensitivity :float = 0.5
+var sensitivity :float = 0.4
 var screen_factor :float = 1.0
 
 var max_health :float = 25.0
@@ -22,12 +22,18 @@ var organised_inventory :Dictionary = {}
 
 var object_detected :Object = null
 var object_ID :int = 0
-var object_hold :Object = null
+var object_held :Object = null
+var object_mass :float = 0.0
+
+var time_played :int = 0
+
+var head_bobbing :bool = true
 
 @onready var player = get_tree().get_first_node_in_group("Player")
 
 func _process(_delta :float) -> void:
-	screen_factor = DisplayServer.window_get_size().length()/3016.118
+	#screen_factor = DisplayServer.window_get_size().length()
+	pass
 
 func organise_inventory():
 	organised_inventory = {}

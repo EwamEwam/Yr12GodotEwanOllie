@@ -177,7 +177,7 @@ shape = SubResource("BoxShape3D_rtqk3")
 script = ExtResource("6_va6n7")
 
 [node name="Floor" type="StaticBody3D" parent="SubViewportContainer/SubViewport/Environment"]
-collision_layer = 129
+collision_layer = 131
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Environment/Floor"]
 mesh = SubResource("BoxMesh_puo1i")

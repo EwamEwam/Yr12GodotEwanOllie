@@ -1,7 +1,7 @@
 extends Node
 
 #Prop types:
-#1: Basic Uninteractable Prop
+#1: Basic interactable Prop with not other purpose
 const itemdata :Dictionary = {
 	"0": {
 		"Name" = "Error",
@@ -19,6 +19,6 @@ const itemdata :Dictionary = {
 		"Outline" = "res://Assets/Props_Models_And_Collisions/1_Placeholder_Outline.tres",
 		"Mass" = 1,
 		"Type" = 1, 
-		"Tootip" = "A basic blue cube, whas a mass of exactly 1 kg to\nthe atomic level"
+		"Tootip" = "A basic blue cube, has a mass of exactly 1 kg to\nthe atomic level"
 	}
 }
