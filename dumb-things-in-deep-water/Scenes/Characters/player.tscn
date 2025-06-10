@@ -66,6 +66,7 @@ collision_mask = 128
 
 [node name="Camera3D" type="Camera3D" parent="Camera_Pivot/Yaw/Pitch/Camera_Spring"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 8, 4.5)
+current = true
 
 [node name="Ground_Check" type="ShapeCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.136434, 0)
