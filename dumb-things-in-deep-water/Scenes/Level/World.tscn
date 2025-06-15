@@ -1,10 +1,11 @@
-[gd_scene load_steps=22 format=4 uid="uid://dobik07wuoko6"]
+[gd_scene load_steps=23 format=4 uid="uid://dobik07wuoko6"]
 
 [ext_resource type="Material" uid="uid://dlmex6cutmye0" path="res://Scripts/World/World_Material.tres" id="1_w7klp"]
 [ext_resource type="Texture2D" uid="uid://blqfqlxdrwusi" path="res://Assets/Textures/Joesph_Mcfarland.jpg" id="2_37drw"]
 [ext_resource type="PackedScene" uid="uid://c4wqxs7funv7h" path="res://Scenes/Characters/player.tscn" id="3_rdphb"]
 [ext_resource type="PackedScene" uid="uid://culqao60nt1mv" path="res://Scenes/Props/Placeholder(1).tscn" id="4_37drw"]
-[ext_resource type="Script" uid="uid://bkmwodo6s0oum" path="res://Scenes/Level/World.gd" id="6_va6n7"]
+[ext_resource type="PackedScene" uid="uid://baocn3lc445ff" path="res://Scenes/Misc/hud.tscn" id="6_nbqfg"]
+[ext_resource type="Script" uid="uid://bkmwodo6s0oum" path="res://Scripts/World/World.gd" id="6_va6n7"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_rdphb"]
 vertices = PackedVector3Array(-12, -0.757901, -12, -12, -0.757901, 12, 12, -0.757901, 12, 12, -0.757901, -12)
@@ -140,7 +141,7 @@ shadow_mesh = SubResource("ArrayMesh_d51hi")
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_va6n7"]
 data = PackedVector3Array(-1, -1, -1, 1, -1, 1, 1, -1, -1, -1, -1, -1, -1, -1, 1, 1, -1, 1, 1, -1, -1, 1, 1, 1, 1, 1, -1, 1, -1, -1, 1, -1, 1, 1, 1, 1, -1, -1, 1, 1, 1, -1, 1, 1, 1, -1, -1, 1, -1, -1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, -1, -1)
 
-[node name="Test" type="Node"]
+[node name="Main" type="Node"]
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 offset_right = 640.0
@@ -214,9 +215,25 @@ shape = SubResource("ConcavePolygonShape3D_va6n7")
 
 [node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_rdphb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, -2)
-visible = true
 
 [node name="Props" type="Node3D" parent="SubViewportContainer/SubViewport"]
 
 [node name="Box_Prop" parent="SubViewportContainer/SubViewport/Props" instance=ExtResource("4_37drw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.64156, 4.11621, -0.974679)
+
+[node name="Box_Prop2" parent="SubViewportContainer/SubViewport/Props" instance=ExtResource("4_37drw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.64156, 4.11621, 0.585712)
+
+[node name="Box_Prop3" parent="SubViewportContainer/SubViewport/Props" instance=ExtResource("4_37drw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.64156, 4.11621, 2.20336)
+
+[node name="Box_Prop4" parent="SubViewportContainer/SubViewport/Props" instance=ExtResource("4_37drw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.64156, 5.39029, 1.25854)
+
+[node name="Box_Prop5" parent="SubViewportContainer/SubViewport/Props" instance=ExtResource("4_37drw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.64156, 5.46187, -0.273219)
+
+[node name="Box_Prop6" parent="SubViewportContainer/SubViewport/Props" instance=ExtResource("4_37drw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.64156, 6.99363, 0.528449)
+
+[node name="HUD" parent="." instance=ExtResource("6_nbqfg")]

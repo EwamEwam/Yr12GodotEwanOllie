@@ -19,7 +19,9 @@ var last_direction_facing :Vector3 = Vector3.ZERO
 var camera_bob :Vector2 = Vector2.ZERO
 var head_bob_timer :float = 0.0
 
-enum movement_states {NORMAL,AIMING}
+var throw_power :float = 1.0
+
+enum movement_states {NORMAL,AIMING,THROWING}
 var movement_state :movement_states = movement_states.NORMAL
 
 @onready var camera_yaw :Node3D = $Camera_Pivot/Yaw
@@ -30,12 +32,19 @@ var movement_state :movement_states = movement_states.NORMAL
 @onready var item_detection :Area3D = $Mesh/Item_Detection
 @onready var hand :Marker3D = $Mesh/Hand
 @onready var mesh :MeshInstance3D = $Mesh
+@onready var ground_check :ShapeCast3D = $Ground_Check
 
 #The physics process function which essentially runs every frame. Handles most of the player's essential logic
 func _physics_process(delta: float) -> void:
 	set_speed()
-	var current_direction_held :Vector2
 	
+	if ground_check.is_colliding():
+		var collider
+		collider = ground_check.get_collider(0)  
+		if collider is RigidBody3D:
+			collider.linear_velocity = Vector3.ZERO
+			
+	var current_direction_held :Vector2
 	if Playerstats.current_state == Playerstats.game_states.PLAYING and Playerstats.current_camera == Playerstats.camera_states.THIRD:
 		var camera_offset :Basis = set_camera()
 		current_direction_held = Input.get_vector("Left","Right","Up","Down").normalized()
@@ -68,7 +77,7 @@ func _physics_process(delta: float) -> void:
 	true_velocity = (global_position - position_last_frame) * 60
 	
 	set_camera_bob(delta)
-	set_movement_mode()
+	set_movement_mode(delta)
 	
 	Playerstats.object_detected = item_check()
 	
@@ -79,19 +88,18 @@ func _input(event: InputEvent) -> void:
 		pitch += -event.relative.y * Playerstats.sensitivity * Playerstats.screen_factor
 		pitch = clamp(pitch, -60,65)
 		
-	if event.is_action("Escape"):
+	if event.is_action_pressed("Escape"):
 		get_tree().quit()
 		
-	if event.is_action("E"):
+	if event.is_action_pressed("E"):
 		pass
 		
-	if event.is_action("Left_Click"):
+	if event.is_action_pressed("Left_Click"):
 		if Playerstats.object_detected != null:
 			if Playerstats.object_detected.get_parent().grabbable:
 				Playerstats.object_held = Playerstats.object_detected
 				Playerstats.object_detected.get_parent().hold()
-		elif Playerstats.object_held != null and movement_state == movement_states.AIMING:
-			Playerstats.object_held.get_parent().throw(5)
+				
 			 
 		
 	if event.is_action_pressed("Right_Click"):
@@ -113,7 +121,6 @@ func item_check() -> Object:
 		Playerstats.object_held.get_parent().hold()
 	return closest_object
 	
-
 func set_camera_bob(delta :float) -> void:
 	if Playerstats.head_bobbing:
 		if is_on_floor():
@@ -162,11 +169,27 @@ func set_camera() -> Basis:
 	camera_offset = camera_yaw.transform.basis
 	return camera_offset
 	
-func set_movement_mode() -> void:
+func set_movement_mode(delta :float) -> void:
 	if Input.is_action_pressed("Alt"):
-		movement_state = movement_states.AIMING
+		if Playerstats.object_held != null and Input.is_action_just_pressed("Left_Click"):
+			throw_process(delta)
+		elif throw_power > 1:
+			throw_process(delta)
+		else:
+			movement_state = movement_states.AIMING
 	else:
 		movement_state = movement_states.NORMAL
+
+func throw_process(delta :float) -> void:
+	if Input.is_action_pressed("Left_Click"):
+		movement_state = movement_states.THROWING
+		throw_power = clamp(throw_power + delta * 2,1,6)
+		print(throw_power)
+	elif throw_power > 1:
+		print("Throw")
+		Playerstats.object_held.get_parent().throw(throw_power)
+		movement_state = movement_states.AIMING
+		throw_power = 1
 
 func push_rigid_body() -> void:
 	var col := get_last_slide_collision()

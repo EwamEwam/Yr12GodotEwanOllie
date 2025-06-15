@@ -1,3 +1,21 @@
-[gd_scene format=3 uid="uid://baocn3lc445ff"]
+[gd_scene load_steps=3 format=3 uid="uid://baocn3lc445ff"]
+
+[ext_resource type="Script" uid="uid://noefglp8kk2" path="res://Scripts/Other/HUD.gd" id="1_7lq3g"]
+[ext_resource type="Texture2D" uid="uid://dedhoyvicgme3" path="res://Assets/Sprites/Reticule.png" id="1_8leah"]
 
 [node name="HUD" type="Node2D"]
+script = ExtResource("1_7lq3g")
+
+[node name="Throw_Bar" type="ProgressBar" parent="."]
+offset_left = 327.0
+offset_top = 227.0
+offset_right = 338.0
+offset_bottom = 254.0
+max_value = 7.0
+value = 2.0
+fill_mode = 3
+show_percentage = false
+
+[node name="Reticule" type="Sprite2D" parent="."]
+position = Vector2(320, 240)
+texture = ExtResource("1_8leah")

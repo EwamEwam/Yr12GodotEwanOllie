@@ -5,6 +5,7 @@
 [ext_resource type="ArrayMesh" uid="uid://bv6eohy1lbs1e" path="res://Assets/Props_Models_And_Collisions/1_Placeholder_Outline.tres" id="3_l3b44"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5sy10"]
+resource_local_to_scene = true
 blend_mode = 4
 shading_mode = 0
 albedo_color = Color(0, 0, 0, 1)
