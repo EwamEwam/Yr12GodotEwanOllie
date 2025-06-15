@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://4elvwkl063ne"]
+[gd_scene load_steps=6 format=3 uid="uid://4elvwkl063ne"]
 
 [ext_resource type="Script" uid="uid://0nmnl5dxtpwx" path="res://Scripts/Characters/enemy.gd" id="1_lsx3x"]
 
@@ -7,6 +7,9 @@ albedo_color = Color(1, 0.227451, 0, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_lsx3x"]
 material = SubResource("StandardMaterial3D_j51ow")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_lsx3x"]
+radius = 0.617265
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_b1c4r"]
 
@@ -17,8 +20,15 @@ script = ExtResource("1_lsx3x")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 mesh = SubResource("SphereMesh_lsx3x")
 
+[node name="Hitbox" type="Area3D" parent="MeshInstance3D"]
+
+[node name="Collision" type="CollisionShape3D" parent="MeshInstance3D/Hitbox"]
+shape = SubResource("SphereShape3D_lsx3x")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("SphereShape3D_b1c4r")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+
+[connection signal="body_entered" from="MeshInstance3D/Hitbox" to="." method="_on_hitbox_body_entered"]
