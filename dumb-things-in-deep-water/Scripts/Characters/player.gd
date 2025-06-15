@@ -77,9 +77,8 @@ func _physics_process(delta: float) -> void:
 	true_velocity = (global_position - position_last_frame) * 60
 	
 	set_camera_bob(delta)
-	set_movement_mode(delta)
-	
 	Playerstats.object_detected = item_check()
+	set_movement_mode(delta)
 	
 #The function that handles most input events
 func _input(event: InputEvent) -> void:
@@ -99,8 +98,6 @@ func _input(event: InputEvent) -> void:
 			if Playerstats.object_detected.get_parent().grabbable:
 				Playerstats.object_held = Playerstats.object_detected
 				Playerstats.object_detected.get_parent().hold()
-				
-			 
 		
 	if event.is_action_pressed("Right_Click"):
 		if Playerstats.object_held != null:
@@ -171,9 +168,9 @@ func set_camera() -> Basis:
 	
 func set_movement_mode(delta :float) -> void:
 	if Input.is_action_pressed("Alt"):
-		if Playerstats.object_held != null and Input.is_action_just_pressed("Left_Click"):
-			throw_process(delta)
-		elif throw_power > 1:
+		if Input.is_action_just_pressed("Left_Click") and Playerstats.object_held == null:
+			Input.action_release("Left_Click")
+		elif Playerstats.object_held != null:
 			throw_process(delta)
 		else:
 			movement_state = movement_states.AIMING
