@@ -25,6 +25,11 @@ var object_ID :int = 0
 var object_held :Object = null
 var object_mass :float = 0.0
 
+var head_hp :float = 25.0
+var torso_hp :float = 25.0
+var legs_hp :float = 25.0
+var arms_hp :float = 25.0
+
 var time_played :int = 0
 
 var head_bobbing :bool = true
@@ -33,7 +38,8 @@ var head_bobbing :bool = true
 
 func _process(_delta :float) -> void:
 	#screen_factor = DisplayServer.window_get_size().length()
-	pass
+	oxygen = clamp(oxygen,0,100)
+	health = clamp(health,0,max_health)
 
 func organise_inventory():
 	organised_inventory = {}

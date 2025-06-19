@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=4 uid="uid://dobik07wuoko6"]
+[gd_scene load_steps=24 format=4 uid="uid://dobik07wuoko6"]
 
 [ext_resource type="Material" uid="uid://dlmex6cutmye0" path="res://Scripts/World/World_Material.tres" id="1_w7klp"]
 [ext_resource type="Texture2D" uid="uid://blqfqlxdrwusi" path="res://Assets/Textures/Joesph_Mcfarland.jpg" id="2_37drw"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://culqao60nt1mv" path="res://Scenes/Props/Placeholder(1).tscn" id="4_37drw"]
 [ext_resource type="PackedScene" uid="uid://baocn3lc445ff" path="res://Scenes/Misc/hud.tscn" id="6_nbqfg"]
 [ext_resource type="Script" uid="uid://bkmwodo6s0oum" path="res://Scripts/World/World.gd" id="6_va6n7"]
+[ext_resource type="PackedScene" uid="uid://d2u8mjvg6i7lq" path="res://Scenes/Characters/number.tscn" id="7_va6n7"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_rdphb"]
 vertices = PackedVector3Array(-12, -0.757901, -12, -12, -0.757901, 12, 12, -0.757901, 12, 12, -0.757901, -12)
@@ -16,9 +17,6 @@ background_mode = 1
 background_color = Color(0.0558, 0.18693, 0.93, 1)
 background_energy_multiplier = 0.25
 ambient_light_energy = 0.55
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_rtqk3"]
-size = Vector3(25, 0.1, 24.9897)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5t2hj"]
 albedo_texture = ExtResource("2_37drw")
@@ -141,7 +139,11 @@ shadow_mesh = SubResource("ArrayMesh_d51hi")
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_va6n7"]
 data = PackedVector3Array(-1, -1, -1, 1, -1, 1, 1, -1, -1, -1, -1, -1, -1, -1, 1, 1, -1, 1, 1, -1, -1, 1, 1, 1, 1, 1, -1, 1, -1, -1, 1, -1, 1, 1, 1, 1, -1, -1, 1, 1, 1, -1, 1, 1, 1, -1, -1, 1, -1, -1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, -1, -1)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_nbqfg"]
+size = Vector3(172.287, 1, 143.43)
+
 [node name="Main" type="Node"]
+script = ExtResource("6_va6n7")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 offset_right = 640.0
@@ -171,11 +173,6 @@ environment = SubResource("Environment_erj1f")
 transform = Transform3D(1, 0, 0, 0, 0.0196686, 0.999807, 0, -0.999807, 0.0196686, 0, 42.1927, 0)
 light_color = Color(0.6806, 0.70151, 0.82, 1)
 shadow_enabled = true
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/Environment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.00512695)
-shape = SubResource("BoxShape3D_rtqk3")
-script = ExtResource("6_va6n7")
 
 [node name="Floor" type="StaticBody3D" parent="SubViewportContainer/SubViewport/Environment"]
 collision_layer = 131
@@ -213,6 +210,12 @@ skeleton = NodePath("")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.78746, 1.05, -7.45604)
 shape = SubResource("ConcavePolygonShape3D_va6n7")
 
+[node name="Death_Barrier" type="Area3D" parent="SubViewportContainer/SubViewport/Environment"]
+
+[node name="Collision" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/Environment/Death_Barrier"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -14.4592, 0)
+shape = SubResource("BoxShape3D_nbqfg")
+
 [node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_rdphb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, -2)
 
@@ -237,3 +240,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.64156, 5.46187, -0.273219)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.64156, 6.99363, 0.528449)
 
 [node name="HUD" parent="." instance=ExtResource("6_nbqfg")]
+
+[node name="Number" parent="." instance=ExtResource("7_va6n7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.15414, 5.07061, -3.25576)

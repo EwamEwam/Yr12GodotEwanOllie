@@ -37,9 +37,10 @@ var movement_state :movement_states = movement_states.NORMAL
 #The physics process function which essentially runs every frame. Handles most of the player's essential logic
 func _physics_process(delta: float) -> void:
 	set_speed()
-	
+	fall_damage_calculation()
+		
 	if ground_check.is_colliding():
-		var collider
+		var collider :Object
 		collider = ground_check.get_collider(0)  
 		if collider is RigidBody3D:
 			collider.linear_velocity = Vector3.ZERO
@@ -70,6 +71,9 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		calculated_velocity.y -= gravity * delta
 		
+	if Playerstats.current_state == Playerstats.game_states.PLAYING:
+		Playerstats.oxygen -= delta/2.5
+		
 	position_last_frame = global_position
 	velocity = calculated_velocity
 	push_rigid_body()
@@ -91,13 +95,33 @@ func _input(event: InputEvent) -> void:
 		get_tree().quit()
 		
 	if event.is_action_pressed("E"):
-		pass
+		if Playerstats.object_held != null and not movement_state == movement_states.THROWING:
+			Playerstats.inventory.append(Playerstats.object_ID)
+			Playerstats.inventory_mass += Playerstats.object_mass
+			Playerstats.object_held.get_parent().queue_free()
+			Playerstats.object_held = null
+			Playerstats.object_ID = 0
+			Playerstats.object_mass = 0
+			
+	if event.is_action_pressed("Q"):
+		if Playerstats.object_held == null and not movement_state == movement_states.THROWING and Playerstats.inventory.size() > 0:
+			var new_prop_ID: int = Playerstats.inventory.pop_front()
+			var prop :PackedScene = load(ItemData.itemdata[str(new_prop_ID)]["Path"])
+			var new_prop :Marker3D = prop.instantiate()
+			Playerstats.object_ID = new_prop_ID
+			Playerstats.object_mass = ItemData.itemdata[str(new_prop_ID)]["Mass"]
+			$"../Props".add_child(new_prop)
+			Playerstats.object_held = new_prop.body
+			item_check()
 		
 	if event.is_action_pressed("Left_Click"):
 		if Playerstats.object_detected != null:
 			if Playerstats.object_detected.get_parent().grabbable:
 				Playerstats.object_held = Playerstats.object_detected
 				Playerstats.object_detected.get_parent().hold()
+				Playerstats.object_ID = Playerstats.object_held.get_parent().ID
+				Playerstats.object_mass = Playerstats.object_held.mass
+				Input.action_release("Left_Click")
 		
 	if event.is_action_pressed("Right_Click"):
 		if Playerstats.object_held != null:
@@ -118,6 +142,7 @@ func item_check() -> Object:
 		Playerstats.object_held.get_parent().hold()
 	return closest_object
 	
+
 func set_camera_bob(delta :float) -> void:
 	if Playerstats.head_bobbing:
 		if is_on_floor():
@@ -168,9 +193,8 @@ func set_camera() -> Basis:
 	
 func set_movement_mode(delta :float) -> void:
 	if Input.is_action_pressed("Alt"):
-		if Input.is_action_just_pressed("Left_Click") and Playerstats.object_held == null:
-			Input.action_release("Left_Click")
-		elif Playerstats.object_held != null:
+		if Playerstats.object_held != null:
+			movement_state = movement_states.AIMING
 			throw_process(delta)
 		else:
 			movement_state = movement_states.AIMING
@@ -181,9 +205,7 @@ func throw_process(delta :float) -> void:
 	if Input.is_action_pressed("Left_Click"):
 		movement_state = movement_states.THROWING
 		throw_power = clamp(throw_power + delta * 2,1,6)
-		print(throw_power)
 	elif throw_power > 1:
-		print("Throw")
 		Playerstats.object_held.get_parent().throw(throw_power)
 		movement_state = movement_states.AIMING
 		throw_power = 1
@@ -357,3 +379,17 @@ func get_all_connected_bodies(start_body: RigidBody3D, max_bodies: int = 6) -> A
 					stack.append(collider)
 
 	return connected_bodies
+	
+func fall_damage_calculation() -> void:
+	if is_on_floor():
+		if calculated_velocity.y < -22:
+			change_in_health(calculated_velocity.y/10)
+
+func change_in_health(amt :float) -> void:
+	var previous_health :float = int(ceil(Playerstats.health))
+	Playerstats.health += amt
+	if previous_health - int(ceil(Playerstats.health)) > 0:
+		var number :PackedScene = load("res://Scenes/Characters/number.tscn")
+		var new_number :Label3D = number.instantiate()
+		new_number.create("Player_Damage",str(int(previous_health - int(ceil(Playerstats.health)))))
+		$"../Environment".add_child(new_number)
