@@ -34,7 +34,7 @@ mesh = SubResource("SphereMesh_lsx3x")
 [node name="Collision" type="CollisionShape3D" parent="Body/Hitbox"]
 shape = SubResource("SphereShape3D_lsx3x")
 
-[node name="Stick" type="MeshInstance3D" parent="Body"]
+[node name="Club" type="MeshInstance3D" parent="Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.562621, 0.366269, -0.364734)
 mesh = SubResource("CylinderMesh_b1c4r")
 skeleton = NodePath("../..")
@@ -44,5 +44,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("SphereShape3D_b1c4r")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+
+[node name="Timer" type="Timer" parent="."]
 
 [connection signal="body_entered" from="Body/Hitbox" to="." method="_on_hitbox_body_entered"]

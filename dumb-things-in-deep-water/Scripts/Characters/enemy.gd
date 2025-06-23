@@ -1,4 +1,5 @@
 extends CharacterBody3D
+var ATTACKING: bool = false
 
 @onready var nav_agent :NavigationAgent3D = $NavigationAgent3D
 
@@ -9,7 +10,6 @@ extends CharacterBody3D
 @export var MIN_DETECTION_DIST :float = 3.0
 
 func _smooth_look_at(target_pos: Vector3, delta: float) -> void:
-	
 	var to_target = target_pos - $Body.global_position
 	to_target.y = 0
 
@@ -34,14 +34,24 @@ func _physics_process(delta :float) -> void:
 		var direction = Vector3()
 		direction = (nav_agent.get_next_path_position() - global_position).normalized()
 		velocity = velocity.lerp(direction * SPEED, ACCEL * delta)
-		#$Body.look_at(global_position + velocity)
 		_smooth_look_at(global_position + velocity, delta)
+		
+		
+
 		
 	elif distance < MIN_DETECTION_DIST:
 		
 		velocity = velocity.lerp(Vector3.ZERO, delta*10)
-		#$Body.look_at(Playerstats.player.global_position)
 		_smooth_look_at(Playerstats.player.global_position, delta)
+	
+		if not ATTACKING:
+			ATTACKING = true
+			await get_tree().create_timer(5).timeout
+			attack()
+		
+		else:
+			ATTACKING = false
+			reset_club()
 	
 	else:
 		velocity = velocity.lerp(Vector3.ZERO, ACCEL*delta)
@@ -51,6 +61,14 @@ func _physics_process(delta :float) -> void:
 	
 func update_target_location(target_location :Vector3) -> void:
 	nav_agent.target_position = target_location
+
+func attack():
+	var club = $Body/Club
+	club.rotation_degrees.x = -90
+
+func reset_club():
+	var club = $Body/Club
+	club.rotation_degrees.x = 0
 
 func _on_hitbox_body_entered(body: Node3D) -> void:
 	if body.is_in_group("Player"):
