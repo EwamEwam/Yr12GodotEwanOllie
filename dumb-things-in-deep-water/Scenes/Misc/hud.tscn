@@ -1,12 +1,20 @@
-[gd_scene load_steps=9 format=3 uid="uid://baocn3lc445ff"]
+[gd_scene load_steps=17 format=3 uid="uid://baocn3lc445ff"]
 
 [ext_resource type="Script" uid="uid://noefglp8kk2" path="res://Scripts/Other/HUD.gd" id="1_7lq3g"]
 [ext_resource type="Texture2D" uid="uid://dedhoyvicgme3" path="res://Assets/Sprites/Reticule.png" id="1_8leah"]
+[ext_resource type="Texture2D" uid="uid://0fqahpo0q2i" path="res://Assets/Sprites/Health_bar_background.png" id="2_w21a7"]
 [ext_resource type="Texture2D" uid="uid://cup0857pjeubq" path="res://Assets/Sprites/Item_background.png" id="3_lwfba"]
+[ext_resource type="Texture2D" uid="uid://bmdhll1nok8w" path="res://Assets/Sprites/Health_bar.png" id="3_qlp7m"]
 [ext_resource type="Texture2D" uid="uid://bcam1w041vvds" path="res://Assets/Sprites/Text_Ender.png" id="3_wd7fq"]
+[ext_resource type="Texture2D" uid="uid://vrfcr0syms2" path="res://Assets/Sprites/Health_bar_end.png" id="4_5nnh0"]
 [ext_resource type="Texture2D" uid="uid://hmaa60jromha" path="res://Assets/Sprites/Item_Icons/1.png" id="4_8pbef"]
 [ext_resource type="Texture2D" uid="uid://8nfmrbsy38yi" path="res://Assets/Sprites/error.png" id="5_ifk6x"]
+[ext_resource type="LabelSettings" uid="uid://cab1wtwmy4in1" path="res://Scenes/Misc/Label_Settings.tres" id="6_aoah1"]
+[ext_resource type="Texture2D" uid="uid://c75wp5w1r4x07" path="res://Assets/Sprites/Body_part_head.png" id="6_irqgh"]
+[ext_resource type="Texture2D" uid="uid://ctmnup0l02mug" path="res://Assets/Sprites/Body_part_torso.png" id="7_aoah1"]
 [ext_resource type="FontFile" uid="uid://bxi0rnauxne1i" path="res://Assets/Sprites/Red_Numbers.png" id="7_ifk6x"]
+[ext_resource type="Texture2D" uid="uid://ciapgkj8scrqg" path="res://Assets/Sprites/Body_part_legs.png" id="8_egel0"]
+[ext_resource type="Texture2D" uid="uid://jl5x13gprn5n" path="res://Assets/Sprites/Body_part_arms.png" id="9_wouu6"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_w21a7"]
 animations = [{
@@ -28,7 +36,66 @@ animations = [{
 }]
 
 [node name="HUD" type="Node2D"]
+process_mode = 3
 script = ExtResource("1_7lq3g")
+
+[node name="Health_bar" type="Node2D" parent="."]
+position = Vector2(3, 0)
+
+[node name="Health_Bar_Background" type="TextureProgressBar" parent="Health_bar"]
+offset_left = 3.0
+offset_top = 405.0
+offset_right = 163.0
+offset_bottom = 429.0
+scale = Vector2(3, 3)
+max_value = 160.0
+value = 160.0
+texture_progress = ExtResource("2_w21a7")
+
+[node name="Health_Bar" type="TextureProgressBar" parent="Health_bar"]
+offset_left = 108.0
+offset_top = 447.0
+offset_right = 233.0
+offset_bottom = 452.0
+scale = Vector2(3, 3)
+max_value = 125.0
+value = 125.0
+texture_progress = ExtResource("3_qlp7m")
+
+[node name="HealthBarEnd" type="Sprite2D" parent="Health_bar"]
+position = Vector2(487.5, 456)
+scale = Vector2(3, 3)
+texture = ExtResource("4_5nnh0")
+
+[node name="Hp" type="Label" parent="Health_bar"]
+offset_left = 432.0
+offset_top = 447.0
+offset_right = 472.0
+offset_bottom = 456.0
+scale = Vector2(3, 3)
+theme_override_fonts/font = ExtResource("7_ifk6x")
+text = "125/125"
+label_settings = ExtResource("6_aoah1")
+
+[node name="BodyPartHead" type="Sprite2D" parent="Health_bar"]
+position = Vector2(37.5, 412.5)
+scale = Vector2(3, 3)
+texture = ExtResource("6_irqgh")
+
+[node name="BodyPartTorso" type="Sprite2D" parent="Health_bar"]
+position = Vector2(37.5, 438)
+scale = Vector2(3, 3)
+texture = ExtResource("7_aoah1")
+
+[node name="BodyPartLegs" type="Sprite2D" parent="Health_bar"]
+position = Vector2(37.5, 462)
+scale = Vector2(3, 3)
+texture = ExtResource("8_egel0")
+
+[node name="BodyPartArms" type="Sprite2D" parent="Health_bar"]
+position = Vector2(37.5, 432)
+scale = Vector2(3, 3)
+texture = ExtResource("9_wouu6")
 
 [node name="Throw_Bar" type="ProgressBar" parent="."]
 offset_left = 327.0
@@ -67,6 +134,7 @@ offset_top = -209.0
 offset_right = -10.0
 offset_bottom = -189.0
 text = "(0.5 Kg)"
+label_settings = ExtResource("6_aoah1")
 
 [node name="Holding" type="Label" parent="Item_Description"]
 offset_left = -265.0
@@ -75,6 +143,7 @@ offset_right = -264.0
 offset_bottom = -214.0
 scale = Vector2(1.5, 1.5)
 text = "Nothing"
+label_settings = ExtResource("6_aoah1")
 
 [node name="Object_Icons" type="AnimatedSprite2D" parent="Item_Description"]
 position = Vector2(-293, -213)
@@ -87,19 +156,40 @@ autoplay = "error"
 position = Vector2(320, 240)
 texture = ExtResource("1_8leah")
 
-[node name="Hp" type="Label" parent="."]
-offset_left = 154.0
-offset_top = 449.0
-offset_right = 194.0
-offset_bottom = 458.0
-scale = Vector2(3, 3)
-theme_override_fonts/font = ExtResource("7_ifk6x")
-text = "25/25"
-
 [node name="Oxygen" type="Label" parent="."]
-offset_left = 3.0
-offset_top = 422.0
-offset_right = 138.0
-offset_bottom = 442.0
+visible = false
+offset_left = 500.0
+offset_top = 383.0
+offset_right = 587.0
+offset_bottom = 403.0
 scale = Vector2(1.5, 1.5)
-text = "Oxygen: 100%"
+text = "O2: 100%"
+horizontal_alignment = 2
+
+[node name="FPS" type="Label" parent="."]
+offset_left = 555.0
+offset_top = 2.0
+offset_right = 634.0
+offset_bottom = 22.0
+text = "FPS 60"
+label_settings = ExtResource("6_aoah1")
+horizontal_alignment = 2
+
+[node name="Timer" type="Label" parent="."]
+offset_left = 490.0
+offset_top = 20.0
+offset_right = 585.0
+offset_bottom = 40.0
+scale = Vector2(1.5, 1.5)
+text = "00:00"
+label_settings = ExtResource("6_aoah1")
+horizontal_alignment = 2
+
+[node name="Timer2" type="Label" parent="."]
+offset_left = 640.0
+offset_top = 82.0
+offset_right = 1280.0
+offset_bottom = 102.0
+text = "Too Heavy to lift! (100Kg)"
+label_settings = ExtResource("6_aoah1")
+horizontal_alignment = 2

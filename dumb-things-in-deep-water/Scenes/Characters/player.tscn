@@ -46,8 +46,8 @@ _surfaces = [{
 }]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_40svl"]
-height = 0.6521
-radius = 0.599609
+height = 0.68982
+radius = 0.55
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_al8ar"]
 height = 0.5
@@ -89,17 +89,18 @@ mesh = SubResource("ArrayMesh_40svl")
 [node name="Body_Parts" type="Node3D" parent="Mesh"]
 
 [node name="Head" type="RigidBody3D" parent="Mesh/Body_Parts"]
-collision_layer = 0
+collision_layer = 128
 collision_mask = 16
 can_sleep = false
 lock_rotation = true
 freeze = true
 freeze_mode = 1
-custom_integrator = true
+continuous_cd = true
 contact_monitor = true
+max_contacts_reported = 25
 
 [node name="Collision_Shape" type="CollisionShape3D" parent="Mesh/Body_Parts/Head"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.776543, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.795403, 0)
 shape = SubResource("CylinderShape3D_40svl")
 
 [node name="Camera_Pivot" type="Node3D" parent="."]
@@ -117,3 +118,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 8, 4.5)
 [node name="Ground_Check" type="ShapeCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.136434, 0)
 shape = SubResource("CylinderShape3D_al8ar")
+
+[connection signal="body_entered" from="Mesh/Body_Parts/Head" to="." method="_on_head_body_entered"]

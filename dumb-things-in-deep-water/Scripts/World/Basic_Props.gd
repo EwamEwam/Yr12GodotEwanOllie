@@ -8,6 +8,7 @@ extends Marker3D
 @onready var outline :MeshInstance3D = $Body/Model/Outline
 @onready var collision :CollisionShape3D = $Body/Collision
 @onready var onscreen :VisibleOnScreenNotifier3D = $Body/Onscreen
+@onready var timer :Timer = $Damage_Timer
 
 var grabbable :bool = true
 var outline_shader :StandardMaterial3D
@@ -49,12 +50,13 @@ func drop() -> void:
 	collision.disabled = false
 	body.linear_velocity = Playerstats.player.velocity/(1 + body.mass/(15 * Playerstats.strength))
 	body.angular_velocity = Playerstats.player.velocity / (3 + (body.mass/(4 * Playerstats.strength)))
+	Playerstats.object_mass = 0.0
 	await get_tree().create_timer(0.75).timeout
 	grabbable = true
-	Playerstats.object_mass = 0.0
 	
 func throw(power :float) -> void:
 	if Playerstats.object_held == body:
+		Playerstats.object_mass = 0.0
 		global_position = Playerstats.player.hand.global_position
 		Playerstats.object_ID = 0
 		grabbable = false

@@ -17,5 +17,5 @@ func create(type :String, amt :String) -> void:
 		"Player_Damage":
 			font = load("res://Assets/Sprites/Red_Numbers.png")
 			text = str(amt)
-		
+			
 	number_type = type

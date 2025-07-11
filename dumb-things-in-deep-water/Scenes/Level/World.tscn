@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=4 uid="uid://dobik07wuoko6"]
+[gd_scene load_steps=23 format=4 uid="uid://dobik07wuoko6"]
 
 [ext_resource type="Material" uid="uid://dlmex6cutmye0" path="res://Scripts/World/World_Material.tres" id="1_w7klp"]
 [ext_resource type="Texture2D" uid="uid://blqfqlxdrwusi" path="res://Assets/Textures/Joesph_Mcfarland.jpg" id="2_37drw"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://culqao60nt1mv" path="res://Scenes/Props/Placeholder(1).tscn" id="4_37drw"]
 [ext_resource type="PackedScene" uid="uid://baocn3lc445ff" path="res://Scenes/Misc/hud.tscn" id="6_nbqfg"]
 [ext_resource type="Script" uid="uid://bkmwodo6s0oum" path="res://Scripts/World/World.gd" id="6_va6n7"]
-[ext_resource type="PackedScene" uid="uid://d2u8mjvg6i7lq" path="res://Scenes/Characters/number.tscn" id="7_va6n7"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_rdphb"]
 vertices = PackedVector3Array(-12, -0.757901, -12, -12, -0.757901, 12, 12, -0.757901, 12, 12, -0.757901, -12)
@@ -146,6 +145,7 @@ size = Vector3(172.287, 1, 143.43)
 script = ExtResource("6_va6n7")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+z_index = -2
 offset_right = 640.0
 offset_bottom = 480.0
 stretch = true
@@ -237,9 +237,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.64156, 5.39029, 1.25854)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.64156, 5.46187, -0.273219)
 
 [node name="Box_Prop6" parent="SubViewportContainer/SubViewport/Props" instance=ExtResource("4_37drw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.64156, 6.99363, 0.528449)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.04051, 28.7899, -1.35564)
 
 [node name="HUD" parent="." instance=ExtResource("6_nbqfg")]
 
-[node name="Number" parent="." instance=ExtResource("7_va6n7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.15414, 5.07061, -3.25576)
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+ignore_time_scale = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

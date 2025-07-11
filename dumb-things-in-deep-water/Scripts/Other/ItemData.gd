@@ -17,7 +17,7 @@ const itemdata :Dictionary = {
 		"Path" = "res://Scenes/Props/Placeholder(1).tscn",
 		"Model" = "res://Assets/Props_Models_And_Collisions/1_Placeholder_Model.tres",
 		"Outline" = "res://Assets/Props_Models_And_Collisions/1_Placeholder_Outline.tres",
-		"Mass" = 1,
+		"Mass" = 5,
 		"Type" = 1, 
 		"Tootip" = "A basic blue cube, has a mass of exactly 1 kg to\nthe atomic level"
 	}

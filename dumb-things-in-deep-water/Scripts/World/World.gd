@@ -12,3 +12,6 @@ func check_below_map() -> void:
 		if object.is_in_group("Prop"):
 			object.get_parent().global_position = Vector3(0,100,0)
 			object.position = Vector3.ZERO
+
+func _on_timer_timeout() -> void:
+	$HUD.format_time()

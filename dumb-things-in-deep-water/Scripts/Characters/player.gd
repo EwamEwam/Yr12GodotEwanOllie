@@ -77,8 +77,9 @@ func _physics_process(delta: float) -> void:
 	position_last_frame = global_position
 	velocity = calculated_velocity
 	push_rigid_body()
+	#check_velocity()
 	move_and_slide()
-	true_velocity = (global_position - position_last_frame) * 60
+	true_velocity = (global_position - position_last_frame) * 90
 	
 	set_camera_bob(delta)
 	Playerstats.object_detected = item_check()
@@ -96,12 +97,15 @@ func _input(event: InputEvent) -> void:
 		
 	if event.is_action_pressed("E"):
 		if Playerstats.object_held != null and not movement_state == movement_states.THROWING:
-			Playerstats.inventory.append(Playerstats.object_ID)
-			Playerstats.inventory_mass += Playerstats.object_mass
-			Playerstats.object_held.get_parent().queue_free()
-			Playerstats.object_held = null
-			Playerstats.object_ID = 0
-			Playerstats.object_mass = 0
+			if Playerstats.inventory_mass + Playerstats.object_mass <= Playerstats.max_inventory:
+				Playerstats.inventory.append(Playerstats.object_ID)
+				Playerstats.inventory_mass += Playerstats.object_mass
+				Playerstats.object_held.get_parent().queue_free()
+				Playerstats.object_held = null
+				Playerstats.object_ID = 0
+				Playerstats.object_mass = 0
+			else:
+				$"../../../HUD".alert("Too heavy for inventory!")
 			
 	if event.is_action_pressed("Q"):
 		if Playerstats.object_held == null and not movement_state == movement_states.THROWING and Playerstats.inventory.size() > 0:
@@ -112,19 +116,23 @@ func _input(event: InputEvent) -> void:
 			Playerstats.object_mass = ItemData.itemdata[str(new_prop_ID)]["Mass"]
 			$"../Props".add_child(new_prop)
 			Playerstats.object_held = new_prop.body
+			Playerstats.inventory_mass -= Playerstats.object_mass
 			item_check()
 		
 	if event.is_action_pressed("Left_Click"):
 		if Playerstats.object_detected != null:
 			if Playerstats.object_detected.get_parent().grabbable:
-				Playerstats.object_held = Playerstats.object_detected
-				Playerstats.object_detected.get_parent().hold()
-				Playerstats.object_ID = Playerstats.object_held.get_parent().ID
-				Playerstats.object_mass = Playerstats.object_held.mass
-				Input.action_release("Left_Click")
+				if Playerstats.object_detected.mass <= Playerstats.max_carry_weight:
+					Playerstats.object_held = Playerstats.object_detected
+					Playerstats.object_detected.get_parent().hold()
+					Playerstats.object_ID = Playerstats.object_held.get_parent().ID
+					Playerstats.object_mass = Playerstats.object_held.mass
+					Input.action_release("Left_Click")
+				else:
+					$"../../../HUD".alert("Too heavy to lift! (" + str(Playerstats.object_detected.mass) +" kg)")
 		
 	if event.is_action_pressed("Right_Click"):
-		if Playerstats.object_held != null:
+		if Playerstats.object_held != null and movement_state != movement_states.THROWING:
 			Playerstats.object_held.get_parent().drop()
 
 #runs every frame, checks the objects in the player's grab range 
@@ -141,12 +149,11 @@ func item_check() -> Object:
 	else:
 		Playerstats.object_held.get_parent().hold()
 	return closest_object
-	
 
 func set_camera_bob(delta :float) -> void:
 	if Playerstats.head_bobbing:
 		if is_on_floor():
-			head_bob_timer += delta * (velocity.length()/2 + 1.25)
+			head_bob_timer += delta * (velocity.length()/1.8 + 1.4)
 		else:
 			head_bob_timer += delta * 3
 		camera_bob.x = sin(head_bob_timer + PI/2)/12
@@ -157,6 +164,8 @@ func set_speed() -> void:
 		speed = 11
 	else:
 		speed = 7.5
+	speed /= (1 + (Playerstats.object_mass/(15 * Playerstats.strength)))
+	speed *= ((Playerstats.legs_hp/Playerstats.max_health)/1.25 + 0.2)
 
 func set_camera() -> Basis:
 	var camera_offset
@@ -174,7 +183,7 @@ func set_camera() -> Basis:
 			pivot.position.y = move_toward(pivot.position.y, 3 - (pitch + 45)/45 ,0.1)
 			camera_spring.spring_length = lerp(camera_spring.spring_length, abs(velocity.length())/7.5 + 6.5, 0.05)
 			camera_spring.spring_length = clamp(camera_spring.spring_length,2,8)
-			camera.fov = move_toward(camera.fov,80 + abs(velocity.length()/3), 1.5)
+			camera.fov = move_toward(camera.fov,80 + abs(velocity.length()/2.5), 1.5)
 	elif Playerstats.current_state == Playerstats.game_states.PLAYING:
 			speed /= 2
 			camera.h_offset = camera_bob.x/2
@@ -198,14 +207,16 @@ func set_movement_mode(delta :float) -> void:
 			throw_process(delta)
 		else:
 			movement_state = movement_states.AIMING
+			throw_power = 1
 	else:
 		movement_state = movement_states.NORMAL
+		throw_power = 1
 
 func throw_process(delta :float) -> void:
 	if Input.is_action_pressed("Left_Click"):
 		movement_state = movement_states.THROWING
-		throw_power = clamp(throw_power + delta * 2,1,6)
-	elif throw_power > 1:
+		throw_power = clamp(throw_power + delta * 5,1,6)
+	elif throw_power > 1 and Input.is_action_pressed("Alt"):
 		Playerstats.object_held.get_parent().throw(throw_power)
 		movement_state = movement_states.AIMING
 		throw_power = 1
@@ -383,13 +394,50 @@ func get_all_connected_bodies(start_body: RigidBody3D, max_bodies: int = 6) -> A
 func fall_damage_calculation() -> void:
 	if is_on_floor():
 		if calculated_velocity.y < -22:
-			change_in_health(calculated_velocity.y/10)
+			change_in_health(calculated_velocity.y/8)
+			Playerstats.legs_hp -= abs(calculated_velocity.y/8)
+			$"../../../HUD".shake_part("Legs")
 
 func change_in_health(amt :float) -> void:
 	var previous_health :float = int(ceil(Playerstats.health))
 	Playerstats.health += amt
+	$"../../../HUD".health_bar_animation(previous_health)
 	if previous_health - int(ceil(Playerstats.health)) > 0:
 		var number :PackedScene = load("res://Scenes/Characters/number.tscn")
 		var new_number :Label3D = number.instantiate()
 		new_number.create("Player_Damage",str(int(previous_health - int(ceil(Playerstats.health)))))
 		$"../Environment".add_child(new_number)
+
+func check_velocity() -> void:
+	if abs(calculated_velocity.z - true_velocity.z) > 4:
+		velocity.z = true_velocity.z
+	if abs(calculated_velocity.x - true_velocity.x) > 4:
+		velocity.x = true_velocity.x
+	if abs(calculated_velocity.y - true_velocity.y) > 20:
+		velocity.y = true_velocity.y
+
+func _on_head_body_entered(body: Node) -> void:
+	if body.is_in_group("Prop") and abs(body.linear_velocity.length()) > 3 and body.get_parent().grabbable:
+		damage_based_on_prop(body,8,2,6,"Head")
+		
+func damage_based_on_prop(body :Node, i1 :float, i2 :float, i3 :float, Body_part :String) -> void:
+	var distance_next_tick = ((body.linear_velocity/Engine.get_frames_per_second() + body.global_position) - global_position).length()
+	var current_distance = (body.global_position - global_position).length()
+	if distance_next_tick < current_distance - 0.025:
+		if body.get_parent().timer.is_stopped():
+			change_in_health(-body.linear_velocity.length()/i1 * body.mass/i2)
+			damage_body_part(str(Body_part), body.linear_velocity.length()/8 * i3 * body.mass/2)
+		body.get_parent().timer.start()
+
+func damage_body_part(body_part :String, val: float) -> void:
+	if not Playerstats.invincibility:
+		match body_part:
+			"Head":
+				Playerstats.head_hp -= val
+			"Legs":
+				Playerstats.legs_hp -= val
+			"Torso":
+				Playerstats.torso_hp -= val
+			"Arms":
+				Playerstats.arms_hp -= val
+	$"../../../HUD".shake_part(str(body_part))
