@@ -1,23 +1,25 @@
-[gd_scene load_steps=22 format=4 uid="uid://dobik07wuoko6"]
+[gd_scene load_steps=23 format=4 uid="uid://dobik07wuoko6"]
 
 [ext_resource type="Material" uid="uid://dlmex6cutmye0" path="res://Scripts/World/World_Material.tres" id="1_w7klp"]
 [ext_resource type="Texture2D" uid="uid://blqfqlxdrwusi" path="res://Assets/Textures/Joesph_Mcfarland.jpg" id="2_37drw"]
+[ext_resource type="Script" uid="uid://dqstm0jym4bl3" path="res://Scripts/World/Navigation.gd" id="2_nbqfg"]
 [ext_resource type="PackedScene" uid="uid://c4wqxs7funv7h" path="res://Scenes/Characters/player.tscn" id="3_rdphb"]
 [ext_resource type="PackedScene" uid="uid://culqao60nt1mv" path="res://Scenes/Props/Placeholder(1).tscn" id="4_37drw"]
-[ext_resource type="Script" uid="uid://bkmwodo6s0oum" path="res://Scenes/Level/World.gd" id="6_va6n7"]
+[ext_resource type="PackedScene" uid="uid://4elvwkl063ne" path="res://Scenes/Characters/enemy.tscn" id="7_i1ht0"]
+[ext_resource type="Script" uid="uid://dwm0bmhgapv8c" path="res://Scenes/Level/FPS.gd" id="7_va6n7"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_rdphb"]
-vertices = PackedVector3Array(-12, -0.757901, -12, -12, -0.757901, 12, 12, -0.757901, 12, 12, -0.757901, -12)
-polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+vertices = PackedVector3Array(-4.75, 0.381466, -1.75, -4.5, 0.381466, -1.75, -4.5, 0.381466, -2, -24.5, 0.381466, -0.75, -4.75, 0.381466, -0.75, -4.25, 0.381466, -24.5, -24.5, 0.381466, -24.5, -4.25, 0.381466, -2, 9, 0.381466, -8.5, -2.75, 0.381466, -2, -2.75, 0.381466, -1.75, -2.5, 0.381466, -1.75, 9.25, 0.381466, -8.25, 9.25, 0.381466, -8.5, -2.5, 0.381466, -1.5, 9.5, 0.381466, -8.25, 9.75, 0.631466, -21.25, 13.25, 2.38147, -21.25, 13.25, 2.38147, -24.5, 8.875, 0.381466, -24.5, 9.75, 0.631466, -12, 10, 0.381466, -20.25, 9.75, 0.381466, -20.25, 9, 0.381466, -12, 14.25, 0.381466, -20.5, 14, 0.381466, -20.5, 14, 0.381466, -20.25, 13.5, 0.381466, -20.25, 13.75, 0.631466, -12, 14.25, 0.381466, -12, 24.5, 0.381466, -24.5, 14.25, 0.381466, -24.5, 24.5, 0.381466, -10.25, 14.25, 0.381466, -10.25, 10, 0.631466, -12, 10, 3.38147, -5.25, 13.25, 3.38147, -5.25, 13.25, 0.631466, -12, 10, 3.13147, -9.3, 13.25, 3.13147, -9.3, -2.5, 0.381466, 0, -2.75, 0.381466, 0, -2.75, 0.381466, 0.25, 14.25, 0.381466, -8.5, 14, 0.381466, -8.5, 14, 0.381466, -8.25, -3.5, 0.381466, 24.5, 24.5, 0.381466, 24.5, -3.5, 0.381466, 0.25, 10.25, 0.381466, -9.75, 10.25, 0.381466, -9.5, 13, 0.381466, -9.5, 13, 0.381466, -9.75, -4.5, 0.381466, 0.25, -4.5, 0.381466, 0, -4.75, 0.381466, 0, -24.5, 0.381466, 24.5)
+polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(0, 4, 3), PackedInt32Array(0, 3, 2), PackedInt32Array(2, 3, 5), PackedInt32Array(5, 3, 6), PackedInt32Array(5, 7, 2), PackedInt32Array(13, 12, 8), PackedInt32Array(8, 12, 11), PackedInt32Array(8, 11, 9), PackedInt32Array(9, 11, 10), PackedInt32Array(11, 12, 14), PackedInt32Array(14, 12, 15), PackedInt32Array(17, 16, 18), PackedInt32Array(18, 16, 19), PackedInt32Array(19, 16, 5), PackedInt32Array(21, 20, 22), PackedInt32Array(22, 20, 23), PackedInt32Array(9, 7, 8), PackedInt32Array(8, 7, 23), PackedInt32Array(22, 23, 16), PackedInt32Array(16, 23, 5), PackedInt32Array(5, 23, 7), PackedInt32Array(26, 25, 24), PackedInt32Array(29, 28, 26), PackedInt32Array(26, 28, 27), PackedInt32Array(24, 31, 30), PackedInt32Array(26, 24, 29), PackedInt32Array(29, 24, 32), PackedInt32Array(32, 24, 30), PackedInt32Array(32, 33, 29), PackedInt32Array(37, 39, 34), PackedInt32Array(34, 39, 38), PackedInt32Array(38, 39, 36), PackedInt32Array(38, 36, 35), PackedInt32Array(34, 21, 37), PackedInt32Array(37, 21, 27), PackedInt32Array(34, 20, 21), PackedInt32Array(27, 28, 37), PackedInt32Array(42, 41, 40), PackedInt32Array(45, 44, 43), PackedInt32Array(43, 33, 32), PackedInt32Array(45, 43, 32), PackedInt32Array(40, 14, 15), PackedInt32Array(40, 15, 42), PackedInt32Array(42, 15, 45), PackedInt32Array(45, 32, 42), PackedInt32Array(42, 32, 46), PackedInt32Array(46, 32, 47), PackedInt32Array(46, 48, 42), PackedInt32Array(52, 51, 49), PackedInt32Array(49, 51, 50), PackedInt32Array(55, 54, 53), PackedInt32Array(3, 4, 55), PackedInt32Array(55, 53, 3), PackedInt32Array(3, 53, 56), PackedInt32Array(56, 53, 46), PackedInt32Array(53, 48, 46)]
+agent_max_slope = 61.1
+region_min_size = 0.0
+edge_max_error = 0.35
 
 [sub_resource type="Environment" id="Environment_erj1f"]
 background_mode = 1
 background_color = Color(0.0558, 0.18693, 0.93, 1)
 background_energy_multiplier = 0.25
 ambient_light_energy = 0.55
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_rtqk3"]
-size = Vector3(25, 0.1, 24.9897)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5t2hj"]
 albedo_texture = ExtResource("2_37drw")
@@ -152,71 +154,83 @@ handle_input_locally = false
 size = Vector2i(640, 480)
 render_target_update_mode = 4
 
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="SubViewportContainer/SubViewport"]
+navigation_mesh = SubResource("NavigationMesh_rdphb")
+script = ExtResource("2_nbqfg")
+
+[node name="Props" type="Node3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.22879, 0)
+
+[node name="Box_Prop" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Props" instance=ExtResource("4_37drw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.64156, 4.11621, -0.974679)
+
+[node name="Environment" type="Node3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment"]
+environment = SubResource("Environment_erj1f")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment"]
+transform = Transform3D(1, 0, 0, 0, 0.0196686, 0.999807, 0, -0.999807, 0.0196686, 0, 42.1927, 0)
+light_color = Color(0.6806, 0.70151, 0.82, 1)
+shadow_enabled = true
+
+[node name="Level_GeometryDash" type="StaticBody3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+collision_layer = 129
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Level_GeometryDash"]
+mesh = SubResource("BoxMesh_puo1i")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Level_GeometryDash"]
+shape = SubResource("ConcavePolygonShape3D_i1ht0")
+
+[node name="Cube" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Level_GeometryDash"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.78746, 1.05, -7.45604)
+mesh = SubResource("ArrayMesh_k4fkq")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Level_GeometryDash"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.78746, 1.05, -7.45604)
+shape = SubResource("ConcavePolygonShape3D_rdphb")
+
+[node name="Cube_001" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Level_GeometryDash"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.78746, 2.05, -7.45604)
+mesh = SubResource("ArrayMesh_4pe7p")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Level_GeometryDash"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.78746, 2.05, -7.45604)
+shape = SubResource("ConcavePolygonShape3D_nbqfg")
+
+[node name="Cube_002" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Level_GeometryDash"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 5.78746, 0.565733, -5.45881)
+mesh = SubResource("ArrayMesh_2sldd")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Level_GeometryDash"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 5.78746, 0.565733, -5.45881)
+shape = SubResource("ConcavePolygonShape3D_va6n7")
+
+[node name="Timer" type="Timer" parent="SubViewportContainer/SubViewport/NavigationRegion3D"]
+autostart = true
+
 [node name="ColorRect" type="ColorRect" parent="SubViewportContainer/SubViewport"]
 material = ExtResource("1_w7klp")
 offset_right = 640.0
 offset_bottom = 480.0
 
-[node name="NavigationRegion3D" type="NavigationRegion3D" parent="SubViewportContainer/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2079, 0)
-navigation_mesh = SubResource("NavigationMesh_rdphb")
-
-[node name="Environment" type="Node3D" parent="SubViewportContainer/SubViewport"]
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/Environment"]
-environment = SubResource("Environment_erj1f")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport/Environment"]
-transform = Transform3D(1, 0, 0, 0, 0.0196686, 0.999807, 0, -0.999807, 0.0196686, 0, 42.1927, 0)
-light_color = Color(0.6806, 0.70151, 0.82, 1)
-shadow_enabled = true
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/Environment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.00512695)
-shape = SubResource("BoxShape3D_rtqk3")
-script = ExtResource("6_va6n7")
-
-[node name="Floor" type="StaticBody3D" parent="SubViewportContainer/SubViewport/Environment"]
-collision_layer = 131
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Environment/Floor"]
-mesh = SubResource("BoxMesh_puo1i")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/Environment/Floor"]
-shape = SubResource("ConcavePolygonShape3D_i1ht0")
-
-[node name="Cube" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Environment/Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.78746, 1.05, -7.45604)
-mesh = SubResource("ArrayMesh_k4fkq")
-skeleton = NodePath("")
-
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/Environment/Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.78746, 1.05, -7.45604)
-shape = SubResource("ConcavePolygonShape3D_rdphb")
-
-[node name="Cube_001" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Environment/Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.78746, 2.05, -7.45604)
-mesh = SubResource("ArrayMesh_4pe7p")
-skeleton = NodePath("")
-
-[node name="CollisionShape3D3" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/Environment/Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.78746, 2.05, -7.45604)
-shape = SubResource("ConcavePolygonShape3D_nbqfg")
-
-[node name="Cube_002" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Environment/Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.78746, 1.05, -7.45604)
-mesh = SubResource("ArrayMesh_2sldd")
-skeleton = NodePath("")
-
-[node name="CollisionShape3D4" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/Environment/Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.78746, 1.05, -7.45604)
-shape = SubResource("ConcavePolygonShape3D_va6n7")
-
 [node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_rdphb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, -2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.6862, 8.22679, -6.82149)
 visible = true
 
-[node name="Props" type="Node3D" parent="SubViewportContainer/SubViewport"]
+[node name="Enemy" parent="SubViewportContainer/SubViewport" instance=ExtResource("7_i1ht0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.19248, 0.0659504, 0.906304)
 
-[node name="Box_Prop" parent="SubViewportContainer/SubViewport/Props" instance=ExtResource("4_37drw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.64156, 4.11621, -0.974679)
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("7_va6n7")
+
+[connection signal="timeout" from="SubViewportContainer/SubViewport/NavigationRegion3D/Timer" to="SubViewportContainer/SubViewport/NavigationRegion3D" method="_on_timer_timeout"]

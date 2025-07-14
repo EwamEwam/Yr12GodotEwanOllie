@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://4elvwkl063ne"]
+[gd_scene load_steps=9 format=3 uid="uid://4elvwkl063ne"]
 
 [ext_resource type="Script" path="res://Scenes/Characters/enemy.gd" id="1_lsx3x"]
 
@@ -8,17 +8,52 @@ albedo_color = Color(1, 0.227451, 0, 1)
 [sub_resource type="SphereMesh" id="SphereMesh_lsx3x"]
 material = SubResource("StandardMaterial3D_j51ow")
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_lsx3x"]
+radius = 0.617265
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ixshx"]
+radius = 0.929453
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lsx3x"]
+albedo_color = Color(0.344195, 0.172012, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_b1c4r"]
+material = SubResource("StandardMaterial3D_lsx3x")
+top_radius = 0.2
+bottom_radius = 0.1
+height = 1.3
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_b1c4r"]
 
-[node name="Enemy" type="CharacterBody3D" groups=["enemies"]]
+[node name="Test_Enemy" type="CharacterBody3D" groups=["enemies"]]
 script = ExtResource("1_lsx3x")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 mesh = SubResource("SphereMesh_lsx3x")
+
+[node name="Hitbox" type="Area3D" parent="Body"]
+
+[node name="Collision" type="CollisionShape3D" parent="Body/Hitbox"]
+shape = SubResource("SphereShape3D_lsx3x")
+
+[node name="Collision2" type="CollisionShape3D" parent="Body/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.313816, -1.29183)
+shape = SubResource("SphereShape3D_ixshx")
+
+[node name="Club" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.562621, 0.366269, -0.364734)
+mesh = SubResource("CylinderMesh_b1c4r")
+skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("SphereShape3D_b1c4r")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+
+[node name="Hit_Timer" type="Timer" parent="."]
+wait_time = 0.75
+one_shot = true
+
+[connection signal="timeout" from="Hit_Timer" to="." method="_on_hit_timer_timeout"]
