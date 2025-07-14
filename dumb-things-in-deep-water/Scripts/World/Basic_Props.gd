@@ -10,6 +10,8 @@ extends Marker3D
 @onready var onscreen :VisibleOnScreenNotifier3D = $Body/Onscreen
 @onready var timer :Timer = $Damage_Timer
 
+var previous_velocity :Vector3 = Vector3.ZERO
+
 var grabbable :bool = true
 var outline_shader :StandardMaterial3D
 
@@ -20,6 +22,7 @@ func _ready() -> void:
 	
 func _physics_process(_delta: float) -> void:
 	if onscreen.is_on_screen():
+		previous_velocity = body.linear_velocity
 		body.can_sleep = false
 		model.visible = true
 		if Playerstats.object_detected == body and grabbable:
@@ -29,6 +32,9 @@ func _physics_process(_delta: float) -> void:
 	else:
 		body.can_sleep = true
 		model.visible = false
+		
+	#if abs(body.linear_velocity.length()) > 1:
+	#	print(body.linear_velocity)
 	
 func hold() -> void:
 	if Playerstats.object_held == body:

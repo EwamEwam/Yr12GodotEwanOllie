@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=4 uid="uid://c4wqxs7funv7h"]
+[gd_scene load_steps=14 format=4 uid="uid://c4wqxs7funv7h"]
 
 [ext_resource type="Script" uid="uid://dwx7hesu8s04w" path="res://Scripts/Characters/player.gd" id="1_3etf2"]
 
@@ -49,6 +49,17 @@ _surfaces = [{
 height = 0.68982
 radius = 0.55
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_gy20a"]
+height = 0.765305
+radius = 0.608398
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_cqrjx"]
+height = 0.720867
+radius = 0.562988
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_khnq4"]
+radius = 0.261617
+
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_al8ar"]
 height = 0.5
 radius = 0.55
@@ -60,6 +71,7 @@ platform_floor_layers = 4294967040
 script = ExtResource("1_3etf2")
 
 [node name="Collision" type="CollisionShape3D" parent="."]
+visible = false
 shape = SubResource("CylinderShape3D_3etf2")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
@@ -74,6 +86,7 @@ mesh = SubResource("SphereMesh_al8ar")
 skeleton = NodePath("../..")
 
 [node name="Item_Detection" type="Area3D" parent="Mesh"]
+visible = false
 collision_layer = 2
 collision_mask = 2
 monitorable = false
@@ -89,19 +102,68 @@ mesh = SubResource("ArrayMesh_40svl")
 [node name="Body_Parts" type="Node3D" parent="Mesh"]
 
 [node name="Head" type="RigidBody3D" parent="Mesh/Body_Parts"]
-collision_layer = 128
+collision_layer = 16
 collision_mask = 16
+mass = 1000.0
+gravity_scale = 0.0
 can_sleep = false
 lock_rotation = true
-freeze = true
-freeze_mode = 1
 continuous_cd = true
 contact_monitor = true
-max_contacts_reported = 25
+max_contacts_reported = 100
 
 [node name="Collision_Shape" type="CollisionShape3D" parent="Mesh/Body_Parts/Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.795403, 0)
 shape = SubResource("CylinderShape3D_40svl")
+
+[node name="Torso" type="RigidBody3D" parent="Mesh/Body_Parts"]
+collision_layer = 16
+collision_mask = 16
+mass = 0.001
+gravity_scale = 0.0
+can_sleep = false
+lock_rotation = true
+continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 25
+
+[node name="Collision_Shape" type="CollisionShape3D" parent="Mesh/Body_Parts/Torso"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0626086, 0)
+shape = SubResource("CylinderShape3D_gy20a")
+
+[node name="Legs" type="RigidBody3D" parent="Mesh/Body_Parts"]
+collision_layer = 16
+collision_mask = 16
+mass = 0.001
+gravity_scale = 0.0
+can_sleep = false
+lock_rotation = true
+continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 25
+
+[node name="Collision_Shape" type="CollisionShape3D" parent="Mesh/Body_Parts/Legs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.69292, 0)
+shape = SubResource("CylinderShape3D_cqrjx")
+
+[node name="Arms" type="RigidBody3D" parent="Mesh/Body_Parts"]
+collision_layer = 16
+collision_mask = 16
+mass = 0.001
+gravity_scale = 0.0
+can_sleep = false
+lock_rotation = true
+continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 25
+
+[node name="Collision_Shape" type="CollisionShape3D" parent="Mesh/Body_Parts/Arms"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.600061, 0.172284, -0.697922)
+shape = SubResource("SphereShape3D_khnq4")
+
+[node name="Collision_Shape2" type="CollisionShape3D" parent="Mesh/Body_Parts/Arms"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.172, -0.698)
+shape = SubResource("SphereShape3D_khnq4")
 
 [node name="Camera_Pivot" type="Node3D" parent="."]
 
@@ -117,6 +179,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 8, 4.5)
 
 [node name="Ground_Check" type="ShapeCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.136434, 0)
+visible = false
 shape = SubResource("CylinderShape3D_al8ar")
 
 [connection signal="body_entered" from="Mesh/Body_Parts/Head" to="." method="_on_head_body_entered"]
+[connection signal="body_entered" from="Mesh/Body_Parts/Torso" to="." method="_on_torso_body_entered"]
+[connection signal="body_entered" from="Mesh/Body_Parts/Legs" to="." method="_on_legs_body_entered"]
+[connection signal="body_entered" from="Mesh/Body_Parts/Arms" to="." method="_on_arms_body_entered"]

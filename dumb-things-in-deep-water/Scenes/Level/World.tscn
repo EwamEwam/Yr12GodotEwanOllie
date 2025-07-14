@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=4 uid="uid://dobik07wuoko6"]
+[gd_scene load_steps=24 format=4 uid="uid://dobik07wuoko6"]
 
 [ext_resource type="Material" uid="uid://dlmex6cutmye0" path="res://Scripts/World/World_Material.tres" id="1_w7klp"]
 [ext_resource type="Texture2D" uid="uid://blqfqlxdrwusi" path="res://Assets/Textures/Joesph_Mcfarland.jpg" id="2_37drw"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://culqao60nt1mv" path="res://Scenes/Props/Placeholder(1).tscn" id="4_37drw"]
 [ext_resource type="PackedScene" uid="uid://baocn3lc445ff" path="res://Scenes/Misc/hud.tscn" id="6_nbqfg"]
 [ext_resource type="Script" uid="uid://bkmwodo6s0oum" path="res://Scripts/World/World.gd" id="6_va6n7"]
+[ext_resource type="PackedScene" uid="uid://cboonb5vreyst" path="res://Scenes/Props/White_Cyclinder(2).tscn" id="7_va6n7"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_rdphb"]
 vertices = PackedVector3Array(-12, -0.757901, -12, -12, -0.757901, 12, 12, -0.757901, 12, 12, -0.757901, -12)
@@ -201,6 +202,15 @@ skeleton = NodePath("")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.78746, 2.05, -7.45604)
 shape = SubResource("ConcavePolygonShape3D_nbqfg")
 
+[node name="Cube_003" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Environment/Floor"]
+transform = Transform3D(25, 0, 0, 0, -1.09278e-06, -25, 0, 25, -1.09278e-06, 2.19295, 124.07, -1.52061)
+mesh = SubResource("ArrayMesh_4pe7p")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/Environment/Floor"]
+transform = Transform3D(25, 0, 0, 0, -1.09278e-06, -25, 0, 25, -1.09278e-06, 2.19295, 124.07, -1.52061)
+shape = SubResource("ConcavePolygonShape3D_nbqfg")
+
 [node name="Cube_002" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Environment/Floor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.78746, 1.05, -7.45604)
 mesh = SubResource("ArrayMesh_2sldd")
@@ -237,7 +247,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.64156, 5.39029, 1.25854)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.64156, 5.46187, -0.273219)
 
 [node name="Box_Prop6" parent="SubViewportContainer/SubViewport/Props" instance=ExtResource("4_37drw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.04051, 28.7899, -1.35564)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.41813, 28.7899, -1.35564)
+
+[node name="Box_Prop7" parent="SubViewportContainer/SubViewport/Props" instance=ExtResource("7_va6n7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 15, -1.4)
 
 [node name="HUD" parent="." instance=ExtResource("6_nbqfg")]
 

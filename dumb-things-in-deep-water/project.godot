@@ -119,7 +119,6 @@ jolt_physics_3d/limits/max_linear_velocity=60.0
 jolt_physics_3d/limits/max_angular_velocity=6.28319
 3d/default_gravity=14.0
 3d/solver/solver_iterations=64
-common/physics_interpolation=true
 
 [rendering]
 

@@ -22,6 +22,8 @@ func _process(_delta: float) -> void:
 	else:
 		throw_bar.visible = false
 		
+	$Oxygen_Bar.value = Playerstats.oxygen
+	
 	if Playerstats.object_held == null:
 		$Item_Description/Holding.text = "Nothing"
 		$Item_Description/Holding.position = Vector2(-265,-226)
@@ -35,7 +37,7 @@ func _process(_delta: float) -> void:
 		$Item_Description/Holding.position = Vector2(-265,-235)
 		$Item_Description/Weight.visible = true
 		$Item_Description/Holding.size = Vector2(1,1)
-		$Item_Description/Weight.text = "(" + str(Playerstats.object_mass) + "Kg)"
+		$Item_Description/Weight.text = "(" + str(round(Playerstats.object_held.mass*10)/10) + "Kg)"
 		$Item_Description/TextEnder.visible = true
 		$Item_Description/Object_Icons.visible = true
 		if str(Playerstats.object_ID) in $Item_Description/Object_Icons.sprite_frames.get_animation_names():
@@ -49,14 +51,13 @@ func _process(_delta: float) -> void:
 	$Item_Description/TextEnder.position.x = -260 + ($Item_Description/Line.size.x * 2)
 		
 	$Health_bar/Hp.text = str(int(ceil(Playerstats.health))) + "/" + str(int(Playerstats.max_health))
-	$Oxygen.text =  "O2: " + str(int(Playerstats.oxygen)) + "%"
 	
 	$Health_bar/Health_Bar_Background.value = Playerstats.max_health + 35
 	$Health_bar/HealthBarEnd.position.x = (3 * Playerstats.max_health) + 112.5
-	$Health_bar/Hp.position.x = (Playerstats.max_health * 3) + 66
+	$Health_bar/Hp.position.x = (Playerstats.max_health * 3) + 51
 	
-	for alert in alerts:
-		alert.position.y = 82 + (25*alerts.find(alert))
+	for text in alerts:
+		text.position.y = 82 + (25*alerts.find(text))
 
 func shake_part(body_part :String) -> void:
 	var part :Sprite2D
@@ -79,21 +80,19 @@ func shake_part(body_part :String) -> void:
 	var tween :Tween = get_tree().create_tween()
 	var color: float = (Playerstats.max_health - Body_part_hp)/Playerstats.max_health
 	part.modulate = Color.from_hsv(0,color,1,1)
-	tween.tween_property(part, "scale", Vector2(2,4) , 0.025).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(part, "scale", Vector2(1.75,3.5) , 0.025).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	await tween.finished
 	var tween2 :Tween = get_tree().create_tween()
-	tween2.tween_property(part, "scale", Vector2(4,2) , 0.04).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	tween2.tween_property(part, "scale", Vector2(3.5,1.75) , 0.04).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 	await tween2.finished
 	var tween3 :Tween = get_tree().create_tween()
-	tween3.tween_property(part, "scale", Vector2(3,3) , 0.025).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	print(part.modulate)
-	print(Body_part_hp)
+	tween3.tween_property(part, "scale", Vector2(3,3) , 0.025).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 
 func health_bar_animation(before :float) -> void:
-	var tween :Tween = get_tree().create_tween()
+	#var tween :Tween = get_tree().create_tween()
 	var tween2 :Tween = get_tree().create_tween()
 	var texture :ColorRect = ColorRect.new()
-	tween.tween_property($Health_bar/Health_Bar, "value", Playerstats.health, abs($Health_bar/Health_Bar.value-Playerstats.health)/200).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	#tween.tween_property($Health_bar/Health_Bar, "value", Playerstats.health, abs($Health_bar/Health_Bar.value-Playerstats.health)/200).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	texture.position = Vector2(108,447)
 	texture.color = Color(1,1,1,1)
 	texture.scale = Vector2(3,3)
@@ -101,10 +100,13 @@ func health_bar_animation(before :float) -> void:
 	texture.z_index = -1
 	$Health_bar.add_child(texture)
 	tween2.tween_property(texture, "modulate", Color(1,1,1,0), 0.75).set_trans(Tween.TRANS_LINEAR)
-	await tween.finished
+	#await tween.finished
 	$Health_bar/Health_Bar.value = Playerstats.health
 	await tween2.finished
 	texture.queue_free()
+	
+func update_health_bar() -> void:
+	$Health_bar/Health_Bar.value = Playerstats.health
 	
 func format_time() -> void:
 	level_time = clamp(level_time + 1, 0, 3599)
