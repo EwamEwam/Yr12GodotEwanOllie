@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://d2u8mjvg6i7lq"]
+
+[ext_resource type="Script" uid="uid://crw5v73h4yw7g" path="res://Scripts/Characters/Number.gd" id="1_uemgn"]
+[ext_resource type="FontFile" uid="uid://bxi0rnauxne1i" path="res://Assets/Sprites/Red_Numbers.png" id="1_wegsq"]
+
+[node name="Number" type="Label3D"]
+pixel_size = 0.08
+billboard = 1
+texture_filter = 4
+text = "25"
+font = ExtResource("1_wegsq")
+script = ExtResource("1_uemgn")
