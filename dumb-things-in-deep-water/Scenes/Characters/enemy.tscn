@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://4elvwkl063ne"]
+[gd_scene load_steps=9 format=3 uid="uid://4elvwkl063ne"]
 
 [ext_resource type="Script" uid="uid://0nmnl5dxtpwx" path="res://Scripts/Characters/enemy.gd" id="1_lsx3x"]
 
@@ -10,6 +10,9 @@ material = SubResource("StandardMaterial3D_j51ow")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_lsx3x"]
 radius = 0.617265
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ixshx"]
+radius = 0.929453
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lsx3x"]
 albedo_color = Color(0.344195, 0.172012, 0, 1)
@@ -34,6 +37,10 @@ mesh = SubResource("SphereMesh_lsx3x")
 [node name="Collision" type="CollisionShape3D" parent="Body/Hitbox"]
 shape = SubResource("SphereShape3D_lsx3x")
 
+[node name="Collision2" type="CollisionShape3D" parent="Body/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.313816, -1.29183)
+shape = SubResource("SphereShape3D_ixshx")
+
 [node name="Club" type="MeshInstance3D" parent="Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.562621, 0.366269, -0.364734)
 mesh = SubResource("CylinderMesh_b1c4r")
@@ -45,6 +52,8 @@ shape = SubResource("SphereShape3D_b1c4r")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Hit_Timer" type="Timer" parent="."]
+wait_time = 0.75
+one_shot = true
 
-[connection signal="body_entered" from="Body/Hitbox" to="." method="_on_hitbox_body_entered"]
+[connection signal="timeout" from="Hit_Timer" to="." method="_on_hit_timer_timeout"]

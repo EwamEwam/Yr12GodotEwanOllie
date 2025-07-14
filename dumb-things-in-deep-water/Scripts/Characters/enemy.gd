@@ -1,7 +1,8 @@
 extends CharacterBody3D
-var ATTACKING: bool = false
-
+var ATTACK_READY: bool = true
+@export var dmg :float = 10
 @onready var nav_agent :NavigationAgent3D = $NavigationAgent3D
+
 
 @export var SPEED :float = 8
 @export var ACCEL :float = 3.0
@@ -36,25 +37,18 @@ func _physics_process(delta :float) -> void:
 		velocity = velocity.lerp(direction * SPEED, ACCEL * delta)
 		_smooth_look_at(global_position + velocity, delta)
 		
-		
-
-		
 	elif distance < MIN_DETECTION_DIST:
 		
 		velocity = velocity.lerp(Vector3.ZERO, delta*10)
 		_smooth_look_at(Playerstats.player.global_position, delta)
 	
-		if not ATTACKING:
-			ATTACKING = true
-			await get_tree().create_timer(5).timeout
+		if ATTACK_READY:
+			ATTACK_READY = false
 			attack()
-		
-		else:
-			ATTACKING = false
-			reset_club()
-	
+
 	else:
 		velocity = velocity.lerp(Vector3.ZERO, ACCEL*delta)
+		ATTACK_READY = true
 
 	$Body.rotation = Vector3(0,$Body.rotation.y,0)
 	move_and_slide()
@@ -64,15 +58,22 @@ func update_target_location(target_location :Vector3) -> void:
 
 func attack():
 	var club = $Body/Club
+	$Hit_Timer.start()
+	check_hitbox()
 	club.rotation_degrees.x = -90
+	await get_tree().create_timer(0.25).timeout
+	reset_club()
 
 func reset_club():
 	var club = $Body/Club
 	club.rotation_degrees.x = 0
 
-func _on_hitbox_body_entered(body: Node3D) -> void:
-	if body.is_in_group("Player"):
-		await get_tree().create_timer(0.1).timeout
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		OS.alert("On Grand Bibby, you are dead.")
-		get_tree().quit()
+func check_hitbox() -> void:
+	var bodies :Array[Node3D] = $Body/Hitbox.get_overlapping_bodies()
+	for body in bodies:
+		if body.is_in_group("Player"):
+			print("Hit")
+		
+
+func _on_hit_timer_timeout() -> void:
+	ATTACK_READY = true
