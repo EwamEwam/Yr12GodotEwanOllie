@@ -1,8 +1,8 @@
 extends CharacterBody3D
+
 var ATTACK_READY: bool = true
 @export var dmg :float = 10
 @onready var nav_agent :NavigationAgent3D = $NavigationAgent3D
-
 
 @export var SPEED :float = 8
 @export var ACCEL :float = 3.0
@@ -19,7 +19,7 @@ func _smooth_look_at(target_pos: Vector3, delta: float) -> void:
 		to_target = to_target.normalized()
 		var target_rot = Quaternion(Vector3.FORWARD, to_target)
 		var current_rot = $Body.global_transform.basis.get_rotation_quaternion()
-		var smooth_rot = current_rot.slerp(target_rot, delta * 7.0)
+		var smooth_rot = current_rot.slerp(target_rot, delta * 7.0).normalized()
 		$Body.rotation = smooth_rot.get_euler()
 
 func _physics_process(delta :float) -> void:
@@ -54,6 +54,7 @@ func _physics_process(delta :float) -> void:
 	move_and_slide()
 	
 func update_target_location(target_location :Vector3) -> void:
+	print("test")
 	nav_agent.target_position = target_location
 
 func attack():

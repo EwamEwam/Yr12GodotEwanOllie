@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=4 uid="uid://dobik07wuoko6"]
+[gd_scene load_steps=22 format=4 uid="uid://dobik07wuoko6"]
 
 [ext_resource type="Material" uid="uid://dlmex6cutmye0" path="res://Scripts/World/World_Material.tres" id="1_w7klp"]
 [ext_resource type="Texture2D" uid="uid://blqfqlxdrwusi" path="res://Assets/Textures/Joesph_Mcfarland.jpg" id="2_37drw"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://c4wqxs7funv7h" path="res://Scenes/Characters/player.tscn" id="3_rdphb"]
 [ext_resource type="PackedScene" uid="uid://culqao60nt1mv" path="res://Scenes/Props/Placeholder(1).tscn" id="4_37drw"]
 [ext_resource type="PackedScene" uid="uid://4elvwkl063ne" path="res://Scenes/Characters/enemy.tscn" id="7_i1ht0"]
-[ext_resource type="Script" uid="uid://dwm0bmhgapv8c" path="res://Scenes/Level/FPS.gd" id="7_va6n7"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_rdphb"]
 vertices = PackedVector3Array(-4.75, 0.381466, -1.75, -4.5, 0.381466, -1.75, -4.5, 0.381466, -2, -24.5, 0.381466, -0.75, -4.75, 0.381466, -0.75, -4.25, 0.381466, -24.5, -24.5, 0.381466, -24.5, -4.25, 0.381466, -2, 9, 0.381466, -8.5, -2.75, 0.381466, -2, -2.75, 0.381466, -1.75, -2.5, 0.381466, -1.75, 9.25, 0.381466, -8.25, 9.25, 0.381466, -8.5, -2.5, 0.381466, -1.5, 9.5, 0.381466, -8.25, 9.75, 0.631466, -21.25, 13.25, 2.38147, -21.25, 13.25, 2.38147, -24.5, 8.875, 0.381466, -24.5, 9.75, 0.631466, -12, 10, 0.381466, -20.25, 9.75, 0.381466, -20.25, 9, 0.381466, -12, 14.25, 0.381466, -20.5, 14, 0.381466, -20.5, 14, 0.381466, -20.25, 13.5, 0.381466, -20.25, 13.75, 0.631466, -12, 14.25, 0.381466, -12, 24.5, 0.381466, -24.5, 14.25, 0.381466, -24.5, 24.5, 0.381466, -10.25, 14.25, 0.381466, -10.25, 10, 0.631466, -12, 10, 3.38147, -5.25, 13.25, 3.38147, -5.25, 13.25, 0.631466, -12, 10, 3.13147, -9.3, 13.25, 3.13147, -9.3, -2.5, 0.381466, 0, -2.75, 0.381466, 0, -2.75, 0.381466, 0.25, 14.25, 0.381466, -8.5, 14, 0.381466, -8.5, 14, 0.381466, -8.25, -3.5, 0.381466, 24.5, 24.5, 0.381466, 24.5, -3.5, 0.381466, 0.25, 10.25, 0.381466, -9.75, 10.25, 0.381466, -9.5, 13, 0.381466, -9.5, 13, 0.381466, -9.75, -4.5, 0.381466, 0.25, -4.5, 0.381466, 0, -4.75, 0.381466, 0, -24.5, 0.381466, 24.5)
@@ -194,12 +193,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.78746, 1.05, -7.45604)
 shape = SubResource("ConcavePolygonShape3D_rdphb")
 
 [node name="Cube_001" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Level_GeometryDash"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.78746, 2.05, -7.45604)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.78746, 2.06838, -7.45604)
 mesh = SubResource("ArrayMesh_4pe7p")
 skeleton = NodePath("")
 
 [node name="CollisionShape3D3" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Level_GeometryDash"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.78746, 2.05, -7.45604)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.78746, 2.06838, -7.45604)
 shape = SubResource("ConcavePolygonShape3D_nbqfg")
 
 [node name="Cube_002" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Level_GeometryDash"]
@@ -221,16 +220,8 @@ offset_bottom = 480.0
 
 [node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_rdphb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.6862, 8.22679, -6.82149)
-visible = true
 
 [node name="Enemy" parent="SubViewportContainer/SubViewport" instance=ExtResource("7_i1ht0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.19248, 0.0659504, 0.906304)
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="Label" type="Label" parent="CanvasLayer"]
-offset_right = 40.0
-offset_bottom = 23.0
-script = ExtResource("7_va6n7")
 
 [connection signal="timeout" from="SubViewportContainer/SubViewport/NavigationRegion3D/Timer" to="SubViewportContainer/SubViewport/NavigationRegion3D" method="_on_timer_timeout"]

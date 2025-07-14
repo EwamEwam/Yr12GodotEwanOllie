@@ -13,5 +13,5 @@ dest_files=["res://.godot/imported/Bourbon_And_Coke_Blocks_2.png-418a6b56b146df8
 [params]
 
 ranges=PackedStringArray("A-Z", "a-z", " -/", ":-?", "0-9")
-letter_spacing=-2
-mipmaps=true
+letter_spacing=-1
+mipmaps=false

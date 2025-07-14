@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://baocn3lc445ff"]
+[gd_scene load_steps=19 format=3 uid="uid://baocn3lc445ff"]
 
 [ext_resource type="Script" uid="uid://noefglp8kk2" path="res://Scripts/Other/HUD.gd" id="1_7lq3g"]
 [ext_resource type="Texture2D" uid="uid://dedhoyvicgme3" path="res://Assets/Sprites/Reticule.png" id="1_8leah"]
@@ -12,7 +12,6 @@
 [ext_resource type="LabelSettings" uid="uid://cab1wtwmy4in1" path="res://Scenes/Misc/Label_Settings.tres" id="6_aoah1"]
 [ext_resource type="Texture2D" uid="uid://c75wp5w1r4x07" path="res://Assets/Sprites/Body_part_head.png" id="6_irqgh"]
 [ext_resource type="Texture2D" uid="uid://ctmnup0l02mug" path="res://Assets/Sprites/Body_part_torso.png" id="7_aoah1"]
-[ext_resource type="FontFile" uid="uid://bxi0rnauxne1i" path="res://Assets/Sprites/Red_Numbers.png" id="7_ifk6x"]
 [ext_resource type="Texture2D" uid="uid://ciapgkj8scrqg" path="res://Assets/Sprites/Body_part_legs.png" id="8_egel0"]
 [ext_resource type="Texture2D" uid="uid://jl5x13gprn5n" path="res://Assets/Sprites/Body_part_arms.png" id="9_wouu6"]
 [ext_resource type="Texture2D" uid="uid://b6jmmhfbvk1gs" path="res://Assets/Sprites/Time_FPS_Seperator.png" id="16_egel0"]
@@ -79,7 +78,6 @@ offset_top = 447.0
 offset_right = 462.0
 offset_bottom = 456.0
 scale = Vector2(3, 3)
-theme_override_fonts/font = ExtResource("7_ifk6x")
 text = "125/125"
 label_settings = ExtResource("6_aoah1")
 horizontal_alignment = 2
