@@ -1,11 +1,12 @@
-[gd_scene load_steps=22 format=4 uid="uid://dobik07wuoko6"]
+[gd_scene load_steps=24 format=4 uid="uid://dobik07wuoko6"]
 
+[ext_resource type="Script" uid="uid://bkmwodo6s0oum" path="res://Scripts/World/World.gd" id="1_i1ht0"]
 [ext_resource type="Material" uid="uid://dlmex6cutmye0" path="res://Scripts/World/World_Material.tres" id="1_w7klp"]
 [ext_resource type="Texture2D" uid="uid://blqfqlxdrwusi" path="res://Assets/Textures/Joesph_Mcfarland.jpg" id="2_37drw"]
-[ext_resource type="Script" uid="uid://dqstm0jym4bl3" path="res://Scripts/World/Navigation.gd" id="2_nbqfg"]
 [ext_resource type="PackedScene" uid="uid://c4wqxs7funv7h" path="res://Scenes/Characters/player.tscn" id="3_rdphb"]
 [ext_resource type="PackedScene" uid="uid://culqao60nt1mv" path="res://Scenes/Props/Placeholder(1).tscn" id="4_37drw"]
 [ext_resource type="PackedScene" uid="uid://4elvwkl063ne" path="res://Scenes/Characters/enemy.tscn" id="7_i1ht0"]
+[ext_resource type="PackedScene" uid="uid://baocn3lc445ff" path="res://Scenes/Misc/hud.tscn" id="7_va6n7"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_rdphb"]
 vertices = PackedVector3Array(-4.75, 0.381466, -1.75, -4.5, 0.381466, -1.75, -4.5, 0.381466, -2, -24.5, 0.381466, -0.75, -4.75, 0.381466, -0.75, -4.25, 0.381466, -24.5, -24.5, 0.381466, -24.5, -4.25, 0.381466, -2, 9, 0.381466, -8.5, -2.75, 0.381466, -2, -2.75, 0.381466, -1.75, -2.5, 0.381466, -1.75, 9.25, 0.381466, -8.25, 9.25, 0.381466, -8.5, -2.5, 0.381466, -1.5, 9.5, 0.381466, -8.25, 9.75, 0.631466, -21.25, 13.25, 2.38147, -21.25, 13.25, 2.38147, -24.5, 8.875, 0.381466, -24.5, 9.75, 0.631466, -12, 10, 0.381466, -20.25, 9.75, 0.381466, -20.25, 9, 0.381466, -12, 14.25, 0.381466, -20.5, 14, 0.381466, -20.5, 14, 0.381466, -20.25, 13.5, 0.381466, -20.25, 13.75, 0.631466, -12, 14.25, 0.381466, -12, 24.5, 0.381466, -24.5, 14.25, 0.381466, -24.5, 24.5, 0.381466, -10.25, 14.25, 0.381466, -10.25, 10, 0.631466, -12, 10, 3.38147, -5.25, 13.25, 3.38147, -5.25, 13.25, 0.631466, -12, 10, 3.13147, -9.3, 13.25, 3.13147, -9.3, -2.5, 0.381466, 0, -2.75, 0.381466, 0, -2.75, 0.381466, 0.25, 14.25, 0.381466, -8.5, 14, 0.381466, -8.5, 14, 0.381466, -8.25, -3.5, 0.381466, 24.5, 24.5, 0.381466, 24.5, -3.5, 0.381466, 0.25, 10.25, 0.381466, -9.75, 10.25, 0.381466, -9.5, 13, 0.381466, -9.5, 13, 0.381466, -9.75, -4.5, 0.381466, 0.25, -4.5, 0.381466, 0, -4.75, 0.381466, 0, -24.5, 0.381466, 24.5)
@@ -141,9 +142,14 @@ shadow_mesh = SubResource("ArrayMesh_d51hi")
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_va6n7"]
 data = PackedVector3Array(-1, -1, -1, 1, -1, 1, 1, -1, -1, -1, -1, -1, -1, -1, 1, 1, -1, 1, 1, -1, -1, 1, 1, 1, 1, 1, -1, 1, -1, -1, 1, -1, 1, 1, 1, 1, -1, -1, 1, 1, 1, -1, 1, 1, 1, -1, -1, 1, -1, -1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, -1, -1)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_na3uy"]
+size = Vector3(500, 1, 500)
+
 [node name="Test" type="Node"]
+script = ExtResource("1_i1ht0")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+z_index = -2
 offset_right = 640.0
 offset_bottom = 480.0
 stretch = true
@@ -155,7 +161,6 @@ render_target_update_mode = 4
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="SubViewportContainer/SubViewport"]
 navigation_mesh = SubResource("NavigationMesh_rdphb")
-script = ExtResource("2_nbqfg")
 
 [node name="Props" type="Node3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.22879, 0)
@@ -210,8 +215,11 @@ skeleton = NodePath("")
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 5.78746, 0.565733, -5.45881)
 shape = SubResource("ConcavePolygonShape3D_va6n7")
 
-[node name="Timer" type="Timer" parent="SubViewportContainer/SubViewport/NavigationRegion3D"]
-autostart = true
+[node name="Death_Barrier" type="Area3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Death_Barrier"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -14.5638, 0)
+shape = SubResource("BoxShape3D_na3uy")
 
 [node name="ColorRect" type="ColorRect" parent="SubViewportContainer/SubViewport"]
 material = ExtResource("1_w7klp")
@@ -224,4 +232,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.6862, 8.22679, -6.82149)
 [node name="Enemy" parent="SubViewportContainer/SubViewport" instance=ExtResource("7_i1ht0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.19248, 0.0659504, 0.906304)
 
-[connection signal="timeout" from="SubViewportContainer/SubViewport/NavigationRegion3D/Timer" to="SubViewportContainer/SubViewport/NavigationRegion3D" method="_on_timer_timeout"]
+[node name="HUD" parent="." instance=ExtResource("7_va6n7")]
+z_index = -1
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+ignore_time_scale = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -2,7 +2,7 @@ extends Node2D
 
 @onready var reticle :Sprite2D = $Reticule
 @onready var throw_bar :ProgressBar = $Throw_Bar
-@onready var player :CharacterBody3D = get_node('/root/Main/SubViewportContainer/SubViewport/Player')
+@onready var player :CharacterBody3D = Playerstats.player
 
 var level_time :int = 0
 var formatted_time :Vector2i = Vector2i(0,0)
@@ -89,10 +89,10 @@ func shake_part(body_part :String) -> void:
 	tween3.tween_property(part, "scale", Vector2(3,3) , 0.025).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 
 func health_bar_animation(before :float) -> void:
-	#var tween :Tween = get_tree().create_tween()
+	var tween :Tween = get_tree().create_tween()
 	var tween2 :Tween = get_tree().create_tween()
 	var texture :ColorRect = ColorRect.new()
-	#tween.tween_property($Health_bar/Health_Bar, "value", Playerstats.health, abs($Health_bar/Health_Bar.value-Playerstats.health)/200).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property($Health_bar/Health_Bar, "value", Playerstats.health, abs($Health_bar/Health_Bar.value-Playerstats.health)/200).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	texture.position = Vector2(108,447)
 	texture.color = Color(1,1,1,1)
 	texture.scale = Vector2(3,3)
@@ -100,7 +100,7 @@ func health_bar_animation(before :float) -> void:
 	texture.z_index = -1
 	$Health_bar.add_child(texture)
 	tween2.tween_property(texture, "modulate", Color(1,1,1,0), 0.75).set_trans(Tween.TRANS_LINEAR)
-	#await tween.finished
+	await tween.finished
 	$Health_bar/Health_Bar.value = Playerstats.health
 	await tween2.finished
 	texture.queue_free()

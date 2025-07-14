@@ -12,6 +12,6 @@ dest_files=["res://.godot/imported/Red_Numbers.png-9ac8bef3b0168d9f0ae745065d3a2
 
 [params]
 
-ranges=PackedStringArray("0-9")
+ranges=PackedStringArray("0-9", "/")
 letter_spacing=-1
 mipmaps=false

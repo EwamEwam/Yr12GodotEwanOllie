@@ -19,7 +19,7 @@ func _smooth_look_at(target_pos: Vector3, delta: float) -> void:
 		to_target = to_target.normalized()
 		var target_rot = Quaternion(Vector3.FORWARD, to_target)
 		var current_rot = $Body.global_transform.basis.get_rotation_quaternion()
-		var smooth_rot = current_rot.slerp(target_rot, delta * 7.0).normalized()
+		var smooth_rot = current_rot.slerp(target_rot, delta * 7.0)
 		$Body.rotation = smooth_rot.get_euler()
 
 func _physics_process(delta :float) -> void:
@@ -54,7 +54,6 @@ func _physics_process(delta :float) -> void:
 	move_and_slide()
 	
 func update_target_location(target_location :Vector3) -> void:
-	print("test")
 	nav_agent.target_position = target_location
 
 func attack():
@@ -73,8 +72,7 @@ func check_hitbox() -> void:
 	var bodies :Array[Node3D] = $Body/Hitbox.get_overlapping_bodies()
 	for body in bodies:
 		if body.is_in_group("Player"):
-			print("Hit")
-		
+			body.change_in_health(-dmg)
 
 func _on_hit_timer_timeout() -> void:
 	ATTACK_READY = true

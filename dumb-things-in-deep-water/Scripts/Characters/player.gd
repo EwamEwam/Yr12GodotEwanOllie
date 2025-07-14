@@ -411,7 +411,7 @@ func change_in_health(amt :float) -> void:
 		var number :PackedScene = load("res://Scenes/Characters/number.tscn")
 		var new_number :Label3D = number.instantiate()
 		new_number.create("Player_Damage",str(int(previous_health - int(ceil(Playerstats.health)))))
-		$"../Environment".add_child(new_number)
+		$"../NavigationRegion3D/Environment".add_child(new_number)
 		$"../../../HUD".health_bar_animation(previous_health)
 	else:
 		$"../../../HUD".update_health_bar()

@@ -31,7 +31,7 @@ var legs_hp :float = 125.0
 var arms_hp :float = 125.0
 
 var invincibility :bool = false
-var regen :bool = true
+var regen :bool = false
 var time_since_last_damage :float = 35.0
 
 var time_played :int = 0
@@ -50,8 +50,8 @@ func _process(delta :float) -> void:
 	legs_hp = clamp(legs_hp,0,max_health)
 	arms_hp = clamp(arms_hp,0,max_health)
 	
-	#if head_hp <= 0 or torso_hp <= 0:
-	#	health = 0
+	if head_hp <= 0 or torso_hp <= 0:
+		health = 0
 		
 	if health <= 0:
 		get_tree().quit()
