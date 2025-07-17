@@ -86,7 +86,6 @@ mesh = SubResource("SphereMesh_al8ar")
 skeleton = NodePath("../..")
 
 [node name="Item_Detection" type="Area3D" parent="Mesh"]
-visible = false
 collision_layer = 2
 collision_mask = 2
 monitorable = false
