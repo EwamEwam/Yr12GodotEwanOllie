@@ -18,6 +18,9 @@ var last_direction_facing :Vector3 = Vector3.ZERO
 
 var camera_bob :Vector2 = Vector2.ZERO
 var head_bob_timer :float = 0.0
+var camera_shake :Vector2 = Vector2.ZERO
+var camera_jerk: float = 0.0
+var jerk_velocity: float = 0.0
 
 var throw_power :float = 1.0
 
@@ -86,7 +89,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	true_velocity = (global_position - position_last_frame) * 90
 	
-	set_camera_bob(delta)
+	set_camera_movement(delta)
 	Playerstats.object_detected = item_check()
 	set_movement_mode(delta)
 	
@@ -119,7 +122,7 @@ func _input(event: InputEvent) -> void:
 			var new_prop :Marker3D = prop.instantiate()
 			Playerstats.object_ID = new_prop_ID
 			Playerstats.object_mass = ItemData.itemdata[str(new_prop_ID)]["Mass"]
-			$"../Props".add_child(new_prop)
+			$"../NavigationRegion3D/Props".add_child(new_prop)
 			Playerstats.object_held = new_prop.body
 			Playerstats.inventory_mass -= Playerstats.object_mass
 			item_check()
@@ -155,20 +158,43 @@ func item_check() -> Object:
 		Playerstats.object_held.get_parent().hold()
 	return closest_object
 
-func set_camera_bob(delta :float) -> void:
+func set_camera_movement(delta :float) -> void:
 	if Playerstats.head_bobbing:
 		if is_on_floor():
 			head_bob_timer += delta * (velocity.length()/1.8 + 1.4)
 		else:
 			head_bob_timer += delta * 3
-		camera_bob.x = sin(head_bob_timer + PI/2)/12
-		camera_bob.y = abs(sin(head_bob_timer)) /12
+		camera_bob.x = move_toward(camera_bob.x,sin(head_bob_timer + PI/2)/12 + camera_shake.x,delta * 15)
+		camera_bob.y = move_toward(camera_bob.y, abs(sin(head_bob_timer)) /12 + camera_shake.y,delta * 15)
+		if abs(camera_jerk) > 0.01 or abs(jerk_velocity) > 0.01:
+			var camera_acceleration = -50 * camera_jerk - 10 * jerk_velocity
+			jerk_velocity += camera_acceleration * delta
+			camera_jerk += jerk_velocity * delta
+			camera.rotation.x = camera_jerk
+		else:
+			jerk_velocity = 0.0
+			camera_jerk = 0.0
+			camera.rotation.x = 0.0
 
 func set_speed() -> void:
-	if Input.is_action_pressed("Shift"):
+	if not Playerstats.shift_lock:
+		if Input.is_action_pressed("Shift"):
+			Playerstats.sprint_key = true
+		else:
+			Playerstats.sprint_key = false
+		
+	else:
+		if Input.is_action_just_pressed("Shift"):
+			if Playerstats.sprint_key:
+				Playerstats.sprint_key = false
+			else:
+				Playerstats.sprint_key = true
+				
+	if Playerstats.sprint_key:
 		speed = 11
 	else:
 		speed = 7.5
+				
 	speed /= (1 + (Playerstats.object_mass/(15 * Playerstats.strength)))
 	speed *= ((Playerstats.legs_hp/Playerstats.max_health)/1.25 + 0.2)
 
@@ -357,7 +383,6 @@ func calculate_friction(connected_bodies: Array) -> float:
 	var friction = base_friction + (connected_bodies.size() * friction_per_body) + (total_mass * mass_friction_factor)
 	return clamp(friction, 0.0, 1.0)
 
-
 # Function to get all connected RigidBody3D objects
 func get_all_connected_bodies(start_body: RigidBody3D, max_bodies: int = 6) -> Array:
 	var connected_bodies = []
@@ -399,20 +424,26 @@ func get_all_connected_bodies(start_body: RigidBody3D, max_bodies: int = 6) -> A
 func fall_damage_calculation() -> void:
 	if is_on_floor():
 		if calculated_velocity.y < -22:
-			change_in_health(calculated_velocity.y/8)
+			change_in_health(calculated_velocity.y/8 ,true)
 			Playerstats.legs_hp -= abs(calculated_velocity.y/8)
 			$"../../../HUD".shake_part("Legs")
 
-func change_in_health(amt :float) -> void:
+func change_in_health(amt :float, particles :bool) -> void:
 	var previous_health :float = int(ceil(Playerstats.health))
 	Playerstats.health += amt
 	if previous_health - int(ceil(Playerstats.health)) > 0:
 		Playerstats.time_since_last_damage = 0
-		var number :PackedScene = load("res://Scenes/Characters/number.tscn")
-		var new_number :Label3D = number.instantiate()
-		new_number.create("Player_Damage",str(int(previous_health - int(ceil(Playerstats.health)))))
-		$"../NavigationRegion3D/Environment".add_child(new_number)
-		$"../../../HUD".health_bar_animation(previous_health)
+		Playerstats.next_health_regen = 0
+		if particles:
+			var number :PackedScene = load("res://Scenes/Characters/number.tscn")
+			var new_number :Label3D = number.instantiate()
+			new_number.create("Player_Damage",str(int(previous_health - int(ceil(Playerstats.health)))))
+			$"../NavigationRegion3D/Environment".add_child(new_number)
+			$"../../../HUD".health_bar_animation(previous_health)
+			shake(min(-0.1,(2*amt)/Playerstats.max_health),25,1.8,get_process_delta_time())
+			jerk_velocity = min((5*amt)/Playerstats.max_health,-0.5)
+		else:
+			$"../../../HUD".update_health_bar()
 	else:
 		$"../../../HUD".update_health_bar()
 
@@ -429,7 +460,7 @@ func damage_based_on_prop(body :Node, i1 :float, i2 :float, i3 :float, dot :floa
 	var distance_next_tick :float = ((prop_velocity/60 + body.global_position) - global_position).length()
 	var current_distance :float = (body.global_position - global_position).length()
 	if body.get_parent().timer.is_stopped() and dot > 0.15 and distance_next_tick < current_distance:
-		change_in_health(-prop_velocity.length()/i1 * body.mass/i2 * dot)
+		change_in_health(-prop_velocity.length()/i1 * body.mass/i2 * dot,true)
 		damage_body_part(str(Body_part), prop_velocity.length()/8 * i3 * body.mass/2 * dot)
 	body.get_parent().timer.start()
 
@@ -469,3 +500,13 @@ func _on_legs_body_entered(body: Node) -> void:
 func _on_arms_body_entered(body: Node) -> void:
 	if body.is_in_group("Prop") and abs(body.get_parent().previous_velocity.length()) > 4 and body.get_parent().grabbable:
 		damage_based_on_prop(body,15,2.5,3,calculate_dot_product(body),"Arms")
+		
+func shake(amt,rep,damp,time) -> void:
+	if Playerstats.health > 0:
+		for i in range(rep):
+			if Playerstats.allow_shaking:
+				camera_shake.x=(randf_range(-amt,amt))
+				camera_shake.y=(randf_range(-amt,amt))
+				amt /= damp
+				await get_tree().create_timer(time).timeout
+	camera_shake = Vector2.ZERO

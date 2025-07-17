@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://baocn3lc445ff"]
+[gd_scene load_steps=21 format=3 uid="uid://baocn3lc445ff"]
 
 [ext_resource type="Script" uid="uid://noefglp8kk2" path="res://Scripts/Other/HUD.gd" id="1_7lq3g"]
 [ext_resource type="Texture2D" uid="uid://dedhoyvicgme3" path="res://Assets/Sprites/Reticule.png" id="1_8leah"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://ctmnup0l02mug" path="res://Assets/Sprites/Body_part_torso.png" id="7_aoah1"]
 [ext_resource type="Texture2D" uid="uid://ciapgkj8scrqg" path="res://Assets/Sprites/Body_part_legs.png" id="8_egel0"]
 [ext_resource type="Texture2D" uid="uid://jl5x13gprn5n" path="res://Assets/Sprites/Body_part_arms.png" id="9_wouu6"]
+[ext_resource type="FontFile" uid="uid://b6jcffkqcl0a2" path="res://Assets/Sprites/Blue_Numbers.png" id="13_hlxis"]
 [ext_resource type="Texture2D" uid="uid://b6jmmhfbvk1gs" path="res://Assets/Sprites/Time_FPS_Seperator.png" id="16_egel0"]
 [ext_resource type="Texture2D" uid="uid://b0qk88veua1yx" path="res://Assets/Sprites/Oxygen_Tank.png" id="17_wouu6"]
 [ext_resource type="Texture2D" uid="uid://cd7oxagwgcig0" path="res://Assets/Sprites/Oxygen_bar.png" id="18_80pih"]
@@ -43,22 +44,21 @@ process_mode = 3
 script = ExtResource("1_7lq3g")
 
 [node name="Health_bar" type="Node2D" parent="."]
-position = Vector2(3, 0)
 
 [node name="Health_Bar_Background" type="TextureProgressBar" parent="Health_bar"]
 offset_left = 3.0
-offset_top = 396.0
-offset_right = 163.0
-offset_bottom = 423.0
+offset_top = 393.0
+offset_right = 166.0
+offset_bottom = 421.0
 scale = Vector2(3, 3)
-max_value = 160.0
-value = 160.0
+max_value = 163.0
+value = 163.0
 texture_progress = ExtResource("2_w21a7")
 
 [node name="Health_Bar" type="TextureProgressBar" parent="Health_bar"]
-offset_left = 108.0
+offset_left = 117.0
 offset_top = 447.0
-offset_right = 233.0
+offset_right = 242.0
 offset_bottom = 452.0
 scale = Vector2(3, 3)
 max_value = 125.0
@@ -69,40 +69,65 @@ stretch_margin_right = 1
 texture_progress = ExtResource("3_qlp7m")
 
 [node name="HealthBarEnd" type="Sprite2D" parent="Health_bar"]
-position = Vector2(487.5, 456)
+position = Vector2(496.5, 456)
 scale = Vector2(3, 3)
 texture = ExtResource("4_5nnh0")
 
 [node name="Hp" type="Label" parent="Health_bar"]
-offset_left = 426.0
-offset_top = 447.0
-offset_right = 462.0
-offset_bottom = 456.0
+offset_left = 505.0
+offset_top = 441.0
+offset_right = 543.0
+offset_bottom = 450.0
 scale = Vector2(3, 3)
 theme_override_fonts/font = ExtResource("5_80pih")
 text = "125/125"
 label_settings = ExtResource("6_aoah1")
-horizontal_alignment = 2
 
 [node name="BodyPartHead" type="Sprite2D" parent="Health_bar"]
-position = Vector2(37.5, 412.5)
+position = Vector2(40.5, 409.5)
 scale = Vector2(3, 3)
 texture = ExtResource("6_irqgh")
 
 [node name="BodyPartTorso" type="Sprite2D" parent="Health_bar"]
-position = Vector2(37.5, 438)
+position = Vector2(40.5, 435)
 scale = Vector2(3, 3)
 texture = ExtResource("7_aoah1")
 
 [node name="BodyPartLegs" type="Sprite2D" parent="Health_bar"]
-position = Vector2(37.5, 462)
+position = Vector2(40.5, 459)
 scale = Vector2(3, 3)
 texture = ExtResource("8_egel0")
 
 [node name="BodyPartArms" type="Sprite2D" parent="Health_bar"]
-position = Vector2(37.5, 432)
+position = Vector2(40.5, 429)
 scale = Vector2(3, 3)
 texture = ExtResource("9_wouu6")
+
+[node name="OxygenTank" type="Sprite2D" parent="Health_bar"]
+position = Vector2(141, 414)
+scale = Vector2(3, 3)
+texture = ExtResource("17_wouu6")
+
+[node name="Oxygen_Bar" type="TextureProgressBar" parent="Health_bar"]
+offset_left = 90.0
+offset_top = 405.0
+offset_right = 124.0
+offset_bottom = 410.0
+scale = Vector2(3, 3)
+step = 0.05
+value = 50.0
+nine_patch_stretch = true
+texture_progress = ExtResource("18_80pih")
+
+[node name="Oxygen" type="Label" parent="Health_bar"]
+offset_left = 204.0
+offset_top = 399.0
+offset_right = 230.0
+offset_bottom = 408.0
+scale = Vector2(3, 3)
+theme_override_fonts/font = ExtResource("13_hlxis")
+text = "100%"
+label_settings = ExtResource("6_aoah1")
 
 [node name="Throw_Bar" type="ProgressBar" parent="."]
 offset_left = 327.0
@@ -187,19 +212,3 @@ visible = false
 position = Vector2(515, 32)
 scale = Vector2(3, 3)
 texture = ExtResource("16_egel0")
-
-[node name="OxygenTank" type="Sprite2D" parent="."]
-position = Vector2(135, 415.5)
-scale = Vector2(3, 3)
-texture = ExtResource("17_wouu6")
-
-[node name="Oxygen_Bar" type="TextureProgressBar" parent="."]
-offset_left = 84.0
-offset_top = 408.0
-offset_right = 112.0
-offset_bottom = 412.0
-scale = Vector2(3, 3)
-step = 0.05
-value = 50.0
-nine_patch_stretch = true
-texture_progress = ExtResource("18_80pih")

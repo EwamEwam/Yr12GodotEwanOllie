@@ -7,13 +7,15 @@ var current_camera :camera_states = camera_states.THIRD
 
 var sensitivity :float = 0.4
 var screen_factor :float = 1.0
+var shift_lock :bool = false
+var allow_shaking :bool = true
 
-var max_health :float = 125.0
+var max_health :float = 100.0
 var strength :float = 1.0
 var max_carry_weight :float = 50.0
 var max_inventory :float = 5.0
 
-var health :float = 125.0
+var health :float = 100.0
 var oxygen :float = 100.0
 var special :float = 100.0
 var inventory_mass :float = 0.0
@@ -32,7 +34,9 @@ var arms_hp :float = 125.0
 
 var invincibility :bool = false
 var regen :bool = false
-var time_since_last_damage :float = 35.0
+var sprint_key :bool = false
+var time_since_last_damage :float = 0.0
+var next_health_regen :float = 0.0
 
 var time_played :int = 0
 
@@ -59,8 +63,15 @@ func _process(delta :float) -> void:
 	time_since_last_damage = min(time_since_last_damage + delta, 60)
 		
 	if regen and health < max_health:
-		player.change_in_health((time_since_last_damage/60)*(delta/2))
-		health = clamp(health,0,max_health)
+		next_health_regen += (time_since_last_damage/60)*(delta/2)
+		if next_health_regen >= 0.25:
+			player.change_in_health(0.25,false) 
+			health = clamp(health,0,max_health)
+			next_health_regen = 0.0
+	
+			
+	if oxygen <= 0:
+		player.change_in_health(-delta*6,false)
 		
 func organise_inventory():
 	organised_inventory = {}

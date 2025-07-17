@@ -10,6 +10,7 @@ var alerts :Array[Node] = []
 
 func _ready() -> void:
 	$Health_bar/Health_Bar.value = Playerstats.health
+	$Health_bar/HealthBarEnd.position.x = (3 * Playerstats.max_health) + 121.5
 
 func _process(_delta: float) -> void:
 	reticle.modulate.a = 0.2
@@ -22,7 +23,7 @@ func _process(_delta: float) -> void:
 	else:
 		throw_bar.visible = false
 		
-	$Oxygen_Bar.value = Playerstats.oxygen
+	$Health_bar/Oxygen_Bar.value = Playerstats.oxygen
 	
 	if Playerstats.object_held == null:
 		$Item_Description/Holding.text = "Nothing"
@@ -52,9 +53,10 @@ func _process(_delta: float) -> void:
 		
 	$Health_bar/Hp.text = str(int(ceil(Playerstats.health))) + "/" + str(int(Playerstats.max_health))
 	
-	$Health_bar/Health_Bar_Background.value = Playerstats.max_health + 35
-	$Health_bar/HealthBarEnd.position.x = (3 * Playerstats.max_health) + 112.5
-	$Health_bar/Hp.position.x = (Playerstats.max_health * 3) + 51
+	$Health_bar/Health_Bar_Background.value = Playerstats.max_health + 38
+	$Health_bar/HealthBarEnd.position.x = (3 * Playerstats.max_health) + 121.5
+	$Health_bar/Hp.position.x = (Playerstats.max_health * 3) + 130
+	$Health_bar/Oxygen.text = str(int(ceil(Playerstats.oxygen))) + "%"
 	
 	for text in alerts:
 		text.position.y = 82 + (25*alerts.find(text))
@@ -93,10 +95,10 @@ func health_bar_animation(before :float) -> void:
 	var tween2 :Tween = get_tree().create_tween()
 	var texture :ColorRect = ColorRect.new()
 	tween.tween_property($Health_bar/Health_Bar, "value", Playerstats.health, abs($Health_bar/Health_Bar.value-Playerstats.health)/200).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	texture.position = Vector2(108,447)
+	texture.position = Vector2(117,447)
 	texture.color = Color(1,1,1,1)
 	texture.scale = Vector2(3,3)
-	texture.size = Vector2(before + floor(before/90),5)
+	texture.size = Vector2(before,5)
 	texture.z_index = -1
 	$Health_bar.add_child(texture)
 	tween2.tween_property(texture, "modulate", Color(1,1,1,0), 0.75).set_trans(Tween.TRANS_LINEAR)
@@ -129,20 +131,23 @@ func format_time() -> void:
 	$Timer.text = string2 + ":" + string1
 
 func alert(text: String) -> void:
-	if alerts.size() < 9:
-		var text_box: Label = Label.new()
-		alerts.append(text_box)
-		text_box.label_settings = load("res://Scenes/Misc/Label_Settings.tres")
-		text_box.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		text_box.position = Vector2(640, 57+(25*alerts.size()))
-		text_box.size = Vector2(640,20)
-		text_box.text = text
-		add_child(text_box)
-		var tween1 :Tween = get_tree().create_tween()
-		tween1.tween_property(text_box,"position",Vector2(-6,57+(25*alerts.size())),0.15).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		await get_tree().create_timer(1).timeout
-		var tween2 :Tween = get_tree().create_tween()
-		tween2.tween_property(text_box,"modulate",Color(1,1,1,0),2).set_trans(Tween.TRANS_LINEAR)
-		await tween2.finished
+	if alerts.size() > 9:
+		alerts[0].queue_free()
+		alerts.pop_front()
+	var text_box: Label = Label.new()
+	alerts.append(text_box)
+	text_box.label_settings = load("res://Scenes/Misc/Label_Settings.tres")
+	text_box.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	text_box.position = Vector2(640, 57+(25*alerts.size()))
+	text_box.size = Vector2(640,20)
+	text_box.text = text
+	add_child(text_box)
+	var tween1 :Tween = get_tree().create_tween()
+	tween1.tween_property(text_box,"position",Vector2(-6,57+(25*alerts.size())),0.15).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	await get_tree().create_timer(1).timeout
+	var tween2 :Tween = get_tree().create_tween()
+	tween2.tween_property(text_box,"modulate",Color(1,1,1,0),2).set_trans(Tween.TRANS_LINEAR)
+	await tween2.finished
+	if is_instance_valid(text_box):
 		text_box.queue_free()
 		alerts.erase(text_box)
