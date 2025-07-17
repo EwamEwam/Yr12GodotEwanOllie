@@ -17,4 +17,5 @@ func check_below_map() -> void:
 
 func _on_timer_timeout() -> void:
 	$HUD.format_time()
-	$SubViewportContainer/SubViewport/NavigationRegion3D.bake_navigation_mesh()
+	$HUD.update_health_bar()
+	#$SubViewportContainer/SubViewport/NavigationRegion3D.bake_navigation_mesh()

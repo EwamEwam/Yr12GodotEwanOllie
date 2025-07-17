@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://dwx7hesu8s04w" path="res://Scripts/Characters/player.gd" id="1_3etf2"]
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_3etf2"]
-height = 2.1
-radius = 0.55
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3etf2"]
+radius = 0.524115
+height = 2.06177
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_3etf2"]
 
@@ -66,13 +66,14 @@ radius = 0.55
 
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
 slide_on_ceiling = false
+floor_snap_length = 0.25
 platform_on_leave = 2
 platform_floor_layers = 4294967040
+safe_margin = 0.1
 script = ExtResource("1_3etf2")
 
 [node name="Collision" type="CollisionShape3D" parent="."]
-visible = false
-shape = SubResource("CylinderShape3D_3etf2")
+shape = SubResource("CapsuleShape3D_3etf2")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_3etf2")
@@ -86,7 +87,6 @@ mesh = SubResource("SphereMesh_al8ar")
 skeleton = NodePath("../..")
 
 [node name="Item_Detection" type="Area3D" parent="Mesh"]
-visible = false
 collision_layer = 2
 collision_mask = 2
 monitorable = false
@@ -179,7 +179,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 8, 4.5)
 
 [node name="Ground_Check" type="ShapeCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.136434, 0)
-visible = false
 shape = SubResource("CylinderShape3D_al8ar")
 
 [connection signal="body_entered" from="Mesh/Body_Parts/Head" to="." method="_on_head_body_entered"]

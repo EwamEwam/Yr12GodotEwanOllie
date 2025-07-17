@@ -1,0 +1,17 @@
+[remap]
+
+importer="dt.abfi"
+type="FontFile"
+uid="uid://b6jcffkqcl0a2"
+path="res://.godot/imported/Blue_Numbers.png-948654b6fc599cae3b28dc3aec6526ab.fontdata"
+
+[deps]
+
+source_file="res://Assets/Sprites/Blue_Numbers.png"
+dest_files=["res://.godot/imported/Blue_Numbers.png-948654b6fc599cae3b28dc3aec6526ab.fontdata"]
+
+[params]
+
+ranges=PackedStringArray("0-9", "%")
+letter_spacing=-1
+mipmaps=false
