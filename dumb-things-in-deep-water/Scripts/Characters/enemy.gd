@@ -18,13 +18,13 @@ func _smooth_look_at(target_pos: Vector3, delta: float) -> void:
 	if to_target.length() > 0.01:
 
 		to_target = to_target.normalized()
-		var target_rot = Quaternion(Vector3.FORWARD, to_target)
+		var target_rot = Quaternion(Vector3.FORWARD, to_target).normalized()
 		var current_rot = $Body.global_transform.basis.get_rotation_quaternion()
 		var smooth_rot = current_rot.slerp(target_rot, delta * 7.0)
 		$Body.rotation = smooth_rot.get_euler()
 
 func _physics_process(delta :float) -> void:
-	
+	$Raycast.target_position = Playerstats.player.global_position - global_position
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)
 		var collider = collision.get_collider()
@@ -62,7 +62,8 @@ func _physics_process(delta :float) -> void:
 	move_and_slide()
 	
 func update_target_location(target_location :Vector3) -> void:
-	nav_agent.target_position = target_location
+	if not $Raycast.is_colliding():
+		nav_agent.target_position = target_location
 
 func attack():
 	var club = $Body/Club
@@ -80,14 +81,13 @@ func check_hitbox() -> void:
 	var bodies :Array[Node3D] = $Body/Hitbox.get_overlapping_bodies()
 	for body in bodies:
 		if body.is_in_group("Player"):
-			body.change_in_health(-dmg)
+			body.change_in_health(-dmg,true)
 
 func _on_hit_timer_timeout() -> void:
 	ATTACK_READY = true
 
 func take_damage(damage: float):
 	health -= damage
-	print("Enemy hit! Health: ", health)
 	if health <= 0:
 		die()
 
