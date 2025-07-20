@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://dej5qwnxb1b3a"]
+
+[ext_resource type="Texture2D" uid="uid://cbosaky8rxksb" path="res://Assets/Sprites/Tootltip.png" id="1_l3se7"]
+[ext_resource type="Script" uid="uid://tqe5ryu6ehvi" path="res://Scripts/Other/tooltip.gd" id="2_okwl6"]
+
+[node name="Tooltip" type="NinePatchRect"]
+offset_right = 17.0
+offset_bottom = 15.0
+scale = Vector2(2, 2)
+texture = ExtResource("1_l3se7")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+script = ExtResource("2_okwl6")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 24.0
+offset_bottom = 24.0
+scale = Vector2(0.5, 0.5)
+text = ":P"

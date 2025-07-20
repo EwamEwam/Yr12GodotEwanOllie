@@ -19,8 +19,8 @@ radius = 0.696289
 [node name="White_Cyclinder" type="Marker3D" groups=["Prop"]]
 script = ExtResource("1_81buw")
 ID = 2
-pick_up_position = Vector3(0, 0, -0.5)
-pick_up_rotation = Vector3(8, 2, 3)
+pick_up_position = Vector3(0, 0, -0.65)
+pick_up_rotation = Vector3(9, 3, 2)
 
 [node name="Damage_Timer" type="Timer" parent="."]
 wait_time = 0.25

@@ -1,0 +1,17 @@
+[remap]
+
+importer="dt.abfi"
+type="FontFile"
+uid="uid://ck827ntho6mfk"
+path="res://.godot/imported/Orange_Numbers.png-3d9aba0a709515861008dbdbd0f39d29.fontdata"
+
+[deps]
+
+source_file="res://Assets/Sprites/Orange_Numbers.png"
+dest_files=["res://.godot/imported/Orange_Numbers.png-3d9aba0a709515861008dbdbd0f39d29.fontdata"]
+
+[params]
+
+ranges=PackedStringArray("0-9", "/")
+letter_spacing=-1
+mipmaps=false

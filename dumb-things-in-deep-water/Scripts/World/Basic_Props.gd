@@ -11,6 +11,8 @@ extends Marker3D
 @onready var timer :Timer = $Damage_Timer
 
 var previous_velocity :Vector3 = Vector3.ZERO
+var previous_position :Vector3 = Vector3.ZERO
+var true_velocity :Vector3 = Vector3.ZERO 
 
 var grabbable :bool = true
 var outline_shader :StandardMaterial3D
@@ -20,7 +22,7 @@ func _ready() -> void:
 	pick_up_rotation = Vector3(deg_to_rad(pick_up_rotation.x),deg_to_rad(pick_up_rotation.y),deg_to_rad(pick_up_rotation.z))
 	set_props()
 	
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if onscreen.is_on_screen():
 		previous_velocity = body.linear_velocity
 		body.can_sleep = false
@@ -29,12 +31,23 @@ func _physics_process(_delta: float) -> void:
 			outline_shader.albedo_color = Color(1,1,1,1)
 		else:
 			outline_shader.albedo_color = Color(0,0,0,1)
+			
+		if (true_velocity - body.linear_velocity).length() > 2 and true_velocity != Vector3.ZERO and Playerstats.object_held != body and grabbable:
+			print((true_velocity - body.linear_velocity).length())
+			body.linear_velocity = true_velocity
+			previous_position = body.global_position
+		
 	else:
 		body.can_sleep = true
 		model.visible = false
+	
+	if body.linear_velocity.length() > 0.001:
+		true_velocity = (body.global_position - previous_position)/delta
+		previous_position = body.global_position
 		
 	#if abs(body.linear_velocity.length()) > 1:
-	#	print(body.linear_velocity)
+	#	print("linear: " + str(body.linear_velocity))
+	#	print("true " + str(true_velocity))
 	
 func hold() -> void:
 	if Playerstats.object_held == body:

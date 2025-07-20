@@ -23,7 +23,7 @@ ItemData="*res://Scripts/Other/ItemData.gd"
 
 window/size/viewport_width=640
 window/size/viewport_height=480
-window/size/mode=3
+window/size/mode=2
 window/stretch/mode="viewport"
 
 [editor_plugins]
@@ -110,7 +110,7 @@ Q={
 [physics]
 
 common/physics_ticks_per_second=90
-common/max_physics_steps_per_frame=20
+common/max_physics_steps_per_frame=30
 3d/physics_engine="Jolt Physics"
 jolt_physics_3d/simulation/velocity_steps=16
 jolt_physics_3d/simulation/position_steps=16

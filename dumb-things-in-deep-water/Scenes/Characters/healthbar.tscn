@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://bnmdahypayfna"]
+
+[ext_resource type="Script" uid="uid://bth7vlqjnop6r" path="res://Scripts/Characters/healthbar.gd" id="1_evd5b"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ul7si"]
+transparency = 1
+blend_mode = 4
+shading_mode = 0
+disable_ambient_light = true
+disable_fog = true
+albedo_color = Color(0.0165, 0.09, 0, 0.490196)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_evd5b"]
+size = Vector2(1, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b4gjl"]
+blend_mode = 4
+shading_mode = 0
+disable_ambient_light = true
+disable_fog = true
+albedo_color = Color(0.266667, 1, 0, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_lds5w"]
+size = Vector2(1, 0.1)
+center_offset = Vector3(-0.5, 0, 0)
+
+[node name="Healthbar" type="Node3D"]
+script = ExtResource("1_evd5b")
+
+[node name="Background" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_ul7si")
+mesh = SubResource("PlaneMesh_evd5b")
+
+[node name="Bar" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.5, 0, -0.01)
+material_override = SubResource("StandardMaterial3D_b4gjl")
+mesh = SubResource("PlaneMesh_lds5w")

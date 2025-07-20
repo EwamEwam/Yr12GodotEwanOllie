@@ -157,6 +157,17 @@ func item_check() -> Object:
 	else:
 		Playerstats.object_held.get_parent().hold()
 	return closest_object
+	
+func load_item_from_inventory(ID :int) -> void:
+	Playerstats.object_ID = ID
+	var object = load(ItemData.itemdata[str(ID)]["Path"])
+	var new_object = object.instantiate()
+	new_object.ID = ID
+	$"../NavigationRegion3D/Props".add_child(new_object)
+	new_object.global_position = hand.global_position
+	Playerstats.object_held = new_object.body
+	new_object.rotation = mesh.rotation + new_object.pick_up_rotation
+	Playerstats.inventory_mass -= round(new_object.body.mass * 10) / 10
 
 func set_camera_movement(delta :float) -> void:
 	if Playerstats.head_bobbing:
@@ -212,9 +223,9 @@ func set_camera() -> Basis:
 			pivot.position.x = move_toward(pivot.position.x, 0, 0.025)
 			pivot.position.z = move_toward(pivot.position.z, 0, 0.025)
 			pivot.position.y = move_toward(pivot.position.y, 3 - (pitch + 45)/45 ,0.1)
-			camera_spring.spring_length = lerp(camera_spring.spring_length, abs(velocity.length())/7.5 + 6.5, 0.05)
+			camera_spring.spring_length = lerp(camera_spring.spring_length, abs(calculated_velocity.length())/7.5 + 6.5, 0.05)
 			camera_spring.spring_length = clamp(camera_spring.spring_length,2,8)
-			camera.fov = move_toward(camera.fov,80 + abs(velocity.length()/2.5), 1.5)
+			camera.fov = move_toward(camera.fov,80 + abs(calculated_velocity.length()/2.5), 1.5)
 	elif Playerstats.current_state == Playerstats.game_states.PLAYING:
 			speed /= 2
 			camera.h_offset = camera_bob.x/2
@@ -227,7 +238,7 @@ func set_camera() -> Basis:
 			camera_yaw.rotation_degrees.y = lerp(camera_yaw.rotation_degrees.y, yaw, camera_speed)
 			camera_pitch.rotation_degrees.x = lerp(camera_pitch.rotation_degrees.x, pitch, camera_speed)
 			camera_spring.spring_length = lerp(camera_spring.spring_length, 2.0, 0.075)
-			camera.fov = move_toward(camera.fov,80 + abs(velocity.length()/3), 1.5)
+			camera.fov = move_toward(camera.fov,80 + abs(calculated_velocity.length()/3), 1.5)
 	camera_offset = camera_yaw.transform.basis
 	return camera_offset
 	
@@ -383,6 +394,7 @@ func calculate_friction(connected_bodies: Array) -> float:
 	var friction = base_friction + (connected_bodies.size() * friction_per_body) + (total_mass * mass_friction_factor)
 	return clamp(friction, 0.0, 1.0)
 
+
 # Function to get all connected RigidBody3D objects
 func get_all_connected_bodies(start_body: RigidBody3D, max_bodies: int = 6) -> Array:
 	var connected_bodies = []
@@ -437,13 +449,19 @@ func change_in_health(amt :float, particles :bool) -> void:
 		if particles:
 			var number :PackedScene = load("res://Scenes/Characters/number.tscn")
 			var new_number :Label3D = number.instantiate()
-			new_number.create("Player_Damage",str(int(previous_health - int(ceil(Playerstats.health)))))
+			new_number.create("Player_Damage",str(int(previous_health - int(ceil(Playerstats.health)))),global_position)
 			$"../NavigationRegion3D/Environment".add_child(new_number)
 			$"../../../HUD".health_bar_animation(previous_health)
 			shake(min(-0.1,(2*amt)/Playerstats.max_health),25,1.8,get_process_delta_time())
 			jerk_velocity = min((5*amt)/Playerstats.max_health,-0.5)
 		else:
 			$"../../../HUD".update_health_bar()
+	elif particles and int(ceil(Playerstats.health)) - previous_health > 0:
+		var number :PackedScene = load("res://Scenes/Characters/number.tscn")
+		var new_number :Label3D = number.instantiate()
+		new_number.create("Heal",str(int(int(ceil(Playerstats.health))-previous_health)),global_position)
+		$"../NavigationRegion3D/Environment".add_child(new_number)
+		$"../../../HUD".update_health_bar()
 	else:
 		$"../../../HUD".update_health_bar()
 
@@ -468,7 +486,6 @@ func calculate_dot_product(body :Node) -> float:
 	var to_player :Vector3 = (global_position - body.global_position).normalized()
 	var velocity_dir :Vector3 =  body.get_parent().previous_velocity.normalized()
 	var dot :float = velocity_dir.dot(to_player)
-	print(dot)
 	return abs(dot)
 
 func damage_body_part(body_part :String, val: float) -> void:

@@ -1,0 +1,55 @@
+[gd_scene load_steps=3 format=3 uid="uid://4gn54sy2xffq"]
+
+[ext_resource type="Texture2D" uid="uid://0kg1fk54alpo" path="res://Assets/Sprites/Inventory.png" id="1_bfbsr"]
+[ext_resource type="Script" uid="uid://ds5ulesvr3xtl" path="res://Scripts/Other/inventory.gd" id="1_jg3nd"]
+
+[node name="Inventory" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jg3nd")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 480.0
+color = Color(0.211765, 0.231373, 0.396078, 0.501961)
+
+[node name="Inventory_panel" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 4.0
+offset_right = 126.0
+offset_bottom = 161.0
+scale = Vector2(3, 3)
+texture = ExtResource("1_bfbsr")
+patch_margin_left = 52
+patch_margin_top = 15
+patch_margin_right = 69
+patch_margin_bottom = 3
+
+[node name="Mass" type="Label" parent="Inventory_panel"]
+layout_mode = 0
+offset_left = 53.0
+offset_top = 4.0
+offset_right = 149.0
+offset_bottom = 24.0
+scale = Vector2(0.5, 0.5)
+text = "0.0/0.0"
+horizontal_alignment = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Inventory_panel"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 16.0
+offset_right = 338.0
+offset_bottom = 426.0
+scale = Vector2(0.333, 0.333)
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Inventory_panel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3

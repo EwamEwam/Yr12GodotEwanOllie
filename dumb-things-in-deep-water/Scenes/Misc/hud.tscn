@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://baocn3lc445ff"]
+[gd_scene load_steps=22 format=3 uid="uid://baocn3lc445ff"]
 
 [ext_resource type="Script" uid="uid://noefglp8kk2" path="res://Scripts/Other/HUD.gd" id="1_7lq3g"]
 [ext_resource type="Texture2D" uid="uid://dedhoyvicgme3" path="res://Assets/Sprites/Reticule.png" id="1_8leah"]
@@ -19,6 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://b6jmmhfbvk1gs" path="res://Assets/Sprites/Time_FPS_Seperator.png" id="16_egel0"]
 [ext_resource type="Texture2D" uid="uid://b0qk88veua1yx" path="res://Assets/Sprites/Oxygen_Tank.png" id="17_wouu6"]
 [ext_resource type="Texture2D" uid="uid://cd7oxagwgcig0" path="res://Assets/Sprites/Oxygen_bar.png" id="18_80pih"]
+[ext_resource type="PackedScene" uid="uid://4gn54sy2xffq" path="res://Scenes/Misc/inventory.tscn" id="20_3kgmp"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_w21a7"]
 animations = [{
@@ -212,3 +213,6 @@ visible = false
 position = Vector2(515, 32)
 scale = Vector2(3, 3)
 texture = ExtResource("16_egel0")
+
+[node name="Inventory" parent="." instance=ExtResource("20_3kgmp")]
+visible = false

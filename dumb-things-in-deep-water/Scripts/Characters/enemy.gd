@@ -1,8 +1,9 @@
 extends CharacterBody3D
 
 var ATTACK_READY: bool = true
-@export var dmg :float = 10
+@export var dmg :float = 3
 @export var health :float = 10
+@export var max_health :float = 10
 @onready var nav_agent :NavigationAgent3D = $NavigationAgent3D
 
 @export var SPEED :float = 8
@@ -29,8 +30,9 @@ func _physics_process(delta :float) -> void:
 		var collision = get_slide_collision(i)
 		var collider = collision.get_collider()
 		
-		if collider is RigidBody3D:
+		if collider is RigidBody3D and $Invinicibility.is_stopped():
 			take_damage(collider.get_parent().previous_velocity.length()/5 * collider.mass)
+			$Invinicibility.start()
 	
 	if not is_on_floor():
 		velocity.y -= 0.9
@@ -87,9 +89,14 @@ func _on_hit_timer_timeout() -> void:
 	ATTACK_READY = true
 
 func take_damage(damage: float):
-	health -= damage
-	if health <= 0:
-		die()
+	if damage > 1:
+		health -= damage
+		var number :PackedScene = load("res://Scenes/Characters/number.tscn")
+		var new_number :Label3D = number.instantiate()
+		new_number.create("Enemy_Damage",str(int(ceil(damage))),global_position)
+		$"../../NavigationRegion3D/Environment".add_child(new_number)
+		if health <= 0:
+			die()
 
 func die():
 	queue_free()
