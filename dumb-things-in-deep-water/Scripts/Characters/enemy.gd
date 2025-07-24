@@ -93,7 +93,7 @@ func take_damage(damage: float):
 		health -= damage
 		var number :PackedScene = load("res://Scenes/Characters/number.tscn")
 		var new_number :Label3D = number.instantiate()
-		new_number.create("Enemy_Damage",str(int(ceil(damage))),global_position)
+		new_number.create("Enemy_Damage",str(int(round(damage))),global_position)
 		$"../../NavigationRegion3D/Environment".add_child(new_number)
 		if health <= 0:
 			die()

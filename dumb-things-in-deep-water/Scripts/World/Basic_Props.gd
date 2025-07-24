@@ -33,7 +33,6 @@ func _physics_process(delta: float) -> void:
 			outline_shader.albedo_color = Color(0,0,0,1)
 			
 		if (true_velocity - body.linear_velocity).length() > 2 and true_velocity != Vector3.ZERO and Playerstats.object_held != body and grabbable:
-			print((true_velocity - body.linear_velocity).length())
 			body.linear_velocity = true_velocity
 			previous_position = body.global_position
 		

@@ -60,6 +60,8 @@ func _process(_delta: float) -> void:
 	
 	for text in alerts:
 		text.position.y = 82 + (25*alerts.find(text))
+		
+	set_prompts()
 
 func shake_part(body_part :String) -> void:
 	var part :Sprite2D
@@ -141,13 +143,29 @@ func alert(text: String) -> void:
 	text_box.position = Vector2(640, 57+(25*alerts.size()))
 	text_box.size = Vector2(640,20)
 	text_box.text = text
+	text_box.z_index = -1
 	add_child(text_box)
 	var tween1 :Tween = get_tree().create_tween()
 	tween1.tween_property(text_box,"position",Vector2(-6,57+(25*alerts.size())),0.15).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	await get_tree().create_timer(1).timeout
-	var tween2 :Tween = get_tree().create_tween()
-	tween2.tween_property(text_box,"modulate",Color(1,1,1,0),2).set_trans(Tween.TRANS_LINEAR)
-	await tween2.finished
+	if is_instance_valid(text_box):
+		var tween2 :Tween = get_tree().create_tween()
+		tween2.tween_property(text_box,"modulate",Color(1,1,1,0),2).set_trans(Tween.TRANS_LINEAR)
+		await tween2.finished
 	if is_instance_valid(text_box):
 		text_box.queue_free()
 		alerts.erase(text_box)
+
+func set_prompts() -> void:
+	$Item_Description/Prompts/InventoryIcon.visible = false
+	$Item_Description/Prompts/PickUp.visible = false
+	$Item_Description/Prompts/Drop.visible = false
+	$Item_Description/Prompts/Throw.visible = false
+	if Playerstats.show_prompts:
+		$Item_Description/Prompts/InventoryIcon.visible = true
+		if Playerstats.object_held != null:
+			$Item_Description/Prompts/Drop.visible = true
+			$Item_Description/Prompts/Throw.visible = true
+		elif Playerstats.object_detected != null:
+			if Playerstats.object_detected.get_parent().grabbable:
+				$Item_Description/Prompts/PickUp.visible = true

@@ -137,7 +137,7 @@ func _input(event: InputEvent) -> void:
 					Playerstats.object_mass = Playerstats.object_held.mass
 					Input.action_release("Left_Click")
 				else:
-					$"../../../HUD".alert("Too heavy to lift! (" + str(round(Playerstats.object_detected.mass*10)/10)  +" kg)")
+					$"../../../HUD".alert("Too heavy to lift! (" + str(round(Playerstats.object_detected.mass*10)/10)  +"kg)")
 		
 	if event.is_action_pressed("Right_Click"):
 		if Playerstats.object_held != null and movement_state != movement_states.THROWING:
@@ -479,7 +479,7 @@ func damage_based_on_prop(body :Node, i1 :float, i2 :float, i3 :float, dot :floa
 	var current_distance :float = (body.global_position - global_position).length()
 	if body.get_parent().timer.is_stopped() and dot > 0.15 and distance_next_tick < current_distance:
 		change_in_health(-prop_velocity.length()/i1 * body.mass/i2 * dot,true)
-		damage_body_part(str(Body_part), prop_velocity.length()/8 * i3 * body.mass/2 * dot)
+		damage_body_part(str(Body_part), prop_velocity.length()/i1 * i3 * body.mass/i2 * dot)
 	body.get_parent().timer.start()
 
 func calculate_dot_product(body :Node) -> float:
@@ -503,20 +503,19 @@ func damage_body_part(body_part :String, val: float) -> void:
 
 func _on_head_body_entered(body: Node) -> void:
 	if body.is_in_group("Prop") and abs(body.get_parent().previous_velocity.length()) > 4 and body.get_parent().grabbable:
-		print("head Hit")
-		damage_based_on_prop(body,8,2,6,calculate_dot_product(body),"Head")
+		damage_based_on_prop(body,8,2,2,calculate_dot_product(body),"Head")
 
 func _on_torso_body_entered(body: Node) -> void:
 	if body.is_in_group("Prop") and abs(body.get_parent().previous_velocity.length()) > 4 and body.get_parent().grabbable:
-		damage_based_on_prop(body,15,2.5,2.75,calculate_dot_product(body),"Torso")
+		damage_based_on_prop(body,16,2,1,calculate_dot_product(body),"Torso")
 
 func _on_legs_body_entered(body: Node) -> void:
 	if body.is_in_group("Prop") and abs(body.get_parent().previous_velocity.length()) > 4 and body.get_parent().grabbable:
-		damage_based_on_prop(body,16,2.75,3,calculate_dot_product(body),"Legs")
+		damage_based_on_prop(body,18,2,1.25,calculate_dot_product(body),"Legs")
 
 func _on_arms_body_entered(body: Node) -> void:
 	if body.is_in_group("Prop") and abs(body.get_parent().previous_velocity.length()) > 4 and body.get_parent().grabbable:
-		damage_based_on_prop(body,15,2.5,3,calculate_dot_product(body),"Arms")
+		damage_based_on_prop(body,20,2.75,0.75,calculate_dot_product(body),"Arms")
 		
 func shake(amt,rep,damp,time) -> void:
 	if Playerstats.health > 0:
