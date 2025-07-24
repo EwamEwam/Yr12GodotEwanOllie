@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=4 uid="uid://c4wqxs7funv7h"]
+[gd_scene load_steps=15 format=4 uid="uid://c4wqxs7funv7h"]
 
 [ext_resource type="Script" uid="uid://dwx7hesu8s04w" path="res://Scripts/Characters/player.gd" id="1_3etf2"]
 
@@ -19,6 +19,8 @@ grow_amount = 0.025
 [sub_resource type="SphereMesh" id="SphereMesh_al8ar"]
 radius = 0.07
 height = 0.14
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3etf2"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_40svl"]
 radius = 1.08102
@@ -85,6 +87,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.615256, 0.191685, -0.714787
 material_overlay = SubResource("StandardMaterial3D_40svl")
 mesh = SubResource("SphereMesh_al8ar")
 skeleton = NodePath("../..")
+
+[node name="Collision_check" type="Area3D" parent="Mesh/Hand"]
+collision_layer = 0
+collision_mask = 128
+
+[node name="Collision" type="CollisionShape3D" parent="Mesh/Hand/Collision_check"]
+shape = SubResource("BoxShape3D_3etf2")
 
 [node name="Item_Detection" type="Area3D" parent="Mesh"]
 collision_layer = 2

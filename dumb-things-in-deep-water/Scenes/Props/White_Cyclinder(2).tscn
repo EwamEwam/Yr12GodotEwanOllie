@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/Basic_Props.gd" id="1_81buw"]
 [ext_resource type="CylinderMesh" uid="uid://1adipgv1ooi4" path="res://Assets/Props_Models_And_Collisions/2_White_Cyclinder.tres" id="2_81buw"]
 [ext_resource type="ArrayMesh" uid="uid://cr8rrh3b22hbc" path="res://Assets/Props_Models_And_Collisions/2_White_Cyclinder_Outline.tres" id="3_godeo"]
+[ext_resource type="Shape3D" uid="uid://dtifiroiogaf" path="res://Assets/Props_Models_And_Collisions/Cyclinder_test.tres" id="4_godeo"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5sy10"]
 resource_local_to_scene = true
@@ -11,10 +12,6 @@ shading_mode = 0
 albedo_color = Color(0, 0, 0, 1)
 texture_filter = 4
 disable_receive_shadows = true
-
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_sxwxh"]
-height = 2.1582
-radius = 0.696289
 
 [node name="White_Cyclinder" type="Marker3D" groups=["Prop"]]
 script = ExtResource("1_81buw")
@@ -41,7 +38,7 @@ material_overlay = SubResource("StandardMaterial3D_5sy10")
 mesh = ExtResource("3_godeo")
 
 [node name="Collision" type="CollisionShape3D" parent="Body"]
-shape = SubResource("CylinderShape3D_sxwxh")
+shape = ExtResource("4_godeo")
 
 [node name="Onscreen" type="VisibleOnScreenNotifier3D" parent="Body"]
 aabb = AABB(-1, -1.1763, -1, 2, 2.3526, 2)

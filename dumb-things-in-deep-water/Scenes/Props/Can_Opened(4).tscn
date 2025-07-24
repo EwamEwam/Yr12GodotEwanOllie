@@ -1,0 +1,49 @@
+[gd_scene load_steps=7 format=3 uid="uid://bc6tvq5mnc3su"]
+
+[ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/Basic_Props.gd" id="1_hm0fo"]
+[ext_resource type="ArrayMesh" uid="uid://bskdml7jwhjr5" path="res://Assets/Props_Models_And_Collisions/1_Placeholder_Model.tres" id="2_lsnx0"]
+[ext_resource type="ArrayMesh" uid="uid://bv6eohy1lbs1e" path="res://Assets/Props_Models_And_Collisions/1_Placeholder_Outline.tres" id="3_85auu"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_k831n"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5sy10"]
+resource_local_to_scene = true
+blend_mode = 4
+shading_mode = 0
+albedo_color = Color(0, 0, 0, 1)
+texture_filter = 4
+disable_receive_shadows = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hpr1u"]
+size = Vector3(1.025, 1.025, 1.025)
+
+[node name="Opened_Can" type="Marker3D" groups=["Prop"]]
+script = ExtResource("1_hm0fo")
+ID = 4
+pick_up_position = Vector3(0, 0, -0.5)
+pick_up_rotation = Vector3(8, 2, 3)
+
+[node name="Damage_Timer" type="Timer" parent="."]
+wait_time = 0.25
+one_shot = true
+autostart = true
+
+[node name="Body" type="RigidBody3D" parent="." groups=["Prop"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.576496)
+collision_layer = 19
+collision_mask = 146
+physics_material_override = SubResource("PhysicsMaterial_k831n")
+continuous_cd = true
+
+[node name="Model" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+mesh = ExtResource("2_lsnx0")
+
+[node name="Outline" type="MeshInstance3D" parent="Body/Model"]
+material_overlay = SubResource("StandardMaterial3D_5sy10")
+mesh = ExtResource("3_85auu")
+
+[node name="Collision" type="CollisionShape3D" parent="Body"]
+shape = SubResource("BoxShape3D_hpr1u")
+
+[node name="Onscreen" type="VisibleOnScreenNotifier3D" parent="Body"]

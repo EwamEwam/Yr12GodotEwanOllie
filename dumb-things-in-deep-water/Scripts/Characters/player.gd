@@ -21,6 +21,7 @@ var head_bob_timer :float = 0.0
 var camera_shake :Vector2 = Vector2.ZERO
 var camera_jerk: float = 0.0
 var jerk_velocity: float = 0.0
+var zoom :float = 1.0
 
 var throw_power :float = 1.0
 
@@ -36,6 +37,7 @@ var movement_state :movement_states = movement_states.NORMAL
 @onready var hand :Marker3D = $Mesh/Hand
 @onready var mesh :MeshInstance3D = $Mesh
 @onready var ground_check :ShapeCast3D = $Ground_Check
+@onready var collision_check :Area3D = $Mesh/Hand/Collision_check
 
 #The physics process function which essentially runs every frame. Handles most of the player's essential logic
 func _physics_process(delta: float) -> void:
@@ -54,7 +56,7 @@ func _physics_process(delta: float) -> void:
 			collider.linear_velocity = Vector3.ZERO
 			
 	var current_direction_held :Vector2
-	if Playerstats.current_state == Playerstats.game_states.PLAYING and Playerstats.current_camera == Playerstats.camera_states.THIRD:
+	if Playerstats.current_state == Playerstats.game_states.PLAYING and Playerstats.current_camera != Playerstats.camera_states.FIRST:
 		var camera_offset :Basis = set_camera()
 		current_direction_held = Input.get_vector("Left","Right","Up","Down").normalized()
 		var direction :Vector3 = (camera_offset * Vector3(current_direction_held.x, 0, current_direction_held.y)).normalized()
@@ -128,8 +130,8 @@ func _input(event: InputEvent) -> void:
 			item_check()
 		
 	if event.is_action_pressed("Left_Click"):
-		if Playerstats.object_detected != null:
-			if Playerstats.object_detected.get_parent().grabbable:
+		if Playerstats.object_held == null:
+			if Playerstats.object_detected != null and Playerstats.object_detected.get_parent().grabbable:
 				if Playerstats.object_detected.mass <= Playerstats.max_carry_weight:
 					Playerstats.object_held = Playerstats.object_detected
 					Playerstats.object_detected.get_parent().hold()
@@ -138,10 +140,16 @@ func _input(event: InputEvent) -> void:
 					Input.action_release("Left_Click")
 				else:
 					$"../../../HUD".alert("Too heavy to lift! (" + str(round(Playerstats.object_detected.mass*10)/10)  +"kg)")
+		else:
+			Playerstats.object_held.get_parent().item_use()
 		
 	if event.is_action_pressed("Right_Click"):
-		if Playerstats.object_held != null and movement_state != movement_states.THROWING:
+		if Playerstats.object_held != null and movement_state != movement_states.THROWING and collision_check.get_overlapping_bodies().size() <= 0:
 			Playerstats.object_held.get_parent().drop()
+		print(collision_check.has_overlapping_areas())
+
+	if event.is_action_pressed("V"):
+		set_camera_mode()
 
 #runs every frame, checks the objects in the player's grab range 
 func item_check() -> Object:
@@ -394,7 +402,6 @@ func calculate_friction(connected_bodies: Array) -> float:
 	var friction = base_friction + (connected_bodies.size() * friction_per_body) + (total_mass * mass_friction_factor)
 	return clamp(friction, 0.0, 1.0)
 
-
 # Function to get all connected RigidBody3D objects
 func get_all_connected_bodies(start_body: RigidBody3D, max_bodies: int = 6) -> Array:
 	var connected_bodies = []
@@ -460,6 +467,7 @@ func change_in_health(amt :float, particles :bool) -> void:
 		var number :PackedScene = load("res://Scenes/Characters/number.tscn")
 		var new_number :Label3D = number.instantiate()
 		new_number.create("Heal",str(int(int(ceil(Playerstats.health))-previous_health)),global_position)
+		Playerstats.health = clamp(Playerstats.health,0,Playerstats.max_health)
 		$"../NavigationRegion3D/Environment".add_child(new_number)
 		$"../../../HUD".update_health_bar()
 	else:
@@ -479,7 +487,7 @@ func damage_based_on_prop(body :Node, i1 :float, i2 :float, i3 :float, dot :floa
 	var current_distance :float = (body.global_position - global_position).length()
 	if body.get_parent().timer.is_stopped() and dot > 0.15 and distance_next_tick < current_distance:
 		change_in_health(-prop_velocity.length()/i1 * body.mass/i2 * dot,true)
-		damage_body_part(str(Body_part), prop_velocity.length()/i1 * i3 * body.mass/i2 * dot)
+		body_part(str(Body_part), -prop_velocity.length()/i1 * i3 * body.mass/i2 * dot)
 	body.get_parent().timer.start()
 
 func calculate_dot_product(body :Node) -> float:
@@ -488,18 +496,22 @@ func calculate_dot_product(body :Node) -> float:
 	var dot :float = velocity_dir.dot(to_player)
 	return abs(dot)
 
-func damage_body_part(body_part :String, val: float) -> void:
+func body_part(part :String, val: float) -> void:
 	if not Playerstats.invincibility:
-		match body_part:
+		match part:
 			"Head":
-				Playerstats.head_hp -= val
+				Playerstats.head_hp += val
 			"Legs":
-				Playerstats.legs_hp -= val
+				Playerstats.legs_hp += val
 			"Torso":
-				Playerstats.torso_hp -= val
+				Playerstats.torso_hp += val
 			"Arms":
-				Playerstats.arms_hp -= val
-	$"../../../HUD".shake_part(str(body_part))
+				Playerstats.arms_hp += val
+	Playerstats.head_hp = clamp(Playerstats.head_hp,0,Playerstats.max_health)
+	Playerstats.torso_hp = clamp(Playerstats.torso_hp,0,Playerstats.max_health)
+	Playerstats.legs_hp = clamp(Playerstats.legs_hp,0,Playerstats.max_health)
+	Playerstats.arms_hp = clamp(Playerstats.arms_hp,0,Playerstats.max_health)
+	$"../../../HUD".shake_part(str(part))
 
 func _on_head_body_entered(body: Node) -> void:
 	if body.is_in_group("Prop") and abs(body.get_parent().previous_velocity.length()) > 4 and body.get_parent().grabbable:
@@ -526,3 +538,29 @@ func shake(amt,rep,damp,time) -> void:
 				amt /= damp
 				await get_tree().create_timer(time).timeout
 	camera_shake = Vector2.ZERO
+
+func set_camera_mode() -> void:
+	var current = Playerstats.current_camera
+	var states = Playerstats.camera_states
+	if current == states.FIRST:
+		Playerstats.current_camera = Playerstats.camera_states.CLOSE
+	if current == states.CLOSE:
+		Playerstats.current_camera = Playerstats.camera_states.NORMAL
+	if current == states.NORMAL:
+		Playerstats.current_camera = Playerstats.camera_states.OUTWARDS
+	if current == states.OUTWARDS and true_velocity == Vector3.ZERO:
+		Playerstats.current_camera = Playerstats.camera_states.FIRST
+	else:
+		Playerstats.current_camera = Playerstats.camera_states.CLOSE
+		
+	print(current)
+		
+	match current:
+		states.CLOSE:
+			pass
+		states.NORMAL:
+			pass
+		states.OUTWARDS:
+			pass
+		states.FIRST:
+			pass

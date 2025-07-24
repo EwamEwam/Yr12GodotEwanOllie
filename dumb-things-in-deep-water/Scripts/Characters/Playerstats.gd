@@ -1,22 +1,22 @@
 extends Node
 
 enum game_states {PLAYING,PAUSED,MENU}
-enum camera_states {THIRD,FIRST}
+enum camera_states {CLOSE,NORMAL,OUTWARDS,FIRST}
 var current_state :game_states = game_states.PLAYING
-var current_camera :camera_states = camera_states.THIRD
+var current_camera :camera_states = camera_states.NORMAL
 
 var sensitivity :float = 0.4
 var screen_factor :float = 1.0
-var shift_lock :bool = false
+var shift_lock :bool = true
 var allow_shaking :bool = true
 var show_prompts :bool = true
 
-var max_health :float = 45.0
-var strength :float = 1.0
-var max_carry_weight :float = 50.0
+var max_health :float = 100.0
+var strength :float = 100.0
+var max_carry_weight :float = 500.0
 var max_inventory :float = 5.0
 
-var health :float = 45.0
+var health :float = 100.0
 var oxygen :float = 100.0
 var special :float = 100.0
 var inventory_mass :float = 0.0

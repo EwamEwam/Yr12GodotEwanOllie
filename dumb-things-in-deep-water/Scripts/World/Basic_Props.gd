@@ -48,6 +48,36 @@ func _physics_process(delta: float) -> void:
 	#	print("linear: " + str(body.linear_velocity))
 	#	print("true " + str(true_velocity))
 	
+func item_use():
+	match ItemData.itemdata[str(ID)]["Type"]:
+		1:
+			return
+		2:
+			ID += 1
+			Playerstats.object_ID += 1
+			set_props()
+		3:
+			var value :float = ItemData.itemdata[str(ID)]["Value"]
+			Playerstats.player.change_in_health(value,true)
+			Playerstats.player.body_part("Head",value)
+			Playerstats.player.body_part("Torso",value)
+			Playerstats.player.body_part("Legs",value)
+			Playerstats.player.body_part("Arms",value)
+			ID += 1
+			Playerstats.object_ID += 1
+			set_props()
+		4:
+			var value :float = ItemData.itemdata[str(ID)]["Value"]
+			Playerstats.player.change_in_health(value,true)
+			Playerstats.player.body_part("Head",value)
+			Playerstats.player.body_part("Torso",value)
+			Playerstats.player.body_part("Legs",value)
+			Playerstats.player.body_part("Arms",value)
+			Playerstats.object_held = null
+			Playerstats.object_mass = 0.0
+			Playerstats.object_ID = 0
+			queue_free()
+	
 func hold() -> void:
 	if Playerstats.object_held == body:
 		global_position = Playerstats.player.hand.global_position
