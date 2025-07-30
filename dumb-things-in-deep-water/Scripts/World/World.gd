@@ -2,6 +2,9 @@ extends Node
 
 @onready var player :Object = $SubViewportContainer/SubViewport/Player
 
+func _ready() -> void:
+	Playerstats.player = get_tree().get_first_node_in_group("Player")
+
 func _physics_process(_delta: float) -> void:
 	get_tree().call_group("enemies", "update_target_location", player.global_position)
 	check_below_map()

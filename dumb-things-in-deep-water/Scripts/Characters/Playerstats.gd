@@ -73,6 +73,8 @@ func _process(delta :float) -> void:
 	if oxygen <= 0:
 		player.change_in_health(-delta*6,false)
 		
+
+		
 func organise_inventory():
 	organised_inventory = {}
 	var sorted = inventory.duplicate(); sorted.sort()
