@@ -11,7 +11,7 @@ var position_last_frame :Vector3 = Vector3.ZERO
 var true_velocity :Vector3 = Vector3.ZERO
 var push_strength :float = 10.0
 
-var camera_speed :float = 0.5
+var camera_speed :float = 30.0
 var yaw :float = 0.0
 var pitch :float = 0.0
 var last_direction_facing :Vector3 = Vector3.ZERO
@@ -24,6 +24,7 @@ var jerk_velocity: float = 0.0
 var zoom :float = 1.0
 
 var throw_power :float = 1.0
+var can_move :bool = true
 
 enum movement_states {NORMAL,AIMING,THROWING}
 var movement_state :movement_states = movement_states.NORMAL
@@ -37,7 +38,6 @@ var movement_state :movement_states = movement_states.NORMAL
 @onready var hand :Marker3D = $Mesh/Hand
 @onready var mesh :MeshInstance3D = $Mesh
 @onready var ground_check :ShapeCast3D = $Ground_Check
-@onready var collision_check :Area3D = $Mesh/Hand/Collision_check
 
 #The physics process function which essentially runs every frame. Handles most of the player's essential logic
 func _physics_process(delta: float) -> void:
@@ -56,12 +56,12 @@ func _physics_process(delta: float) -> void:
 			collider.linear_velocity = Vector3.ZERO
 			
 	var current_direction_held :Vector2
-	if Playerstats.current_state == Playerstats.game_states.PLAYING and Playerstats.current_camera != Playerstats.camera_states.FIRST:
-		var camera_offset :Basis = set_camera()
+	if Playerstats.current_state == Playerstats.game_states.PLAYING:
+		var camera_offset :Basis = set_camera(delta)
 		current_direction_held = Input.get_vector("Left","Right","Up","Down").normalized()
 		var direction :Vector3 = (camera_offset * Vector3(current_direction_held.x, 0, current_direction_held.y)).normalized()
 		
-		if is_on_floor():
+		if is_on_floor() and can_move:
 			if not current_direction_held == Vector2.ZERO:
 				last_direction_facing.x = move_toward(last_direction_facing.x,direction.x, 6 * delta)
 				last_direction_facing.z = move_toward(last_direction_facing.z,direction.z, 6 * delta)
@@ -71,7 +71,7 @@ func _physics_process(delta: float) -> void:
 			calculated_velocity.y = 0
 			if Input.is_action_just_pressed("Space"):
 				calculated_velocity.y = jump_strength
-		else:
+		elif can_move:
 			calculated_velocity.x = move_toward(calculated_velocity.x, (speed * direction.x)/3 + last_velocity_grounded.x/1.5, acceleration/2 * delta)
 			calculated_velocity.z = move_toward(calculated_velocity.z, (speed * direction.z)/3 + last_velocity_grounded.z/1.5, acceleration/2 * delta)
 		
@@ -106,8 +106,8 @@ func _input(event: InputEvent) -> void:
 		get_tree().quit()
 		
 	if event.is_action_pressed("E"):
-		if Playerstats.object_held != null and not movement_state == movement_states.THROWING:
-			if Playerstats.inventory_mass + Playerstats.object_mass <= Playerstats.max_inventory:
+		if Playerstats.object_held != null and not movement_state == movement_states.THROWING and can_move:
+			if roundf(Playerstats.inventory_mass * 10) / 10 + roundf(Playerstats.object_mass * 10) / 10 <= roundf(Playerstats.max_inventory):
 				Playerstats.inventory.append(Playerstats.object_ID)
 				Playerstats.inventory_mass += Playerstats.object_mass
 				Playerstats.object_held.get_parent().queue_free()
@@ -116,22 +116,22 @@ func _input(event: InputEvent) -> void:
 				Playerstats.object_mass = 0
 			else:
 				$"../../../HUD".alert("Too heavy for inventory!")
-			
+
 	if event.is_action_pressed("Q"):
-		if Playerstats.object_held == null and not movement_state == movement_states.THROWING and Playerstats.inventory.size() > 0:
-			var new_prop_ID: int = Playerstats.inventory.pop_front()
+		if Playerstats.object_held == null and not movement_state == movement_states.THROWING and Playerstats.inventory.size() > 0 and can_move:
+			var new_prop_ID: int = Playerstats.inventory.pop_back()
 			var prop :PackedScene = load(ItemData.itemdata[str(new_prop_ID)]["Path"])
 			var new_prop :Marker3D = prop.instantiate()
 			Playerstats.object_ID = new_prop_ID
 			Playerstats.object_mass = ItemData.itemdata[str(new_prop_ID)]["Mass"]
-			$"../NavigationRegion3D/Props".add_child(new_prop)
+			$"../Props".add_child(new_prop)
 			Playerstats.object_held = new_prop.body
-			Playerstats.inventory_mass -= Playerstats.object_mass
+			Playerstats.inventory_mass -= ItemData.itemdata[str(new_prop_ID)]["Mass"]
 			item_check()
 		
 	if event.is_action_pressed("Left_Click"):
 		if Playerstats.object_held == null:
-			if Playerstats.object_detected != null and Playerstats.object_detected.get_parent().grabbable:
+			if Playerstats.object_detected != null and Playerstats.object_detected.get_parent().grabbable and can_move:
 				if Playerstats.object_detected.mass <= Playerstats.max_carry_weight:
 					Playerstats.object_held = Playerstats.object_detected
 					Playerstats.object_detected.get_parent().hold()
@@ -140,13 +140,15 @@ func _input(event: InputEvent) -> void:
 					Input.action_release("Left_Click")
 				else:
 					$"../../../HUD".alert("Too heavy to lift! (" + str(round(Playerstats.object_detected.mass*10)/10)  +"kg)")
-		else:
+		elif movement_state == movement_states.NORMAL:
 			Playerstats.object_held.get_parent().item_use()
 		
 	if event.is_action_pressed("Right_Click"):
-		if Playerstats.object_held != null and movement_state != movement_states.THROWING and collision_check.get_overlapping_bodies().size() <= 0:
-			Playerstats.object_held.get_parent().drop()
-		print(collision_check.has_overlapping_areas())
+		if Playerstats.object_held != null and movement_state != movement_states.THROWING:
+			if check_if_in_wall(Playerstats.object_held):
+				Playerstats.object_held.get_parent().drop()
+			else:
+				$"../../../HUD".alert("Can't place here, there's something in the way.")
 
 	if event.is_action_pressed("V"):
 		set_camera_mode()
@@ -171,7 +173,7 @@ func load_item_from_inventory(ID :int) -> void:
 	var object = load(ItemData.itemdata[str(ID)]["Path"])
 	var new_object = object.instantiate()
 	new_object.ID = ID
-	$"../NavigationRegion3D/Props".add_child(new_object)
+	$"../Props".add_child(new_object)
 	new_object.global_position = hand.global_position
 	Playerstats.object_held = new_object.body
 	new_object.rotation = mesh.rotation + new_object.pick_up_rotation
@@ -217,36 +219,50 @@ func set_speed() -> void:
 	speed /= (1 + (Playerstats.object_mass/(15 * Playerstats.strength)))
 	speed *= ((Playerstats.legs_hp/Playerstats.max_health)/1.25 + 0.2)
 
-func set_camera() -> Basis:
-	var camera_offset
-	if Playerstats.current_state == Playerstats.game_states.PLAYING and movement_state == movement_states.NORMAL:
-			camera.h_offset = camera_bob.x
-			camera.v_offset = camera_bob.y
-			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-			var screen_size : Vector2 = get_viewport().get_texture().get_size()
-			get_viewport().warp_mouse(screen_size/2)
-			camera_yaw.rotation_degrees.y = lerp(camera_yaw.rotation_degrees.y, yaw, camera_speed)
-			camera_pitch.rotation_degrees.x = lerp(camera_pitch.rotation_degrees.x, pitch, camera_speed)
-			pivot.position.x = move_toward(pivot.position.x, 0, 0.025)
-			pivot.position.z = move_toward(pivot.position.z, 0, 0.025)
-			pivot.position.y = move_toward(pivot.position.y, 3 - (pitch + 45)/45 ,0.1)
-			camera_spring.spring_length = lerp(camera_spring.spring_length, abs(calculated_velocity.length())/7.5 + 6.5, 0.05)
-			camera_spring.spring_length = clamp(camera_spring.spring_length,2,8)
-			camera.fov = move_toward(camera.fov,80 + abs(calculated_velocity.length()/2.5), 1.5)
-	elif Playerstats.current_state == Playerstats.game_states.PLAYING:
-			speed /= 2
-			camera.h_offset = camera_bob.x/2
-			camera.v_offset = camera_bob.y/2
-			mesh.rotation.y = deg_to_rad(yaw)
-			last_direction_facing = Vector3(-sin(deg_to_rad(yaw)),0,-cos(deg_to_rad(yaw)))
-			pivot.position.x = move_toward(pivot.position.x, 0.605 * cos(mesh.rotation.y), 0.1)
-			pivot.position.z = move_toward(pivot.position.z, -0.561 * sin(mesh.rotation.y), 0.1)
-			pivot.position.y = move_toward(pivot.position.y, 1.25 ,0.1)
-			camera_yaw.rotation_degrees.y = lerp(camera_yaw.rotation_degrees.y, yaw, camera_speed)
-			camera_pitch.rotation_degrees.x = lerp(camera_pitch.rotation_degrees.x, pitch, camera_speed)
-			camera_spring.spring_length = lerp(camera_spring.spring_length, 2.0, 0.075)
-			camera.fov = move_toward(camera.fov,80 + abs(calculated_velocity.length()/3), 1.5)
+func set_camera(delta: float) -> Basis:
+	# Initialize camera offset
+	var camera_offset: Basis
+	
+	# Handle camera behavior based on game state
+	if Playerstats.current_state == Playerstats.game_states.PLAYING and movement_state == movement_states.NORMAL and can_move:
+		# First-person camera with normal movement
+		camera.h_offset = camera_bob.x
+		camera.v_offset = camera_bob.y
+		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		var screen_size: Vector2 = get_viewport().get_texture().get_size()
+		get_viewport().warp_mouse(screen_size / 2)
+		camera_yaw.rotation_degrees.y = lerp(camera_yaw.rotation_degrees.y, yaw, camera_speed * delta)
+		camera_pitch.rotation_degrees.x = lerp(camera_pitch.rotation_degrees.x, pitch, camera_speed * delta)
+		pivot.position.x = move_toward(pivot.position.x, 0.0, delta * 2)
+		pivot.position.z = move_toward(pivot.position.z, 0.0, delta * 2)
+		pivot.position.y = lerp(pivot.position.y, zoom * (3 - (pitch + 45) / 45), delta * 10)
+		camera_spring.spring_length = lerp(camera_spring.spring_length, zoom * (abs(calculated_velocity.length()) / 7.5 + 6.5), delta * 5)
+		camera_spring.spring_length = clamp(move_toward(camera_spring.spring_length, camera_spring.spring_length * zoom, delta * 5), 2.0, 8.0)
+		camera.fov = move_toward(camera.fov, 80.0 + abs(calculated_velocity.length() / 2.5), delta * 80)
+	elif Playerstats.current_camera == Playerstats.camera_states.FIRST:
+		# First-person camera without normal movement
+		camera.h_offset = camera_bob.x
+		camera.v_offset = camera_bob.y
+		camera_yaw.rotation_degrees.y = lerp(camera_yaw.rotation_degrees.y, yaw, camera_speed * delta)
+		camera_pitch.rotation_degrees.x = lerp(camera_pitch.rotation_degrees.x, pitch, camera_speed * delta)
+		camera.fov = 90.0
+	else:
+		# Other game states (e.g., third-person or restricted movement)
+		speed /= 2
+		camera.h_offset = camera_bob.x / 2
+		camera.v_offset = camera_bob.y / 2
+		mesh.rotation.y = deg_to_rad(yaw)
+		last_direction_facing = Vector3(-sin(deg_to_rad(yaw)), 0, -cos(deg_to_rad(yaw)))
+		pivot.position.x = move_toward(pivot.position.x, 0.605 * cos(mesh.rotation.y), delta * 8)
+		pivot.position.z = move_toward(pivot.position.z, -0.561 * sin(mesh.rotation.y), delta * 8)
+		pivot.position.y = lerp(pivot.position.y, 1.25, delta * 10)
+		camera_yaw.rotation_degrees.y = lerp(camera_yaw.rotation_degrees.y, yaw, camera_speed * delta)
+		camera_pitch.rotation_degrees.x = lerp(camera_pitch.rotation_degrees.x, pitch, camera_speed * delta)
+		camera_spring.spring_length = lerp(camera_spring.spring_length, 2.0 * zoom, 0.075)
+		camera.fov = move_toward(camera.fov, 80.0 + abs(calculated_velocity.length() / 3), delta * 80)
+	
+	# Set and return camera offset
 	camera_offset = camera_yaw.transform.basis
 	return camera_offset
 	
@@ -267,9 +283,14 @@ func throw_process(delta :float) -> void:
 		movement_state = movement_states.THROWING
 		throw_power = clamp(throw_power + delta * 5,1,6)
 	elif throw_power > 1 and Input.is_action_pressed("Alt"):
-		Playerstats.object_held.get_parent().throw(throw_power)
-		movement_state = movement_states.AIMING
-		throw_power = 1
+		if check_if_in_wall(Playerstats.object_held):
+			Playerstats.object_held.get_parent().throw(throw_power)
+			movement_state = movement_states.AIMING
+			throw_power = 1
+		else:
+			$"../../../HUD".alert("Can't throw here, there's something in the way.")
+			movement_state = movement_states.AIMING
+			throw_power = 1
 
 func push_rigid_body() -> void:
 	var col := get_last_slide_collision()
@@ -541,26 +562,42 @@ func shake(amt,rep,damp,time) -> void:
 
 func set_camera_mode() -> void:
 	var current = Playerstats.current_camera
-	var states = Playerstats.camera_states
-	if current == states.FIRST:
+	if current == Playerstats.camera_states.FIRST:
 		Playerstats.current_camera = Playerstats.camera_states.CLOSE
-	if current == states.CLOSE:
+		can_move = true
+		mesh.visible = true
+		zoom = 0.5
+	elif current == Playerstats.camera_states.CLOSE:
 		Playerstats.current_camera = Playerstats.camera_states.NORMAL
-	if current == states.NORMAL:
+		zoom = 1
+	elif current == Playerstats.camera_states.NORMAL:
 		Playerstats.current_camera = Playerstats.camera_states.OUTWARDS
-	if current == states.OUTWARDS and true_velocity == Vector3.ZERO:
+		zoom = 1.75
+	elif current == Playerstats.camera_states.OUTWARDS and true_velocity == Vector3.ZERO and Playerstats.object_held == null:
 		Playerstats.current_camera = Playerstats.camera_states.FIRST
+		mesh.visible = false
+		can_move = false
+		camera_spring.spring_length = 0.0
+		pivot.position.y = 0.5
+		zoom = 0
 	else:
 		Playerstats.current_camera = Playerstats.camera_states.CLOSE
+		zoom = 0.5
 		
-	print(current)
-		
-	match current:
-		states.CLOSE:
-			pass
-		states.NORMAL:
-			pass
-		states.OUTWARDS:
-			pass
-		states.FIRST:
-			pass
+func check_if_in_wall(body :RigidBody3D) -> bool:
+	var space_state :PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
+	var collision_node :CollisionShape3D = body.get_node("Collision")
+	var query :PhysicsShapeQueryParameters3D = PhysicsShapeQueryParameters3D.new()
+	query.shape = collision_node.shape
+	query.transform = body.global_transform
+	query.transform = query.transform.scaled(Vector3(0.95,0.95,0.95))
+	query.collision_mask = 1  # Adjust to match the wall's layer mask
+	query.exclude = [body]    # Avoid detecting itself
+	
+	var results :Array[Dictionary] = space_state.intersect_shape(query, 32)
+	
+	for result in results:
+		var collider :Object = result.collider
+		if collider is StaticBody3D or collider is RigidBody3D:
+			return false
+	return true

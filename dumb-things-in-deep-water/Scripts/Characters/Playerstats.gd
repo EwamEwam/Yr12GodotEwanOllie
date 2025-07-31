@@ -7,16 +7,16 @@ var current_camera :camera_states = camera_states.NORMAL
 
 var sensitivity :float = 0.4
 var screen_factor :float = 1.0
-var shift_lock :bool = true
+var shift_lock :bool = false
 var allow_shaking :bool = true
 var show_prompts :bool = true
 
-var max_health :float = 100.0
-var strength :float = 100.0
-var max_carry_weight :float = 500.0
+var max_health :float = 25.0
+var strength :float = 1.0
+var max_carry_weight :float = 50.0
 var max_inventory :float = 5.0
 
-var health :float = 100.0
+var health :float = 25.0
 var oxygen :float = 100.0
 var special :float = 100.0
 var inventory_mass :float = 0.0
@@ -34,7 +34,7 @@ var legs_hp :float = 125.0
 var arms_hp :float = 125.0
 
 var invincibility :bool = false
-var regen :bool = true
+var regen :bool = false
 var sprint_key :bool = false
 var time_since_last_damage :float = 0.0
 var next_health_regen :float = 0.0

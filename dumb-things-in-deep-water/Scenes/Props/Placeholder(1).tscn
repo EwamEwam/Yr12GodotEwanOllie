@@ -19,7 +19,7 @@ size = Vector3(1.025, 1.025, 1.025)
 
 [node name="Box_Prop" type="Marker3D" groups=["Prop"]]
 script = ExtResource("1_k831n")
-pick_up_position = Vector3(0, 0, -0.5)
+pick_up_position = Vector3(0, 0, -0.6)
 pick_up_rotation = Vector3(8, 2, 3)
 
 [node name="Damage_Timer" type="Timer" parent="."]
@@ -28,7 +28,7 @@ one_shot = true
 autostart = true
 
 [node name="Body" type="RigidBody3D" parent="." groups=["Prop"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.576496)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 collision_layer = 19
 collision_mask = 146
 physics_material_override = SubResource("PhysicsMaterial_k831n")

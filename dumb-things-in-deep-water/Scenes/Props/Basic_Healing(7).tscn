@@ -1,8 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://cp15s3vsmperh"]
 
 [ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/Basic_Props.gd" id="1_qn4jk"]
-[ext_resource type="ArrayMesh" uid="uid://bskdml7jwhjr5" path="res://Assets/Props_Models_And_Collisions/1_Placeholder_Model.tres" id="2_3adu2"]
-[ext_resource type="ArrayMesh" uid="uid://bv6eohy1lbs1e" path="res://Assets/Props_Models_And_Collisions/1_Placeholder_Outline.tres" id="3_3c6v3"]
+[ext_resource type="CylinderMesh" uid="uid://1adipgv1ooi4" path="res://Assets/Props_Models_And_Collisions/2_White_Cyclinder.tres" id="2_3adu2"]
+[ext_resource type="ArrayMesh" uid="uid://cr8rrh3b22hbc" path="res://Assets/Props_Models_And_Collisions/2_White_Cyclinder_Outline.tres" id="3_3c6v3"]
+[ext_resource type="Shape3D" uid="uid://dtifiroiogaf" path="res://Assets/Props_Models_And_Collisions/Cyclinder_test.tres" id="4_iok7f"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_k831n"]
 
@@ -13,9 +14,6 @@ shading_mode = 0
 albedo_color = Color(0, 0, 0, 1)
 texture_filter = 4
 disable_receive_shadows = true
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_hpr1u"]
-size = Vector3(1.025, 1.025, 1.025)
 
 [node name="Healing_Item" type="Marker3D" groups=["Prop"]]
 script = ExtResource("1_qn4jk")
@@ -44,6 +42,9 @@ material_overlay = SubResource("StandardMaterial3D_5sy10")
 mesh = ExtResource("3_3c6v3")
 
 [node name="Collision" type="CollisionShape3D" parent="Body"]
-shape = SubResource("BoxShape3D_hpr1u")
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+shape = ExtResource("4_iok7f")
 
 [node name="Onscreen" type="VisibleOnScreenNotifier3D" parent="Body"]
+
+[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="."]

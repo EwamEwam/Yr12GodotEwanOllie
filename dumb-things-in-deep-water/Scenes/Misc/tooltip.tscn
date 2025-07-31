@@ -5,7 +5,7 @@
 
 [node name="Tooltip" type="NinePatchRect"]
 offset_right = 17.0
-offset_bottom = 15.0
+offset_bottom = 17.0
 scale = Vector2(2, 2)
 texture = ExtResource("1_l3se7")
 patch_margin_left = 3

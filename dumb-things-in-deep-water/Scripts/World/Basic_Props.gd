@@ -10,6 +10,8 @@ extends Marker3D
 @onready var onscreen :VisibleOnScreenNotifier3D = $Body/Onscreen
 @onready var timer :Timer = $Damage_Timer
 
+@export var attribute :bool = false
+
 var previous_velocity :Vector3 = Vector3.ZERO
 var previous_position :Vector3 = Vector3.ZERO
 var true_velocity :Vector3 = Vector3.ZERO 
@@ -49,35 +51,29 @@ func _physics_process(delta: float) -> void:
 	#	print("true " + str(true_velocity))
 	
 func item_use():
-	match ItemData.itemdata[str(ID)]["Type"]:
-		1:
-			return
-		2:
+	var item_properties :Array = ItemData.itemdata[str(ID)]["Properties"]
+	var properties := ItemData.properties
+	
+	for property in item_properties:
+		if property == properties.ID_UPDATE:
 			ID += 1
 			Playerstats.object_ID += 1
 			set_props()
-		3:
+		
+		if property == properties.HEAL:
 			var value :float = ItemData.itemdata[str(ID)]["Value"]
 			Playerstats.player.change_in_health(value,true)
 			Playerstats.player.body_part("Head",value)
 			Playerstats.player.body_part("Torso",value)
 			Playerstats.player.body_part("Legs",value)
 			Playerstats.player.body_part("Arms",value)
-			ID += 1
-			Playerstats.object_ID += 1
-			set_props()
-		4:
-			var value :float = ItemData.itemdata[str(ID)]["Value"]
-			Playerstats.player.change_in_health(value,true)
-			Playerstats.player.body_part("Head",value)
-			Playerstats.player.body_part("Torso",value)
-			Playerstats.player.body_part("Legs",value)
-			Playerstats.player.body_part("Arms",value)
+	
+		if property == properties.DELETE:
 			Playerstats.object_held = null
 			Playerstats.object_mass = 0.0
 			Playerstats.object_ID = 0
 			queue_free()
-	
+		
 func hold() -> void:
 	if Playerstats.object_held == body:
 		global_position = Playerstats.player.hand.global_position
@@ -95,9 +91,10 @@ func drop() -> void:
 	grabbable = false
 	Playerstats.object_held = null
 	body.freeze = false
+	print(Playerstats.player.true_velocity)
+	body.linear_velocity = Playerstats.player.true_velocity/(1 + body.mass/(15 * Playerstats.strength))
+	body.angular_velocity = Playerstats.player.true_velocity / (3 + (body.mass/(4 * Playerstats.strength)))
 	collision.disabled = false
-	body.linear_velocity = Playerstats.player.velocity/(1 + body.mass/(15 * Playerstats.strength))
-	body.angular_velocity = Playerstats.player.velocity / (3 + (body.mass/(4 * Playerstats.strength)))
 	Playerstats.object_mass = 0.0
 	await get_tree().create_timer(0.75).timeout
 	grabbable = true
