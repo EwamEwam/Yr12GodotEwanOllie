@@ -1,7 +1,7 @@
 extends Node
 
 #Each prop in the game can be assigned a property, de
-enum properties {ID_UPDATE,HEAL,DELETE}
+enum properties {ID_UPDATE,HEAL,DELETE,AIM,CANT_DROP_THROW,SHOOT}
 
 const itemdata :Dictionary = {
 	"0": {
@@ -20,7 +20,7 @@ const itemdata :Dictionary = {
 		"Outline" = "res://Assets/Props_Models_And_Collisions/1_Placeholder_Outline.tres",
 		"Mass" = 1.0,
 		"Properties" = [],
-		"Tooltip" = "A basic blue cube, has a mass of\nexactly 1 kg to the atomic level"
+		"Tooltip" = "A basic blue cube, has a mass of\nexactly 1 kg to the atomic level."
 	},
 	"2": {
 		"Name" = "White Cyclinder",
@@ -35,7 +35,7 @@ const itemdata :Dictionary = {
 		"Name" = "Can - Closed",
 		"Path" = "res://Scenes/Props/Can_Closed(3).tscn",
 		"Model" = "res://Assets/Props_Models_And_Collisions/3_Can_Closed.tres",
-		"Outline" = "res://Assets/Props_Models_And_Collisions/2_White_Cyclinder_Outline.tres",
+		"Outline" = "res://Assets/Props_Models_And_Collisions/3_Can_Closed_Outline.tres",
 		"Mass" = 0.3,
 		"Properties" = [properties.ID_UPDATE],
 		"Tooltip" = "A basic can, press left click\nwhile holding to open."
@@ -77,10 +77,27 @@ const itemdata :Dictionary = {
 		"Path" = "res://Scenes/Props/Basic_Healing(7).tscn",
 		"Model" = "res://Assets/Props_Models_And_Collisions/2_White_Cyclinder.tres",
 		"Outline" = "res://Assets/Props_Models_And_Collisions/2_White_Cyclinder_Outline.tres",
-		"Collision" = "res://Assets/Props_Models_And_Collisions/Cyclinder_test.tres",
 		"Mass" = 1.7,
 		"Value" = 10,
 		"Properties" = [properties.HEAL,properties.DELETE],
 		"Tooltip" = "A basic healing item, interact\nwith it while holding it to heal\n10 HP"
+	},
+	"8": {
+		"Name" = "Test Gun",
+		"Path" = "res://Scenes/Props/Basic_Healing(7).tscn",
+		"Model" = "res://Assets/Props_Models_And_Collisions/2_White_Cyclinder.tres",
+		"Outline" = "res://Assets/Props_Models_And_Collisions/2_White_Cyclinder_Outline.tres",
+		"Mass" = 0.8,
+		"Properties" = [properties.AIM,properties.SHOOT,properties.CANT_DROP_THROW],
+		"Tooltip" = "A basic healing item, interact\nwith it while holding it to heal\n10 HP"
+	},
+	"10": {
+		"Name" = "The Package",
+		"Path" = "res://Scenes/Props/Basic_Healing(7).tscn",
+		"Model" = "res://Assets/Props_Models_And_Collisions/2_White_Cyclinder.tres",
+		"Outline" = "res://Assets/Props_Models_And_Collisions/2_White_Cyclinder_Outline.tres",
+		"Mass" = 2.6,
+		"Properties" = [properties.CANT_DROP_THROW],
+		"Tooltip" = "The oh-so-important package\nKeep careful care of this because\nyou HAVE to deliver this."
 	},
 }

@@ -27,6 +27,7 @@ var object_detected :Object = null
 var object_ID :int = 0
 var object_held :Object = null
 var object_mass :float = 0.0
+var object_properties :Array = []
 
 var head_hp :float = 125.0
 var torso_hp :float = 125.0

@@ -51,7 +51,7 @@ func _physics_process(delta: float) -> void:
 	#	print("true " + str(true_velocity))
 	
 func item_use():
-	var item_properties :Array = ItemData.itemdata[str(ID)]["Properties"]
+	var item_properties :Array = Playerstats.object_properties
 	var properties := ItemData.properties
 	
 	for property in item_properties:
@@ -76,6 +76,7 @@ func item_use():
 		
 func hold() -> void:
 	if Playerstats.object_held == body:
+		Playerstats.object_properties = ItemData.itemdata[str(ID)]["Properties"]
 		global_position = Playerstats.player.hand.global_position
 		Playerstats.object_mass = body.mass
 		body.position = pick_up_position
@@ -88,6 +89,7 @@ func hold() -> void:
 func drop() -> void:
 	global_position = Playerstats.player.hand.global_position
 	Playerstats.object_ID = 0
+	Playerstats.object_properties = []
 	grabbable = false
 	Playerstats.object_held = null
 	body.freeze = false
@@ -102,6 +104,7 @@ func drop() -> void:
 func throw(power :float) -> void:
 	if Playerstats.object_held == body:
 		Playerstats.object_mass = 0.0
+		Playerstats.object_properties = []
 		global_position = Playerstats.player.hand.global_position
 		Playerstats.object_ID = 0
 		grabbable = false

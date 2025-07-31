@@ -114,6 +114,7 @@ func _input(event: InputEvent) -> void:
 				Playerstats.object_held = null
 				Playerstats.object_ID = 0
 				Playerstats.object_mass = 0
+				Playerstats.object_properties = []
 			else:
 				$"../../../HUD".alert("Too heavy for inventory!")
 
@@ -145,9 +146,9 @@ func _input(event: InputEvent) -> void:
 		
 	if event.is_action_pressed("Right_Click"):
 		if Playerstats.object_held != null and movement_state != movement_states.THROWING:
-			if check_if_in_wall(Playerstats.object_held):
+			if check_if_in_wall(Playerstats.object_held) and not Playerstats.object_properties.has(ItemData.properties.CANT_DROP_THROW):
 				Playerstats.object_held.get_parent().drop()
-			else:
+			elif not Playerstats.object_properties.has(ItemData.properties.CANT_DROP_THROW):
 				$"../../../HUD".alert("Can't place here, there's something in the way.")
 
 	if event.is_action_pressed("V"):
@@ -279,7 +280,7 @@ func set_movement_mode(delta :float) -> void:
 		throw_power = 1
 
 func throw_process(delta :float) -> void:
-	if Input.is_action_pressed("Left_Click"):
+	if Input.is_action_pressed("Left_Click") and not Playerstats.object_properties.has(ItemData.properties.CANT_DROP_THROW):
 		movement_state = movement_states.THROWING
 		throw_power = clamp(throw_power + delta * 5,1,6)
 	elif throw_power > 1 and Input.is_action_pressed("Alt"):

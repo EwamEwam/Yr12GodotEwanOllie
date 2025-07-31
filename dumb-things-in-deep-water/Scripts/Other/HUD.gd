@@ -163,7 +163,7 @@ func set_prompts() -> void:
 	$Item_Description/Prompts/Throw.visible = false
 	if Playerstats.show_prompts:
 		$Item_Description/Prompts/InventoryIcon.visible = true
-		if Playerstats.object_held != null:
+		if Playerstats.object_held != null and not Playerstats.object_properties.has(ItemData.properties.CANT_DROP_THROW):
 			$Item_Description/Prompts/Drop.visible = true
 			$Item_Description/Prompts/Throw.visible = true
 		elif Playerstats.object_detected != null:
