@@ -1,0 +1,59 @@
+[gd_scene load_steps=7 format=3 uid="uid://1vdsxc2vo8e"]
+
+[ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/Basic_Props.gd" id="1_2j3sr"]
+[ext_resource type="ArrayMesh" uid="uid://d3qug6m6ae3ny" path="res://Assets/Props_Models_And_Collisions/9_Test_Gun.tres" id="2_0heuh"]
+[ext_resource type="ArrayMesh" uid="uid://nqpk6cg4thsl" path="res://Assets/Props_Models_And_Collisions/9_Test_Gun_Outline.tres" id="3_2j3sr"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_k831n"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5sy10"]
+resource_local_to_scene = true
+blend_mode = 4
+shading_mode = 0
+albedo_color = Color(0, 0, 0, 1)
+texture_filter = 4
+disable_receive_shadows = true
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_nu012"]
+points = PackedVector3Array(6.48928, 1.76286, 8.44932, 6.13417, 2.11852, 8.66374, 6.24596, 1.76286, 9.06246, 6.48928, -0.475334, 8.44932, 6.46955, 1.62053, 5.24892, 6.46736, 1.76286, 5.03095, 6.11115, 2.11852, 4.8502, -3.90639, 2.11823, 7.71567, 5.88318, 2.11823, 8.92778, 6.24487, 1.76286, 9.06423, -4.70757, 2.11823, 7.19113, 6.24596, -0.475334, 9.06246, 6.13417, -0.830708, 8.66374, 6.11115, -0.830708, 4.8502, 6.46736, -0.475334, 5.03095, 6.46955, -0.333012, 5.24892, 6.18459, 1.76286, 4.45679, -1.0184, 1.76286, -8.48834, -1.37351, 2.11823, -8.48834, -2.2262, 2.11823, -8.48834, -3.97215, 2.11823, -8.31822, -3.89872, 1.76286, 8.07186, -2.17579, 1.76286, 8.31287, 5.65412, 1.76286, 9.23967, 6.24487, -0.475334, 9.06423, -4.70757, -0.475334, 7.19113, -4.2615, 1.76286, 7.71922, -4.32726, 1.76286, -8.3253, 5.88318, -0.830708, 8.92778, 6.18459, -0.475334, 4.45679, -1.37351, -0.830708, -8.48834, -1.0184, -0.475334, -8.48834, -1.37241, 1.76286, -8.84453, -2.24922, 1.76286, -8.84453, -3.97434, 1.76286, -8.67264, -3.89872, -0.475334, 8.07186, -2.17579, -0.475334, 8.31287, 5.65412, -0.475334, 9.23967, -4.34479, -0.830708, 7.10076, -3.90639, -0.830708, 7.71567, -4.2615, -0.475334, 7.71922, -4.32726, -0.475334, -8.3253, -3.97215, -0.830708, -8.31822, -3.89214, 0.64304, -8.86402, -2.2262, -0.830708, -8.48834, -1.37241, -0.475334, -8.84453, -2.59885, 0.64304, -8.86402, -2.64817, 0.890445, -8.86402, -2.78846, 1.10003, -8.86402, -2.99779, 1.24033, -8.86402, -3.24549, 1.28941, -8.86402, -3.49319, 1.24033, -8.86402, -3.70253, 1.10003, -8.86402, -3.84282, 0.890445, -8.86402, -3.97434, -0.475334, -8.67264, -2.24922, -0.475334, -8.84453, -3.84282, 0.395635, -8.86402, -3.24549, -0.00361955, -8.86402, -2.99779, 0.0457459, -8.86402, -2.78846, 0.185759, -8.86402, -2.64817, 0.395635, -8.86402, -3.70253, 0.185759, -8.86402, -3.49319, 0.0457459, -8.86402)
+
+[node name="Test_Gun" type="Node3D" groups=["Prop"]]
+script = ExtResource("1_2j3sr")
+ID = 9
+pick_up_position = Vector3(-0.05, 0.25, -0.3)
+attribute = true
+
+[node name="Damage_Timer" type="Timer" parent="."]
+wait_time = 0.25
+one_shot = true
+autostart = true
+
+[node name="Shoot_Cooldown" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[node name="Body" type="RigidBody3D" parent="." groups=["Prop"]]
+collision_layer = 19
+collision_mask = 146
+physics_material_override = SubResource("PhysicsMaterial_k831n")
+continuous_cd = true
+
+[node name="Model" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(-2.18557e-09, 0.05, 0, -0.05, -2.18557e-09, 0, 0, 0, 0.05, 0, 0, 0)
+mesh = ExtResource("2_0heuh")
+
+[node name="Outline" type="MeshInstance3D" parent="Body/Model"]
+material_overlay = SubResource("StandardMaterial3D_5sy10")
+mesh = ExtResource("3_2j3sr")
+
+[node name="Collision" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(-2.18557e-09, 0.05, 0, -0.05, -2.18557e-09, 0, 0, 0, 0.05, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_nu012")
+
+[node name="Onscreen" type="VisibleOnScreenNotifier3D" parent="Body"]
+
+[node name="Spawner" type="Marker3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0219922, 0.158008, -0.488456)
+gizmo_extents = 0.7
+
+[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="."]

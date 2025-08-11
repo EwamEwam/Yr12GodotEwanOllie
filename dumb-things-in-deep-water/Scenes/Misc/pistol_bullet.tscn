@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://dhxrg8f4urr68"]
+
+[ext_resource type="Script" uid="uid://dt2w58g572ild" path="res://Scripts/Other/pistol_bullet.gd" id="1_aqaiy"]
+[ext_resource type="ArrayMesh" uid="uid://dmp7gstec1tmw" path="res://Assets/Other_Models_And_Collision/Bullet_1.tres" id="2_oacsy"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dkm6n"]
+size = Vector3(0.175, 0.175, 0.31)
+
+[node name="Pistol_bullet" type="RigidBody3D"]
+collision_layer = 0
+gravity_scale = 0.0
+can_sleep = false
+lock_rotation = true
+custom_integrator = true
+continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 5
+script = ExtResource("1_aqaiy")
+
+[node name="Model" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("2_oacsy")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_dkm6n")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+autostart = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

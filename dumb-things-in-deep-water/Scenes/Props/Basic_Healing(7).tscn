@@ -15,7 +15,7 @@ albedo_color = Color(0, 0, 0, 1)
 texture_filter = 4
 disable_receive_shadows = true
 
-[node name="Healing_Item" type="Marker3D" groups=["Prop"]]
+[node name="Healing_Item" type="Node3D" groups=["Prop"]]
 script = ExtResource("1_qn4jk")
 ID = 7
 pick_up_position = Vector3(0, 0, -0.5)

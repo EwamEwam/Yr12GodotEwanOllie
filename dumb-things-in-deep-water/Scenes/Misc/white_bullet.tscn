@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://1dn8km2s2cho"]
+
+[ext_resource type="Texture2D" uid="uid://bvlofy5how0ct" path="res://Assets/Sprites/Bullet_HUD.png" id="1_i5kek"]
+[ext_resource type="Script" uid="uid://dux6o37yqxqxc" path="res://Scripts/Other/white_bullet.gd" id="2_vanj0"]
+
+[node name="White_Bullet" type="Sprite2D"]
+scale = Vector2(3, 3)
+texture = ExtResource("1_i5kek")
+script = ExtResource("2_vanj0")

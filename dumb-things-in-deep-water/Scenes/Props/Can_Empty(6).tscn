@@ -1,9 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://djvoa4cesveap"]
 
 [ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/Basic_Props.gd" id="1_5ocda"]
-[ext_resource type="ArrayMesh" uid="uid://bskdml7jwhjr5" path="res://Assets/Props_Models_And_Collisions/1_Placeholder_Model.tres" id="2_u6cki"]
-[ext_resource type="ArrayMesh" uid="uid://bv6eohy1lbs1e" path="res://Assets/Props_Models_And_Collisions/1_Placeholder_Outline.tres" id="3_h1gu0"]
-[ext_resource type="Shape3D" uid="uid://c7632bt4cpyqe" path="res://Assets/Props_Models_And_Collisions/Box_test.tres" id="4_u6cki"]
+[ext_resource type="ArrayMesh" uid="uid://b0il6h8atr4l0" path="res://Assets/Props_Models_And_Collisions/6_Can_Empty.tres" id="2_u6cki"]
+[ext_resource type="ArrayMesh" uid="uid://b1uwpnhcgdupv" path="res://Assets/Props_Models_And_Collisions/6_Can_Empty_Outline.tres" id="3_h1gu0"]
+[ext_resource type="Shape3D" uid="uid://c6bs6nkaip2oc" path="res://Assets/Props_Models_And_Collisions/4_Can_Full_Collision.tres" id="4_f1b4p"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_k831n"]
 
@@ -15,10 +15,11 @@ albedo_color = Color(0, 0, 0, 1)
 texture_filter = 4
 disable_receive_shadows = true
 
-[node name="Empty_Can" type="Marker3D" groups=["Prop"]]
+[node name="Empty_Can" type="Node3D" groups=["Prop"]]
 script = ExtResource("1_5ocda")
-pick_up_position = Vector3(0, 0, -0.5)
-pick_up_rotation = Vector3(8, 2, 3)
+ID = 6
+pick_up_position = Vector3(0, 0, 0.25)
+pick_up_rotation = Vector3(8, 150, 0)
 
 [node name="Damage_Timer" type="Timer" parent="."]
 wait_time = 0.25
@@ -33,7 +34,7 @@ physics_material_override = SubResource("PhysicsMaterial_k831n")
 continuous_cd = true
 
 [node name="Model" type="MeshInstance3D" parent="Body"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 mesh = ExtResource("2_u6cki")
 
 [node name="Outline" type="MeshInstance3D" parent="Body/Model"]
@@ -41,6 +42,7 @@ material_overlay = SubResource("StandardMaterial3D_5sy10")
 mesh = ExtResource("3_h1gu0")
 
 [node name="Collision" type="CollisionShape3D" parent="Body"]
-shape = ExtResource("4_u6cki")
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+shape = ExtResource("4_f1b4p")
 
 [node name="Onscreen" type="VisibleOnScreenNotifier3D" parent="Body"]

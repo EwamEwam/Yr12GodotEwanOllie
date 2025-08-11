@@ -3,7 +3,7 @@ extends Node
 @onready var player :Object = $SubViewportContainer/SubViewport/Player
 
 func _physics_process(_delta: float) -> void:
-	get_tree().call_group("enemies", "update_target_location", player.global_position)
+	get_tree().call_group("Enemy", "update_target_location", player.global_position)
 	check_below_map()
 	
 func check_below_map() -> void:
@@ -14,6 +14,7 @@ func check_below_map() -> void:
 		if object.is_in_group("Prop"):
 			object.position = Vector3.ZERO
 			object.linear_velocity = Vector3.ZERO
+			object.get_parent().true_velocity = Vector3.ZERO
 
 func _on_timer_timeout() -> void:
 	$HUD.format_time()

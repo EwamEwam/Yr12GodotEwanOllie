@@ -15,6 +15,7 @@ func _process(_delta :float) -> void:
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("E"):
 		if not opened and Playerstats.object_held == null:
+			Playerstats.current_state = Playerstats.game_states.PAUSED
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			get_tree().paused = true
 			visible = true
@@ -36,6 +37,7 @@ func update(ID) -> void:
 	Playerstats.player.load_item_from_inventory(ID)
 	
 func close() -> void:
+	Playerstats.current_state = Playerstats.game_states.PLAYING
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	opened = false
 	get_tree().paused = false

@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://baocn3lc445ff"]
+[gd_scene load_steps=40 format=3 uid="uid://baocn3lc445ff"]
 
 [ext_resource type="Script" uid="uid://noefglp8kk2" path="res://Scripts/Other/HUD.gd" id="1_7lq3g"]
 [ext_resource type="Texture2D" uid="uid://dedhoyvicgme3" path="res://Assets/Sprites/Reticule.png" id="1_8leah"]
@@ -16,7 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://ciapgkj8scrqg" path="res://Assets/Sprites/Body_part_legs.png" id="8_egel0"]
 [ext_resource type="Texture2D" uid="uid://jl5x13gprn5n" path="res://Assets/Sprites/Body_part_arms.png" id="9_wouu6"]
 [ext_resource type="FontFile" uid="uid://b6jcffkqcl0a2" path="res://Assets/Sprites/Blue_Numbers.png" id="13_hlxis"]
-[ext_resource type="Texture2D" uid="uid://b6jmmhfbvk1gs" path="res://Assets/Sprites/Time_FPS_Seperator.png" id="16_egel0"]
+[ext_resource type="Texture2D" uid="uid://cshorioabc52v" path="res://Assets/Sprites/Item_Icons/2.png" id="17_5gnqf"]
 [ext_resource type="Texture2D" uid="uid://b0qk88veua1yx" path="res://Assets/Sprites/Oxygen_Tank.png" id="17_wouu6"]
 [ext_resource type="Texture2D" uid="uid://cd7oxagwgcig0" path="res://Assets/Sprites/Oxygen_bar.png" id="18_80pih"]
 [ext_resource type="Texture2D" uid="uid://c7dw1u4dhbrx" path="res://Assets/Sprites/Pick_up.png" id="18_g85nf"]
@@ -24,6 +24,15 @@
 [ext_resource type="PackedScene" uid="uid://4gn54sy2xffq" path="res://Scenes/Misc/inventory.tscn" id="20_3kgmp"]
 [ext_resource type="Texture2D" uid="uid://m8fmeqpgpj6v" path="res://Assets/Sprites/Drop.png" id="20_daeb3"]
 [ext_resource type="Texture2D" uid="uid://dmaonhuqkamwc" path="res://Assets/Sprites/Throw.png" id="21_7wd8o"]
+[ext_resource type="Texture2D" uid="uid://cll17f7l26182" path="res://Assets/Sprites/Open.png" id="22_daeb3"]
+[ext_resource type="Texture2D" uid="uid://bp5h3nga1x088" path="res://Assets/Sprites/Eat.png" id="23_7wd8o"]
+[ext_resource type="Texture2D" uid="uid://cnktvmr4hsdhx" path="res://Assets/Sprites/Heal.png" id="24_7wd8o"]
+[ext_resource type="Texture2D" uid="uid://cwo0jd3yd0xd7" path="res://Assets/Sprites/Aim.png" id="25_3doop"]
+[ext_resource type="Texture2D" uid="uid://dsy6kmy5n67w0" path="res://Assets/Sprites/Shoot.png" id="26_5gnqf"]
+[ext_resource type="Texture2D" uid="uid://cmvbxrefykg2t" path="res://Assets/Sprites/Test_gun_Sprite_sheet.png" id="26_wcv54"]
+[ext_resource type="FontFile" uid="uid://dkqra355eqfx1" path="res://Assets/Sprites/White_Numbers.png" id="27_u05gf"]
+[ext_resource type="Texture2D" uid="uid://cnafbocs6uh4k" path="res://Assets/Sprites/Toggle.png" id="28_5gnqf"]
+[ext_resource type="Texture2D" uid="uid://lgfy33vnh3wq" path="res://Assets/Sprites/Reticule_Gun.png" id="30_sms7y"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_w21a7"]
 animations = [{
@@ -37,11 +46,60 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": ExtResource("17_5gnqf")
+}],
+"loop": true,
+"name": &"2",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": ExtResource("5_ifk6x")
 }],
 "loop": false,
 "name": &"error",
 "speed": 0.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u05gf"]
+atlas = ExtResource("26_wcv54")
+region = Rect2(0, 0, 50, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sms7y"]
+atlas = ExtResource("26_wcv54")
+region = Rect2(50, 0, 50, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0umbk"]
+atlas = ExtResource("26_wcv54")
+region = Rect2(100, 0, 50, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3doop"]
+atlas = ExtResource("26_wcv54")
+region = Rect2(150, 0, 50, 14)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5gnqf"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u05gf")
+}],
+"loop": true,
+"name": &"9",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sms7y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0umbk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3doop")
+}],
+"loop": false,
+"name": &"9_Fire",
+"speed": 24.0
 }]
 
 [node name="HUD" type="Node2D"]
@@ -120,7 +178,7 @@ offset_right = 124.0
 offset_bottom = 410.0
 scale = Vector2(3, 3)
 step = 0.05
-value = 50.0
+value = 75.0
 nine_patch_stretch = true
 texture_progress = ExtResource("18_80pih")
 
@@ -131,7 +189,7 @@ offset_right = 230.0
 offset_bottom = 408.0
 scale = Vector2(3, 3)
 theme_override_fonts/font = ExtResource("13_hlxis")
-text = "100%"
+text = "75%"
 label_settings = ExtResource("6_aoah1")
 
 [node name="Throw_Bar" type="ProgressBar" parent="."]
@@ -186,13 +244,13 @@ label_settings = ExtResource("6_aoah1")
 position = Vector2(-293, -213)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_w21a7")
-animation = &"1"
+animation = &"2"
 autoplay = "error"
 
 [node name="Prompts" type="Sprite2D" parent="Item_Description"]
 
 [node name="PickUp" type="Sprite2D" parent="Item_Description/Prompts"]
-position = Vector2(-318, -148)
+position = Vector2(-318, -154)
 scale = Vector2(2, 2)
 texture = ExtResource("18_g85nf")
 centered = false
@@ -204,20 +262,59 @@ texture = ExtResource("19_juip4")
 centered = false
 
 [node name="Drop" type="Sprite2D" parent="Item_Description/Prompts"]
-position = Vector2(-318, -148)
+position = Vector2(-318, -154)
 scale = Vector2(2, 2)
 texture = ExtResource("20_daeb3")
 centered = false
 
 [node name="Throw" type="Sprite2D" parent="Item_Description/Prompts"]
-position = Vector2(-318, -110)
+position = Vector2(-318, -122)
 scale = Vector2(2, 2)
 texture = ExtResource("21_7wd8o")
+centered = false
+
+[node name="Open" type="Sprite2D" parent="Item_Description/Prompts"]
+position = Vector2(-318, -90)
+scale = Vector2(2, 2)
+texture = ExtResource("22_daeb3")
+centered = false
+
+[node name="Eat" type="Sprite2D" parent="Item_Description/Prompts"]
+position = Vector2(-318, -90)
+scale = Vector2(2, 2)
+texture = ExtResource("23_7wd8o")
+centered = false
+
+[node name="Heal" type="Sprite2D" parent="Item_Description/Prompts"]
+position = Vector2(-318, -90)
+scale = Vector2(2, 2)
+texture = ExtResource("24_7wd8o")
+centered = false
+
+[node name="Aim" type="Sprite2D" parent="Item_Description/Prompts"]
+position = Vector2(-318, -154)
+scale = Vector2(2, 2)
+texture = ExtResource("25_3doop")
+centered = false
+
+[node name="Shoot" type="Sprite2D" parent="Item_Description/Prompts"]
+position = Vector2(-318, -122)
+scale = Vector2(2, 2)
+texture = ExtResource("26_5gnqf")
+centered = false
+
+[node name="Toggle" type="Sprite2D" parent="Item_Description/Prompts"]
+position = Vector2(-318, -90)
+scale = Vector2(2, 2)
+texture = ExtResource("28_5gnqf")
 centered = false
 
 [node name="Reticule" type="Sprite2D" parent="."]
 position = Vector2(320, 240)
 texture = ExtResource("1_8leah")
+
+[node name="ReticuleGun" type="Sprite2D" parent="Reticule"]
+texture = ExtResource("30_sms7y")
 
 [node name="FPS" type="Label" parent="."]
 offset_left = 552.0
@@ -238,11 +335,35 @@ text = "00:00"
 label_settings = ExtResource("6_aoah1")
 horizontal_alignment = 2
 
-[node name="TimeFpsSeperator" type="Sprite2D" parent="."]
-visible = false
-position = Vector2(515, 32)
+[node name="Ammo" type="Node2D" parent="."]
+position = Vector2(75.035, 372)
+
+[node name="Gun_HUD" type="AnimatedSprite2D" parent="Ammo"]
 scale = Vector2(3, 3)
-texture = ExtResource("16_egel0")
+sprite_frames = SubResource("SpriteFrames_5gnqf")
+animation = &"9_Fire"
+autoplay = "9"
+frame = 2
+frame_progress = 1.0
+
+[node name="Ammo" type="Label" parent="Ammo"]
+offset_left = -21.035
+offset_top = -15.0
+offset_right = -5.035
+offset_bottom = -6.0
+scale = Vector2(3, 3)
+theme_override_fonts/font = ExtResource("27_u05gf")
+text = "14"
+horizontal_alignment = 2
+
+[node name="Ammo2" type="Label" parent="Ammo"]
+offset_left = 31.965
+offset_top = -7.0
+offset_right = 49.965
+offset_bottom = 2.0
+scale = Vector2(2, 2)
+theme_override_fonts/font = ExtResource("27_u05gf")
+text = "250"
 
 [node name="Inventory" parent="." instance=ExtResource("20_3kgmp")]
 auto_translate_mode = 2

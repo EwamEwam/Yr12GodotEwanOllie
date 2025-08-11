@@ -1,9 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://b8uxpv3fd0038"]
 
 [ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/Basic_Props.gd" id="1_83ocu"]
-[ext_resource type="ArrayMesh" uid="uid://c642k6ymtq716" path="res://Assets/Props_Models_And_Collisions/3_Can_Closed.tres" id="2_83ocu"]
-[ext_resource type="ArrayMesh" uid="uid://nkj0wigywtj2" path="res://Assets/Props_Models_And_Collisions/3_Can_Closed_Outline.tres" id="3_klmdq"]
-[ext_resource type="Shape3D" uid="uid://u4ubbilmhcep" path="res://Assets/Props_Models_And_Collisions/3_Collision.tres" id="3_vy333"]
+[ext_resource type="ArrayMesh" uid="uid://d2tpjo3dmdecv" path="res://Assets/Props_Models_And_Collisions/3_Can_Closed.tres" id="2_83ocu"]
+[ext_resource type="ArrayMesh" uid="uid://bbmr8we6x8p2" path="res://Assets/Props_Models_And_Collisions/3_Can_Closed_Outline.tres" id="3_klmdq"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_k831n"]
 
@@ -15,11 +14,15 @@ albedo_color = Color(0, 0, 0, 1)
 texture_filter = 4
 disable_receive_shadows = true
 
-[node name="Closed_Can" type="Marker3D" groups=["Prop"]]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_83ocu"]
+height = 0.163086
+radius = 0.0698242
+
+[node name="Closed_Can" type="Node3D" groups=["Prop"]]
 script = ExtResource("1_83ocu")
 ID = 3
-pick_up_position = Vector3(0, 0, -0.5)
-pick_up_rotation = Vector3(8, 2, 3)
+pick_up_position = Vector3(0, 0, 0.25)
+pick_up_rotation = Vector3(8, 180, 0)
 
 [node name="Damage_Timer" type="Timer" parent="."]
 wait_time = 0.25
@@ -27,14 +30,13 @@ one_shot = true
 autostart = true
 
 [node name="Body" type="RigidBody3D" parent="." groups=["Prop"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.35)
 collision_layer = 19
 collision_mask = 146
 physics_material_override = SubResource("PhysicsMaterial_k831n")
 continuous_cd = true
 
 [node name="Model" type="MeshInstance3D" parent="Body"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 mesh = ExtResource("2_83ocu")
 
 [node name="Outline" type="MeshInstance3D" parent="Body/Model"]
@@ -42,7 +44,8 @@ material_overlay = SubResource("StandardMaterial3D_5sy10")
 mesh = ExtResource("3_klmdq")
 
 [node name="Collision" type="CollisionShape3D" parent="Body"]
-shape = ExtResource("3_vy333")
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+shape = SubResource("CylinderShape3D_83ocu")
 
 [node name="Onscreen" type="VisibleOnScreenNotifier3D" parent="Body"]
 

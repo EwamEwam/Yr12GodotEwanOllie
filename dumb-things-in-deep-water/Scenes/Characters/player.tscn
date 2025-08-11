@@ -175,7 +175,13 @@ shape = SubResource("SphereShape3D_khnq4")
 collision_mask = 128
 
 [node name="Camera3D" type="Camera3D" parent="Camera_Pivot/Yaw/Pitch/Camera_Spring"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 8, 4.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 6.77399, 12.2586)
+
+[node name="Camera_ray" type="RayCast3D" parent="Camera_Pivot/Yaw/Pitch/Camera_Spring/Camera3D"]
+target_position = Vector3(0, 0, -75)
+
+[node name="Object_detection_ray" type="RayCast3D" parent="Camera_Pivot/Yaw/Pitch/Camera_Spring/Camera3D"]
+target_position = Vector3(0, 0, -50)
 
 [node name="Ground_Check" type="ShapeCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.136434, 0)

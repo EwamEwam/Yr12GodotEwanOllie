@@ -6,7 +6,7 @@
 [node name="Number" type="Label3D"]
 pixel_size = 0.08
 billboard = 1
-texture_filter = 4
+texture_filter = 2
 text = "25"
 font = ExtResource("1_wegsq")
 script = ExtResource("1_uemgn")

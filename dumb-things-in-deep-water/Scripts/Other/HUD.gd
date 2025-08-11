@@ -1,6 +1,7 @@
 extends Node2D
 
 @onready var reticle :Sprite2D = $Reticule
+@onready var reticle_gun :Sprite2D = $Reticule/ReticuleGun
 @onready var throw_bar :ProgressBar = $Throw_Bar
 @onready var player :CharacterBody3D = Playerstats.player
 
@@ -13,6 +14,8 @@ func _ready() -> void:
 	$Health_bar/HealthBarEnd.position.x = (3 * Playerstats.max_health) + 121.5
 
 func _process(_delta: float) -> void:
+	reticle.modulate.g = 1
+	reticle.modulate.b = 1
 	reticle.modulate.a = 0.2
 	if player.movement_state != player.movement_states.NORMAL:
 		reticle.modulate.a = 1
@@ -58,8 +61,19 @@ func _process(_delta: float) -> void:
 	$Health_bar/Hp.position.x = (Playerstats.max_health * 3) + 130
 	$Health_bar/Oxygen.text = str(int(ceil(Playerstats.oxygen))) + "%"
 	
+	set_reticle_size()
+	
+	if Playerstats.object_held != null:
+		if Playerstats.object_properties.has(ItemData.properties.AIM) and Playerstats.player.movement_state == Playerstats.player.movement_states.AIMING and Playerstats.object_held.get_parent().attribute:
+			if Playerstats.player.check_raycast_collider():
+				reticle.modulate.g = 0
+				reticle.modulate.b = 0
+	
 	for text in alerts:
 		text.position.y = 82 + (25*alerts.find(text))
+		
+	$Ammo.visible = false
+	set_ammo()
 		
 	set_prompts()
 
@@ -99,8 +113,7 @@ func health_bar_animation(before :float) -> void:
 	tween.tween_property($Health_bar/Health_Bar, "value", Playerstats.health, abs($Health_bar/Health_Bar.value-Playerstats.health)/200).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	texture.position = Vector2(117,447)
 	texture.color = Color(1,1,1,1)
-	texture.scale = Vector2(3,3)
-	texture.size = Vector2(before,5)
+	texture.size = Vector2(floor(3*before),15)
 	texture.z_index = -1
 	$Health_bar.add_child(texture)
 	tween2.tween_property(texture, "modulate", Color(1,1,1,0), 0.75).set_trans(Tween.TRANS_LINEAR)
@@ -111,6 +124,10 @@ func health_bar_animation(before :float) -> void:
 	
 func update_health_bar() -> void:
 	$Health_bar/Health_Bar.value = Playerstats.health
+	$Health_bar/BodyPartHead.modulate = Color.from_hsv(0,(Playerstats.max_health - Playerstats.head_hp)/Playerstats.max_health,1,1)
+	$Health_bar/BodyPartTorso.modulate = Color.from_hsv(0,(Playerstats.max_health - Playerstats.torso_hp)/Playerstats.max_health,1,1)
+	$Health_bar/BodyPartLegs.modulate = Color.from_hsv(0,(Playerstats.max_health - Playerstats.legs_hp)/Playerstats.max_health,1,1)
+	$Health_bar/BodyPartArms.modulate = Color.from_hsv(0,(Playerstats.max_health - Playerstats.arms_hp)/Playerstats.max_health,1,1)
 	
 func format_time() -> void:
 	level_time = clamp(level_time + 1, 0, 3599)
@@ -161,11 +178,68 @@ func set_prompts() -> void:
 	$Item_Description/Prompts/PickUp.visible = false
 	$Item_Description/Prompts/Drop.visible = false
 	$Item_Description/Prompts/Throw.visible = false
+	$Item_Description/Prompts/Open.visible = false
+	$Item_Description/Prompts/Eat.visible = false
+	$Item_Description/Prompts/Heal.visible = false
+	$Item_Description/Prompts/Shoot.visible = false
+	$Item_Description/Prompts/Aim.visible = false
+	$Item_Description/Prompts/Toggle.visible = false
+	
+	var prompts :Array = Playerstats.object_prompts
+	var prompt_type := ItemData.prompts
 	if Playerstats.show_prompts:
 		$Item_Description/Prompts/InventoryIcon.visible = true
-		if Playerstats.object_held != null and not Playerstats.object_properties.has(ItemData.properties.CANT_DROP_THROW):
-			$Item_Description/Prompts/Drop.visible = true
-			$Item_Description/Prompts/Throw.visible = true
+		if Playerstats.object_held != null:
+			for prompt in prompts:
+				if prompt == prompt_type.OPEN:
+					$Item_Description/Prompts/Open.visible = true
+				if prompt == prompt_type.HEAL:
+					$Item_Description/Prompts/Heal.visible = true
+				if prompt == prompt_type.EAT:
+					$Item_Description/Prompts/Eat.visible = true
+				if prompt == prompt_type.SHOOT:
+					$Item_Description/Prompts/Shoot.visible = true
+				if prompt == prompt_type.AIM:
+					$Item_Description/Prompts/Aim.visible = true
+				if prompt == prompt_type.TOGGLE:
+					$Item_Description/Prompts/Toggle.visible = true
+					
+			if not Playerstats.object_properties.has(ItemData.properties.CANT_DROP_THROW):
+					$Item_Description/Prompts/Drop.visible = true
+					$Item_Description/Prompts/Throw.visible = true
+			
 		elif Playerstats.object_detected != null:
 			if Playerstats.object_detected.get_parent().grabbable:
 				$Item_Description/Prompts/PickUp.visible = true
+				
+func set_ammo() -> void:
+	if Playerstats.object_properties.has(ItemData.properties.SHOOT):
+		$Ammo.visible = true
+		var ammo1 :int
+		var ammo2 :int
+		if Playerstats.object_properties.has(ItemData.properties.PISTOL):
+			ammo1 = Playerstats.ammo["Pistol"][0]
+			ammo2 = Playerstats.ammo["Pistol"][1]
+		$Ammo/Ammo.text = str(ammo1)
+		$Ammo/Ammo2.text = str(ammo2)
+	
+func fire() -> void:
+	var animation_name :String = str(Playerstats.object_ID)+"_Fire"
+	$Ammo/Gun_HUD.play(animation_name)
+	var bullet :PackedScene = load("res://Scenes/Misc/white_bullet.tscn")
+	var new_bullet :Sprite2D = bullet.instantiate()
+	new_bullet.position = Vector2(-50,-15)
+	$Ammo.add_child(new_bullet)
+
+func set_reticle_size() -> void:
+	if Playerstats.object_properties.has(ItemData.properties.SHOOT):
+		reticle_gun.visible = true
+		if Playerstats.object_held.get_parent().attribute:
+			reticle_gun.modulate.a = 0.5
+		else:
+			reticle_gun.modulate.a = 0.1
+
+		var scale_factor :float = abs(2.5 * player.camera_jerk) + 1
+		reticle_gun.scale = scale_factor * Vector2(1,1)
+	else:
+		reticle_gun.visible = false

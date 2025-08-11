@@ -1,4 +1,4 @@
-extends Marker3D
+extends Node3D
 
 @export var ID :int = 1
 @export var pick_up_position :Vector3 = Vector3.ZERO
@@ -10,7 +10,10 @@ extends Marker3D
 @onready var onscreen :VisibleOnScreenNotifier3D = $Body/Onscreen
 @onready var timer :Timer = $Damage_Timer
 
+var object_properties :Array
+
 @export var attribute :bool = false
+@export var max_speed :float = 60.0
 
 var previous_velocity :Vector3 = Vector3.ZERO
 var previous_position :Vector3 = Vector3.ZERO
@@ -26,6 +29,8 @@ func _ready() -> void:
 	
 func _physics_process(delta: float) -> void:
 	if onscreen.is_on_screen():
+		item_process()
+		limit_speed()
 		previous_velocity = body.linear_velocity
 		body.can_sleep = false
 		model.visible = true
@@ -36,11 +41,22 @@ func _physics_process(delta: float) -> void:
 			
 		if (true_velocity - body.linear_velocity).length() > 2 and true_velocity != Vector3.ZERO and Playerstats.object_held != body and grabbable:
 			body.linear_velocity = true_velocity
+			print(body.linear_velocity)
 			previous_position = body.global_position
 		
 	else:
 		body.can_sleep = true
 		model.visible = false
+	
+	if object_properties.has(ItemData.properties.TV):
+		var distance_to_player :float = (global_position - Playerstats.player.global_position).length()
+		$VideoStreamPlayer.volume_db = -10 - distance_to_player/1.5
+		if attribute and not $VideoStreamPlayer.is_playing():
+			$VideoStreamPlayer.play()
+			
+	if object_properties.has(ItemData.properties.SPEAKER):
+		if attribute and not $Body/Audio_Player.playing:
+			$Body/Audio_Player.play()
 	
 	if body.linear_velocity.length() > 0.001:
 		true_velocity = (body.global_position - previous_position)/delta
@@ -50,11 +66,35 @@ func _physics_process(delta: float) -> void:
 	#	print("linear: " + str(body.linear_velocity))
 	#	print("true " + str(true_velocity))
 	
-func item_use():
-	var item_properties :Array = Playerstats.object_properties
+func item_process() -> void:
 	var properties := ItemData.properties
 	
-	for property in item_properties:
+	for property in object_properties:
+		if Playerstats.object_properties.has(properties.AIM):
+			if Input.is_action_pressed("Right_Click") or Input.is_action_pressed("Alt"):
+				Playerstats.player.movement_state = Playerstats.player.movement_states.AIMING
+				
+		if property == properties.TV:
+			if attribute:
+				$Body/Model/Screen.visible = true
+				var video_texture :Texture2D = $VideoStreamPlayer.get_video_texture()
+				var new_texture = StandardMaterial3D.new()
+				new_texture.albedo_texture = video_texture
+				$Body/Model/Screen.material_override = new_texture
+			else:
+				$Body/Model/Screen.visible = false
+				
+		if property == properties.SPEAKER:
+			if attribute:
+				$Body/Light.light_color = Color(0.092, 0.553, 0.0)
+			else:
+				$Body/Light.light_color = Color(0.859, 0.0, 0.0)
+				
+func item_use():
+	var held_properties :Array = Playerstats.object_properties
+	var properties := ItemData.properties
+	
+	for property in held_properties:
 		if property == properties.ID_UPDATE:
 			ID += 1
 			Playerstats.object_ID += 1
@@ -73,10 +113,40 @@ func item_use():
 			Playerstats.object_mass = 0.0
 			Playerstats.object_ID = 0
 			queue_free()
+			
+		if property == properties.SHOOT:
+			if $Shoot_Cooldown.is_stopped() and Playerstats.player.movement_state != Playerstats.player.movement_states.NORMAL:
+				attribute = false
+				$Shoot_Cooldown.start(ItemData.itemdata[str(ID)]["Interval"] / (0.5 + (Playerstats.arms_hp/Playerstats.max_health)/2))
+				var target_position = Playerstats.player.find_raycast_hit_point()
+				if not target_position is Array:
+					target_position = [Vector3.ZERO,Vector3.ZERO]
+				Playerstats.player.shoot(target_position)
+				await $Shoot_Cooldown.timeout
+				attribute = true
+				
+		if property == properties.TV:
+			$VideoStreamPlayer.stream = load(ItemData.itemdata[str(ID)]["Video"])
+			if attribute == false:
+				$Body/Model/Screen.visible = true
+				attribute = true
+			else:
+				$Body/Model/Screen.visible = false
+				attribute = false
 		
+		if property == properties.SPEAKER:
+			$Body/Audio_Player.stream = load(ItemData.itemdata[str(ID)]["Audio"])
+			if attribute == false:
+				attribute = true
+				$Body/Light.light_color = Color(0.092, 0.553, 0.0)
+			else:
+				attribute = false
+				$Body/Light.light_color = Color(0.859, 0.0, 0.0)
+			
 func hold() -> void:
 	if Playerstats.object_held == body:
 		Playerstats.object_properties = ItemData.itemdata[str(ID)]["Properties"]
+		Playerstats.object_prompts = ItemData.itemdata[str(ID)]["Prompts"]
 		global_position = Playerstats.player.hand.global_position
 		Playerstats.object_mass = body.mass
 		body.position = pick_up_position
@@ -90,6 +160,7 @@ func drop() -> void:
 	global_position = Playerstats.player.hand.global_position
 	Playerstats.object_ID = 0
 	Playerstats.object_properties = []
+	Playerstats.object_prompts = []
 	grabbable = false
 	Playerstats.object_held = null
 	body.freeze = false
@@ -105,6 +176,7 @@ func throw(power :float) -> void:
 	if Playerstats.object_held == body:
 		Playerstats.object_mass = 0.0
 		Playerstats.object_properties = []
+		Playerstats.object_prompts = []
 		global_position = Playerstats.player.hand.global_position
 		Playerstats.object_ID = 0
 		grabbable = false
@@ -118,8 +190,20 @@ func throw(power :float) -> void:
 	
 func set_props() -> void:
 	var data :Dictionary = ItemData.itemdata[str(ID)]
+	object_properties = ItemData.itemdata[str(ID)]["Properties"]
 	body.mass = data["Mass"]
 	model.mesh = load(data["Model"])
 	outline.mesh = load(data["Outline"])
 	if data.has("Collision"):
 		collision.shape = load(data["Collision"])
+
+func limit_speed() -> void:
+	if body.linear_velocity.length() > max_speed:
+		body.linear_velocity = body.linear_velocity.normalized() * max_speed
+	
+func create_bullet(target_position :Array) -> void:
+	var bullet :PackedScene = load(ItemData.itemdata[str(ID)]["Bullet"])
+	var new_bullet :Node3D = bullet.instantiate()
+	$"../..".add_child(new_bullet)
+	new_bullet.global_position = $Body/Spawner.global_position
+	new_bullet.create(target_position)

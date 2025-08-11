@@ -18,13 +18,18 @@ var last_direction_facing :Vector3 = Vector3.ZERO
 
 var camera_bob :Vector2 = Vector2.ZERO
 var head_bob_timer :float = 0.0
+var noise :FastNoiseLite = FastNoiseLite.new()
+var noise_t :float = 0.0
 var camera_shake :Vector2 = Vector2.ZERO
+var shake_duration :float = 0.0
+var shake_strength :float = 0.0
 var camera_jerk: float = 0.0
 var jerk_velocity: float = 0.0
 var zoom :float = 1.0
 
 var throw_power :float = 1.0
 var can_move :bool = true
+var reloading :bool = false
 
 enum movement_states {NORMAL,AIMING,THROWING}
 var movement_state :movement_states = movement_states.NORMAL
@@ -38,8 +43,12 @@ var movement_state :movement_states = movement_states.NORMAL
 @onready var hand :Marker3D = $Mesh/Hand
 @onready var mesh :MeshInstance3D = $Mesh
 @onready var ground_check :ShapeCast3D = $Ground_Check
+@onready var camera_raycast :RayCast3D = $Camera_Pivot/Yaw/Pitch/Camera_Spring/Camera3D/Camera_ray
 
 #The physics process function which essentially runs every frame. Handles most of the player's essential logic
+func _ready() -> void:
+	noise.seed = randi()
+
 func _physics_process(delta: float) -> void:
 	set_speed()
 	fall_damage_calculation()
@@ -88,6 +97,7 @@ func _physics_process(delta: float) -> void:
 	velocity = calculated_velocity
 	push_rigid_body()
 	#check_velocity()
+	control_shake(delta)
 	move_and_slide()
 	true_velocity = (global_position - position_last_frame) * 90
 	
@@ -98,8 +108,12 @@ func _physics_process(delta: float) -> void:
 #The function that handles most input events
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Playerstats.current_state == Playerstats.game_states.PLAYING:
-		yaw += -event.relative.x * Playerstats.sensitivity * Playerstats.screen_factor
-		pitch += -event.relative.y * Playerstats.sensitivity * Playerstats.screen_factor
+		if movement_state == movement_states.NORMAL:
+			yaw += -event.relative.x * Playerstats.sensitivity * Playerstats.screen_factor
+			pitch += -event.relative.y * Playerstats.sensitivity * Playerstats.screen_factor
+		else:
+			yaw += -event.relative.x * Playerstats.aiming_sensitivity * Playerstats.screen_factor
+			pitch += -event.relative.y * Playerstats.aiming_sensitivity * Playerstats.screen_factor
 		pitch = clamp(pitch, -60,65)
 		
 	if event.is_action_pressed("Escape"):
@@ -115,6 +129,7 @@ func _input(event: InputEvent) -> void:
 				Playerstats.object_ID = 0
 				Playerstats.object_mass = 0
 				Playerstats.object_properties = []
+				Playerstats.object_prompts = []
 			else:
 				$"../../../HUD".alert("Too heavy for inventory!")
 
@@ -122,7 +137,7 @@ func _input(event: InputEvent) -> void:
 		if Playerstats.object_held == null and not movement_state == movement_states.THROWING and Playerstats.inventory.size() > 0 and can_move:
 			var new_prop_ID: int = Playerstats.inventory.pop_back()
 			var prop :PackedScene = load(ItemData.itemdata[str(new_prop_ID)]["Path"])
-			var new_prop :Marker3D = prop.instantiate()
+			var new_prop :Node3D = prop.instantiate()
 			Playerstats.object_ID = new_prop_ID
 			Playerstats.object_mass = ItemData.itemdata[str(new_prop_ID)]["Mass"]
 			$"../Props".add_child(new_prop)
@@ -141,7 +156,7 @@ func _input(event: InputEvent) -> void:
 					Input.action_release("Left_Click")
 				else:
 					$"../../../HUD".alert("Too heavy to lift! (" + str(round(Playerstats.object_detected.mass*10)/10)  +"kg)")
-		elif movement_state == movement_states.NORMAL:
+		elif movement_state == movement_states.NORMAL or Playerstats.object_properties.has(ItemData.properties.CANT_DROP_THROW):
 			Playerstats.object_held.get_parent().item_use()
 		
 	if event.is_action_pressed("Right_Click"):
@@ -153,20 +168,25 @@ func _input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("V"):
 		set_camera_mode()
+		
+	if event.is_action_pressed("R"):
+		if Playerstats.object_properties.has(ItemData.properties.SHOOT):
+			reload()
 
 #runs every frame, checks the objects in the player's grab range 
 func item_check() -> Object:
 	var closest_object :Object = null
-	if Playerstats.object_held == null:
-		var objects :Array[Node3D] = item_detection.get_overlapping_bodies()
-		var closest_distance :float = 50
-		for item in objects:
-			var distance :float = (item.global_position - global_position).length()
-			if distance < closest_distance:
-				closest_distance = distance
-				closest_object = item
-	else:
-		Playerstats.object_held.get_parent().hold()
+	if Playerstats.current_camera != Playerstats.camera_states.FIRST:
+		if Playerstats.object_held == null:
+			var objects :Array[Node3D] = item_detection.get_overlapping_bodies()
+			var closest_distance :float = 50
+			for item in objects:
+				var distance :float = (item.global_position - global_position).length()
+				if distance < closest_distance:
+					closest_distance = distance
+					closest_object = item
+		else:
+			Playerstats.object_held.get_parent().hold()
 	return closest_object
 	
 func load_item_from_inventory(ID :int) -> void:
@@ -188,15 +208,16 @@ func set_camera_movement(delta :float) -> void:
 			head_bob_timer += delta * 3
 		camera_bob.x = move_toward(camera_bob.x,sin(head_bob_timer + PI/2)/12 + camera_shake.x,delta * 15)
 		camera_bob.y = move_toward(camera_bob.y, abs(sin(head_bob_timer)) /12 + camera_shake.y,delta * 15)
-		if abs(camera_jerk) > 0.01 or abs(jerk_velocity) > 0.01:
-			var camera_acceleration = -50 * camera_jerk - 10 * jerk_velocity
-			jerk_velocity += camera_acceleration * delta
-			camera_jerk += jerk_velocity * delta
-			camera.rotation.x = camera_jerk
-		else:
-			jerk_velocity = 0.0
-			camera_jerk = 0.0
-			camera.rotation.x = 0.0
+	if abs(camera_jerk) > 0.005 or abs(jerk_velocity) > 0.005:
+		jerk_velocity = min(jerk_velocity,65)
+		var camera_acceleration = -100 * camera_jerk - 25 * jerk_velocity
+		jerk_velocity += camera_acceleration * delta
+		camera_jerk += jerk_velocity * delta
+		camera.rotation.x = camera_jerk
+	else:
+		jerk_velocity = 0.0
+		camera_jerk = 0.0
+		camera.rotation.x = 0.0
 
 func set_speed() -> void:
 	if not Playerstats.shift_lock:
@@ -221,12 +242,9 @@ func set_speed() -> void:
 	speed *= ((Playerstats.legs_hp/Playerstats.max_health)/1.25 + 0.2)
 
 func set_camera(delta: float) -> Basis:
-	# Initialize camera offset
 	var camera_offset: Basis
 	
-	# Handle camera behavior based on game state
 	if Playerstats.current_state == Playerstats.game_states.PLAYING and movement_state == movement_states.NORMAL and can_move:
-		# First-person camera with normal movement
 		camera.h_offset = camera_bob.x
 		camera.v_offset = camera_bob.y
 		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
@@ -238,18 +256,16 @@ func set_camera(delta: float) -> Basis:
 		pivot.position.x = move_toward(pivot.position.x, 0.0, delta * 2)
 		pivot.position.z = move_toward(pivot.position.z, 0.0, delta * 2)
 		pivot.position.y = lerp(pivot.position.y, zoom * (3 - (pitch + 45) / 45), delta * 10)
-		camera_spring.spring_length = lerp(camera_spring.spring_length, zoom * (abs(calculated_velocity.length()) / 7.5 + 6.5), delta * 5)
+		camera_spring.spring_length = lerp(camera_spring.spring_length, zoom * ((abs(calculated_velocity.length()) / 7.5) + 6.5), delta * 5)
 		camera_spring.spring_length = clamp(move_toward(camera_spring.spring_length, camera_spring.spring_length * zoom, delta * 5), 2.0, 8.0)
 		camera.fov = move_toward(camera.fov, 80.0 + abs(calculated_velocity.length() / 2.5), delta * 80)
 	elif Playerstats.current_camera == Playerstats.camera_states.FIRST:
-		# First-person camera without normal movement
 		camera.h_offset = camera_bob.x
 		camera.v_offset = camera_bob.y
 		camera_yaw.rotation_degrees.y = lerp(camera_yaw.rotation_degrees.y, yaw, camera_speed * delta)
 		camera_pitch.rotation_degrees.x = lerp(camera_pitch.rotation_degrees.x, pitch, camera_speed * delta)
 		camera.fov = 90.0
 	else:
-		# Other game states (e.g., third-person or restricted movement)
 		speed /= 2
 		camera.h_offset = camera_bob.x / 2
 		camera.v_offset = camera_bob.y / 2
@@ -258,17 +274,16 @@ func set_camera(delta: float) -> Basis:
 		pivot.position.x = move_toward(pivot.position.x, 0.605 * cos(mesh.rotation.y), delta * 8)
 		pivot.position.z = move_toward(pivot.position.z, -0.561 * sin(mesh.rotation.y), delta * 8)
 		pivot.position.y = lerp(pivot.position.y, 1.25, delta * 10)
-		camera_yaw.rotation_degrees.y = lerp(camera_yaw.rotation_degrees.y, yaw, camera_speed * delta)
+		camera_yaw.rotation_degrees.y = yaw
 		camera_pitch.rotation_degrees.x = lerp(camera_pitch.rotation_degrees.x, pitch, camera_speed * delta)
 		camera_spring.spring_length = lerp(camera_spring.spring_length, 2.0 * zoom, 0.075)
 		camera.fov = move_toward(camera.fov, 80.0 + abs(calculated_velocity.length() / 3), delta * 80)
 	
-	# Set and return camera offset
 	camera_offset = camera_yaw.transform.basis
 	return camera_offset
 	
 func set_movement_mode(delta :float) -> void:
-	if Input.is_action_pressed("Alt"):
+	if Input.is_action_pressed("Alt") or (Playerstats.object_properties.has(ItemData.properties.AIM) and Input.is_action_pressed("Right_Click")):
 		if Playerstats.object_held != null:
 			movement_state = movement_states.AIMING
 			throw_process(delta)
@@ -470,7 +485,8 @@ func fall_damage_calculation() -> void:
 			$"../../../HUD".shake_part("Legs")
 
 func change_in_health(amt :float, particles :bool) -> void:
-	var previous_health :float = int(ceil(Playerstats.health))
+	var before :float = Playerstats.health
+	var previous_health :int = int(ceil(Playerstats.health))
 	Playerstats.health += amt
 	if previous_health - int(ceil(Playerstats.health)) > 0:
 		Playerstats.time_since_last_damage = 0
@@ -480,9 +496,9 @@ func change_in_health(amt :float, particles :bool) -> void:
 			var new_number :Label3D = number.instantiate()
 			new_number.create("Player_Damage",str(int(previous_health - int(ceil(Playerstats.health)))),global_position)
 			$"../NavigationRegion3D/Environment".add_child(new_number)
-			$"../../../HUD".health_bar_animation(previous_health)
-			shake(min(-0.1,(2*amt)/Playerstats.max_health),25,1.8,get_process_delta_time())
-			jerk_velocity = min((5*amt)/Playerstats.max_health,-0.5)
+			$"../../../HUD".health_bar_animation(before)
+			shake(max(0.1,-(25*amt)/Playerstats.max_health),0.3)
+			jerk_velocity = min((20*amt)/Playerstats.max_health,-1)
 		else:
 			$"../../../HUD".update_health_bar()
 	elif particles and int(ceil(Playerstats.health)) - previous_health > 0:
@@ -551,15 +567,10 @@ func _on_arms_body_entered(body: Node) -> void:
 	if body.is_in_group("Prop") and abs(body.get_parent().previous_velocity.length()) > 4 and body.get_parent().grabbable:
 		damage_based_on_prop(body,20,2.75,0.75,calculate_dot_product(body),"Arms")
 		
-func shake(amt,rep,damp,time) -> void:
-	if Playerstats.health > 0:
-		for i in range(rep):
-			if Playerstats.allow_shaking:
-				camera_shake.x=(randf_range(-amt,amt))
-				camera_shake.y=(randf_range(-amt,amt))
-				amt /= damp
-				await get_tree().create_timer(time).timeout
-	camera_shake = Vector2.ZERO
+func shake(strength: float, duration: float) -> void:
+	shake_strength = strength
+	shake_duration = duration
+	noise_t = randf_range(0,1000)
 
 func set_camera_mode() -> void:
 	var current = Playerstats.current_camera
@@ -602,3 +613,86 @@ func check_if_in_wall(body :RigidBody3D) -> bool:
 		if collider is StaticBody3D or collider is RigidBody3D:
 			return false
 	return true
+
+func find_raycast_hit_point():
+	if camera_raycast.is_colliding():
+		var arm_factor :float = (Playerstats.max_health - Playerstats.arms_hp)/Playerstats.max_health
+		camera_raycast.target_position = Vector3(randf_range(-5,5)*arm_factor,randf_range(-5,5)*arm_factor,randf_range(-5,5) + -ItemData.itemdata[str(Playerstats.object_ID)]["Range"])
+		var results :Array = [camera_raycast.get_collision_point(),camera_raycast.get_collision_normal()]
+		return results
+	else:
+		return false
+	
+func check_raycast_collider() -> bool:
+	$Camera_Pivot/Yaw/Pitch/Camera_Spring/Camera3D/Object_detection_ray.target_position = Vector3(0,0,-ItemData.itemdata[str(Playerstats.object_ID)]["Range"])
+	if $Camera_Pivot/Yaw/Pitch/Camera_Spring/Camera3D/Object_detection_ray.is_colliding():
+		var collider = $Camera_Pivot/Yaw/Pitch/Camera_Spring/Camera3D/Object_detection_ray.get_collider()
+		if collider is CharacterBody3D:
+			if collider.is_in_group("Enemy"):
+				return true
+		return false
+	return false
+
+func shoot(target_position :Array) -> void:
+	var ammo :Array
+	if Playerstats.object_properties.has(ItemData.properties.PISTOL):
+		ammo = Playerstats.ammo["Pistol"]
+	if Playerstats.object_properties.has(ItemData.properties.SHOTGUN):
+		ammo = Playerstats.ammo["Shotgun"]
+	if Playerstats.object_properties.has(ItemData.properties.REVOLVER):
+		ammo = Playerstats.ammo["Revolver"]
+	if Playerstats.object_properties.has(ItemData.properties.UZI):
+		ammo = Playerstats.ammo["UZI"]
+	if ammo[0] > 0:
+		$"../../../HUD".fire()
+		Playerstats.object_held.get_parent().create_bullet(target_position)
+		jerk_velocity = ItemData.itemdata[str(Playerstats.object_ID)]["Recoil"] / (0.1 + (Playerstats.arms_hp/Playerstats.max_health)/1.111111111111)
+		shake(ItemData.itemdata[str(Playerstats.object_ID)]["Recoil"]/(4*(0.1 + (Playerstats.arms_hp/Playerstats.max_health)/1.111111111111)),0.25)
+		ammo[0] -= 1
+	else:
+		reload()
+		
+func reload() -> void:
+	var ammo :Array
+	var max_ammo :int
+	if Playerstats.object_properties.has(ItemData.properties.PISTOL):
+		ammo = Playerstats.ammo["Pistol"]
+		max_ammo = 14
+	if Playerstats.object_properties.has(ItemData.properties.SHOTGUN):
+		ammo = Playerstats.ammo["Shotgun"]
+		max_ammo = 8
+	if Playerstats.object_properties.has(ItemData.properties.REVOLVER):
+		ammo = Playerstats.ammo["Revolver"]
+		max_ammo = 6
+	if Playerstats.object_properties.has(ItemData.properties.UZI):
+		ammo = Playerstats.ammo["UZI"]
+		max_ammo = 30
+		
+	if ammo[1] == 0 and ammo[0] == 0:
+		$"../../../HUD".alert("No Ammo")
+		
+	elif ammo[0] != max_ammo:
+		if ammo[1] + ammo[0] > max_ammo:
+			ammo[1] -= max_ammo - ammo[0]
+			ammo[0] = max_ammo
+		else:
+			ammo[0] += ammo[1]
+			ammo[1] = 0
+
+func control_shake(delta :float) -> void:
+	if shake_duration > 0:
+		noise_t += delta * 10.0
+		camera_shake = Vector2(
+			noise.get_noise_1d(noise_t) * shake_strength,
+			noise.get_noise_1d(noise_t + 100.0) * shake_strength
+		)
+		
+		# Reduce duration and strength over time
+		shake_duration -= delta
+		shake_strength /= 1.25
+		
+		# Stop shake when duration ends
+		if shake_duration <= 0:
+			shake_duration = 0
+			shake_strength = 0
+			camera_shake = Vector2.ZERO
