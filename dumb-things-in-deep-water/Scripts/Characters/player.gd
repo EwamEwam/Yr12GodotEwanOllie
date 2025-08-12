@@ -100,8 +100,6 @@ func _input(event: InputEvent) -> void:
 		pitch += -event.relative.y * Playerstats.sensitivity * Playerstats.screen_factor
 		pitch = clamp(pitch, -60,65)
 		
-	if event.is_action_pressed("Escape"):
-		get_tree().quit()
 		
 	if event.is_action_pressed("E"):
 		if Playerstats.object_held != null and not movement_state == movement_states.THROWING:
@@ -142,6 +140,11 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("Right_Click"):
 		if Playerstats.object_held != null and movement_state != movement_states.THROWING:
 			Playerstats.object_held.get_parent().drop()
+		
+	if event.is_action_pressed("Escape"):
+		get_tree().change_scene_to_file("res://Scenes/Misc/Settings.tscn")
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
 
 #runs every frame, checks the objects in the player's grab range 
 func item_check() -> Object:
