@@ -12,12 +12,12 @@ var shift_lock :bool = false
 var allow_shaking :bool = true
 var show_prompts :bool = true
 
-var max_health :float = 125.0
+var max_health :float = 25.0
 var strength :float = 1.0
 var max_carry_weight :float = 50.0
 var max_inventory :float = 5.0
 
-var health :float = 125.0
+var health :float = 25.0
 var oxygen :float = 100.0
 var special :float = 100.0
 var inventory_mass :float = 0.0
@@ -70,8 +70,8 @@ func _process(delta :float) -> void:
 	legs_hp = clamp(legs_hp,0,max_health)
 	arms_hp = clamp(arms_hp,0,max_health)
 	
-	#if head_hp <= 0 or torso_hp <= 0:
-	#	health = 0
+	if head_hp <= 0 or torso_hp <= 0:
+		health = 0
 		
 	if health <= 0:
 		get_tree().quit()

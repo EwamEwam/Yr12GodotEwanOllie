@@ -596,21 +596,28 @@ func set_camera_mode() -> void:
 		Playerstats.current_camera = Playerstats.camera_states.CLOSE
 		zoom = 0.5
 		
-func check_if_in_wall(body :RigidBody3D) -> bool:
-	var space_state :PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
-	var collision_node :CollisionShape3D = body.get_node("Collision")
-	var query :PhysicsShapeQueryParameters3D = PhysicsShapeQueryParameters3D.new()
-	query.shape = collision_node.shape
-	query.transform = body.global_transform
-	query.transform = query.transform.scaled(Vector3(0.95,0.95,0.95))
-	query.collision_mask = 1  # Adjust to match the wall's layer mask
-	query.exclude = [body]    # Avoid detecting itself
+func check_if_in_wall(body: RigidBody3D) -> bool:
+	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
+	var collision_node: CollisionShape3D = body.get_node("Collision")
 	
-	var results :Array[Dictionary] = space_state.intersect_shape(query, 32)
+	var scaled_shape : = collision_node.shape.duplicate()
+	var verts = scaled_shape.points
+	for i in range(verts.size()):
+		verts[i] *= 0.95 * collision_node.scale.x
+	scaled_shape.points = verts
+	
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = scaled_shape
+	query.transform = body.global_transform
+	query.collision_mask = 1
+	query.exclude = [body]
+	
+	var results := space_state.intersect_shape(query, 32)
 	
 	for result in results:
-		var collider :Object = result.collider
+		var collider = result.collider
 		if collider is StaticBody3D or collider is RigidBody3D:
+			print(collider)
 			return false
 	return true
 
