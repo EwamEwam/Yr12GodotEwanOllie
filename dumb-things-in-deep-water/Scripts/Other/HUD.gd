@@ -3,14 +3,13 @@ extends Node2D
 @onready var reticle :Sprite2D = $Reticule
 @onready var reticle_gun :Sprite2D = $Reticule/ReticuleGun
 @onready var throw_bar :ProgressBar = $Throw_Bar
-@onready var player :CharacterBody3D
+@onready var player :CharacterBody3D = Playerstats.player
 
 var level_time :int = 0
 var formatted_time :Vector2i = Vector2i(0,0)
 var alerts :Array[Node] = []
 
 func _ready() -> void:
-	player = get_tree().get_first_node_in_group("Player")
 	$Health_bar/Health_Bar.value = Playerstats.health
 	$Health_bar/HealthBarEnd.position.x = (3 * Playerstats.max_health) + 121.5
 
