@@ -11,6 +11,7 @@ var screen_factor :float = 1.0
 var shift_lock :bool = false
 var allow_shaking :bool = true
 var show_prompts :bool = true
+var allow_water_effects :bool = true
 
 var max_health :float = 25.0
 var strength :float = 1.0

@@ -167,15 +167,15 @@ shape = SubResource("SphereShape3D_khnq4")
 
 [node name="Spotlight" type="SpotLight3D" parent="Mesh"]
 transform = Transform3D(1, 0, 0, 0, 1, -1.74846e-07, 0, 1.74846e-07, 1, 0, 0.527096, -0.640068)
-light_color = Color(0.986638, 0.941367, 0.800653, 1)
+light_color = Color(0.978149, 0.961618, 0.916842, 1)
 light_energy = 5000.0
-light_indirect_energy = 10.405
-light_volumetric_fog_energy = 3.703
+light_volumetric_fog_energy = 16.0
+light_size = 0.025
 shadow_enabled = true
-spot_range = 79.0071
-spot_attenuation = 1.55
-spot_angle = 23.3303
-spot_angle_attenuation = 8.87655
+spot_range = 45.0
+spot_attenuation = 2.0
+spot_angle = 19.8454
+spot_angle_attenuation = 13.4543
 
 [node name="Camera_Pivot" type="Node3D" parent="."]
 

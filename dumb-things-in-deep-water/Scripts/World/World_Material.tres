@@ -6,3 +6,8 @@
 shader = ExtResource("1_75aba")
 shader_parameter/num_colors = 16.0
 shader_parameter/dither_strength = 1.0
+shader_parameter/time = 0.0
+shader_parameter/wave_amplitude = 0.003
+shader_parameter/wave_frequency = 5.0
+shader_parameter/wave_speed = 3.0
+shader_parameter/tint_color = Color(0.7, 0.9, 1, 1)

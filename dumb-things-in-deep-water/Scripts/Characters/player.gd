@@ -203,11 +203,11 @@ func load_item_from_inventory(ID :int) -> void:
 func set_camera_movement(delta :float) -> void:
 	if Playerstats.head_bobbing:
 		if is_on_floor():
-			head_bob_timer += delta * (velocity.length()/1.8 + 1.4)
+			head_bob_timer += delta * (velocity.length()/1.8 + 1)
 		else:
 			head_bob_timer += delta * 3
-		camera_bob.x = move_toward(camera_bob.x,sin(head_bob_timer + PI/2)/12 + camera_shake.x,delta * 15)
-		camera_bob.y = move_toward(camera_bob.y, abs(sin(head_bob_timer)) /12 + camera_shake.y,delta * 15)
+		camera_bob.x = move_toward(camera_bob.x,sin(head_bob_timer + PI/2)/16 + camera_shake.x,delta * 15)
+		camera_bob.y = move_toward(camera_bob.y, abs(sin(head_bob_timer))/16 + camera_shake.y,delta * 15)
 	if abs(camera_jerk) > 0.005 or abs(jerk_velocity) > 0.005:
 		jerk_velocity = min(jerk_velocity,65)
 		var camera_acceleration = -100 * camera_jerk - 25 * jerk_velocity

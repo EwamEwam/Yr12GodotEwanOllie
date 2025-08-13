@@ -7,7 +7,7 @@ extends Node
 #AIM: Right click puts the player into aiming stance instead of dropping the object
 #CAN'T_DROP_THROW: Disables the ability to throw or drop the object
 #SHOOT: Creates a specified bullet when the player uses it while in aim stance. 
-enum properties {ID_UPDATE,HEAL,DELETE,AIM,CANT_DROP_THROW,SHOOT,PISTOL,SHOTGUN,UZI,REVOLVER,TV,SPEAKER}
+enum properties {ID_UPDATE,HEAL,DELETE,AIM,CANT_DROP_THROW,SHOOT,PISTOL,SHOTGUN,UZI,REVOLVER,TV,SPEAKER,PAINTING}
 enum prompts {OPEN,HEAL,AIM,SHOOT,TOGGLE,EAT}
 
 const itemdata :Dictionary = {
@@ -130,6 +130,17 @@ const itemdata :Dictionary = {
 		"Mass" = 5.8,
 		"Audio" = "res://Assets/Videos_and_Audio/Carryonmywaywardson.mp3",
 		"Properties" = [properties.SPEAKER],
+		"Prompts" = [prompts.TOGGLE],
+		"Tooltip" = "Masquerading as a man with a\nreason goes so hard for no\nreason."
+	},
+	"11":{
+		"Name" = "Painting - My Love",
+		"Path" = "res://Scenes/Props/Speaker_Carry_on(10).tscn",
+		"Model" = "res://Assets/Props_Models_And_Collisions/10_Speaker_Carry_on.tres",
+		"Outline" = "res://Assets/Props_Models_And_Collisions/10_Speaker_Carry_on_Outline.tres",
+		"Mass" = 5.8,
+		"Audio" = "res://Assets/Videos_and_Audio/Carryonmywaywardson.mp3",
+		"Properties" = [properties.PAINTING],
 		"Prompts" = [prompts.TOGGLE],
 		"Tooltip" = "Masquerading as a man with a\nreason goes so hard for no\nreason."
 	},

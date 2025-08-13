@@ -1,7 +1,8 @@
-[gd_scene load_steps=40 format=3 uid="uid://baocn3lc445ff"]
+[gd_scene load_steps=41 format=3 uid="uid://baocn3lc445ff"]
 
 [ext_resource type="Script" uid="uid://noefglp8kk2" path="res://Scripts/Other/HUD.gd" id="1_7lq3g"]
 [ext_resource type="Texture2D" uid="uid://dedhoyvicgme3" path="res://Assets/Sprites/Reticule.png" id="1_8leah"]
+[ext_resource type="Texture2D" uid="uid://birq713iwjhfa" path="res://Assets/Sprites/Screen_Border.png" id="2_uj57v"]
 [ext_resource type="Texture2D" uid="uid://0fqahpo0q2i" path="res://Assets/Sprites/Health_bar_background.png" id="2_w21a7"]
 [ext_resource type="Texture2D" uid="uid://cup0857pjeubq" path="res://Assets/Sprites/Item_background.png" id="3_lwfba"]
 [ext_resource type="Texture2D" uid="uid://bmdhll1nok8w" path="res://Assets/Sprites/Health_bar.png" id="3_qlp7m"]
@@ -105,6 +106,11 @@ animations = [{
 [node name="HUD" type="Node2D"]
 process_mode = 3
 script = ExtResource("1_7lq3g")
+
+[node name="ScreenBorder" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.815686)
+texture = ExtResource("2_uj57v")
+centered = false
 
 [node name="Health_bar" type="Node2D" parent="."]
 
