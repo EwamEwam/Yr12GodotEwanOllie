@@ -27,6 +27,8 @@ var camera_jerk: float = 0.0
 var jerk_velocity: float = 0.0
 var zoom :float = 1.0
 
+var debug_movement :bool = false
+
 var throw_power :float = 1.0
 var can_move :bool = true
 var reloading :bool = false
@@ -50,6 +52,7 @@ func _ready() -> void:
 	noise.seed = randi()
 
 func _physics_process(delta: float) -> void:
+	debug()
 	set_speed()
 	fall_damage_calculation()
 		
@@ -70,24 +73,36 @@ func _physics_process(delta: float) -> void:
 		current_direction_held = Input.get_vector("Left","Right","Up","Down").normalized()
 		var direction :Vector3 = (camera_offset * Vector3(current_direction_held.x, 0, current_direction_held.y)).normalized()
 		
-		if is_on_floor() and can_move:
-			if not current_direction_held == Vector2.ZERO:
-				last_direction_facing.x = move_toward(last_direction_facing.x,direction.x, 6 * delta)
-				last_direction_facing.z = move_toward(last_direction_facing.z,direction.z, 6 * delta)
-			calculated_velocity.x = move_toward(calculated_velocity.x, speed * direction.x, acceleration * delta)
-			calculated_velocity.z = move_toward(calculated_velocity.z, speed * direction.z, acceleration * delta)
-			last_velocity_grounded = Vector3(calculated_velocity.x, 0, calculated_velocity.z)
+		if not debug_movement:
+			$Collision.disabled = false
+			if is_on_floor() and can_move: 
+				if not current_direction_held == Vector2.ZERO:
+					last_direction_facing.x = move_toward(last_direction_facing.x,direction.x, 6 * delta)
+					last_direction_facing.z = move_toward(last_direction_facing.z,direction.z, 6 * delta)
+				calculated_velocity.x = move_toward(calculated_velocity.x, speed * direction.x, acceleration * delta)
+				calculated_velocity.z = move_toward(calculated_velocity.z, speed * direction.z, acceleration * delta)
+				last_velocity_grounded = Vector3(calculated_velocity.x, 0, calculated_velocity.z)
+				calculated_velocity.y = 0
+				if Input.is_action_just_pressed("Space"):
+					calculated_velocity.y = jump_strength
+			elif can_move:
+				calculated_velocity.x = move_toward(calculated_velocity.x, (speed * direction.x)/3 + last_velocity_grounded.x/1.5, acceleration/2 * delta)
+				calculated_velocity.z = move_toward(calculated_velocity.z, (speed * direction.z)/3 + last_velocity_grounded.z/1.5, acceleration/2 * delta)
+			
+			if last_direction_facing != Vector3.ZERO and movement_state == movement_states.NORMAL:
+				$Mesh.basis = Basis.looking_at(last_direction_facing)
+		
+		else:
+			$Collision.disabled = true
+			calculated_velocity.x = direction.x * 300 * speed * delta
+			calculated_velocity.z = direction.z * 300 * speed * delta
 			calculated_velocity.y = 0
-			if Input.is_action_just_pressed("Space"):
-				calculated_velocity.y = jump_strength
-		elif can_move:
-			calculated_velocity.x = move_toward(calculated_velocity.x, (speed * direction.x)/3 + last_velocity_grounded.x/1.5, acceleration/2 * delta)
-			calculated_velocity.z = move_toward(calculated_velocity.z, (speed * direction.z)/3 + last_velocity_grounded.z/1.5, acceleration/2 * delta)
+			if Input.is_action_pressed("Space"):
+				calculated_velocity.y = 300 * speed * delta
+			if Input.is_action_pressed("Ctrl"):
+				calculated_velocity.y = -300 * speed * delta
 		
-		if last_direction_facing != Vector3.ZERO and movement_state == movement_states.NORMAL:
-			$Mesh.basis = Basis.looking_at(last_direction_facing)
-		
-	if not is_on_floor():
+	if not is_on_floor() and not debug_movement:
 		calculated_velocity.y -= gravity * delta
 		
 	if Playerstats.current_state == Playerstats.game_states.PLAYING:
@@ -166,13 +181,14 @@ func _input(event: InputEvent) -> void:
 			elif not Playerstats.object_properties.has(ItemData.properties.CANT_DROP_THROW):
 				$"../../../HUD".alert("Can't place here, there's something in the way.")
 
-	if event.is_action_pressed("V"):
-		set_camera_mode()
+	if event.is_action_pressed("V"): set_camera_mode()
 		
 	if event.is_action_pressed("R"):
-		if Playerstats.object_properties.has(ItemData.properties.SHOOT):
-			reload()
+		if Playerstats.object_properties.has(ItemData.properties.SHOOT): reload()
 
+	if event.is_action_pressed("B"):
+		if Playerstats.no_clip: debug_movement = !debug_movement
+	
 #runs every frame, checks the objects in the player's grab range 
 func item_check() -> Object:
 	var closest_object :Object = null
@@ -703,3 +719,10 @@ func control_shake(delta :float) -> void:
 			shake_duration = 0
 			shake_strength = 0
 			camera_shake = Vector2.ZERO
+
+func debug() -> void:
+	if Playerstats.camera_hitbox:
+		camera_spring.collision_mask = 128
+	else:
+		camera_spring.collision_mask = 0
+	

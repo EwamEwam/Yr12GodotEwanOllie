@@ -14,17 +14,21 @@ var ATTACK_READY: bool = true
 @export var DETECTION_DISTANCE :float = 50.0
 @export var MIN_DETECTION_DIST :float = 3.0
 
+func _ready() -> void:
+	$Ragdoll/CollisionShape3D.disabled = true
+	$Ragdoll.freeze = true
+
 func _smooth_look_at(target_pos: Vector3, delta: float) -> void:
-	var to_target = target_pos - $Body.global_position
+	var to_target = target_pos - $Ragdoll/Body.global_position
 	to_target.y = 0
 
 	if to_target.length() > 0.01:
 
 		to_target = to_target.normalized()
 		var target_rot = Quaternion(Vector3.FORWARD, to_target).normalized()
-		var current_rot = $Body.global_transform.basis.get_rotation_quaternion()
+		var current_rot = $Ragdoll/Body.global_transform.basis.get_rotation_quaternion()
 		var smooth_rot = current_rot.slerp(target_rot, delta * 7.0)
-		$Body.rotation = smooth_rot.get_euler()
+		$Ragdoll/Body.rotation = smooth_rot.get_euler()
 
 func _physics_process(delta :float) -> void:
 	$Raycast.target_position = Playerstats.player.global_position - global_position
@@ -32,46 +36,47 @@ func _physics_process(delta :float) -> void:
 		var collision = get_slide_collision(i)
 		var collider = collision.get_collider()
 		
-		if collider is RigidBody3D and $Invinicibility.is_stopped():
+		if collider is RigidBody3D and $Invinicibility.is_stopped() and health > 0:
 			take_damage(collider.get_parent().previous_velocity.length()/5 * collider.mass)
 			$Invinicibility.start()
 	
-	if not is_on_floor():
-		velocity.y -= 0.9
-	else:
-		velocity.y = 0
+	if health > 0:
+		if not is_on_floor():
+			velocity.y -= 0.9
+		else:
+			velocity.y = 0
+				
+		var distance :float = (global_position - Playerstats.player.global_position).length()
+		if distance < DETECTION_DISTANCE and distance > MIN_DETECTION_DIST:
+		
+			var direction :Vector3 = Vector3()
+			direction = (nav_agent.get_next_path_position() - global_position).normalized()
+			velocity = velocity.lerp(direction * SPEED, ACCEL * delta)
+			_smooth_look_at(global_position + velocity, delta)
 			
-	var distance :float = (global_position - Playerstats.player.global_position).length()
-	if distance < DETECTION_DISTANCE and distance > MIN_DETECTION_DIST:
-		
-		var direction :Vector3 = Vector3()
-		direction = (nav_agent.get_next_path_position() - global_position).normalized()
-		velocity = velocity.lerp(direction * SPEED, ACCEL * delta)
-		_smooth_look_at(global_position + velocity, delta)
-		
-	elif distance < MIN_DETECTION_DIST:
-		
-		velocity = velocity.lerp(Vector3.ZERO, delta*10)
-		_smooth_look_at(Playerstats.player.global_position, delta)
-	
-		if ATTACK_READY:
-			ATTACK_READY = false
-			attack()
+		elif distance < MIN_DETECTION_DIST:
+			
+			velocity = velocity.lerp(Vector3.ZERO, delta*10)
+			_smooth_look_at(Playerstats.player.global_position, delta)
+			
+			if ATTACK_READY:
+				ATTACK_READY = false
+				attack()
 
-	else:
-		velocity = velocity.lerp(Vector3.ZERO, ACCEL*delta)
-		ATTACK_READY = true
+		else:
+			velocity = velocity.lerp(Vector3.ZERO, ACCEL*delta)
+			ATTACK_READY = true
 
-	$Body.rotation = Vector3(0,$Body.rotation.y,0)
-	push_rigid_body()
-	move_and_slide()
+		$Ragdoll/Body.rotation = Vector3(0,$Ragdoll/Body.rotation.y,0)
+		push_rigid_body()
+		move_and_slide()
 	
 func update_target_location(target_location :Vector3) -> void:
-	if not $Raycast.is_colliding():
+	if not $Raycast.is_colliding() and health > 0:
 		nav_agent.target_position = target_location
 
 func attack():
-	var club = $Body/Club
+	var club = $Ragdoll/Body/Club
 	$Hit_Timer.start()
 	check_hitbox()
 	club.rotation_degrees.x = -90
@@ -79,11 +84,11 @@ func attack():
 	reset_club()
 
 func reset_club():
-	var club = $Body/Club
+	var club = $Ragdoll/Body/Club
 	club.rotation_degrees.x = 0
 
 func check_hitbox() -> void:
-	var bodies :Array[Node3D] = $Body/Hitbox.get_overlapping_bodies()
+	var bodies :Array[Node3D] = $Ragdoll/Body/Hitbox.get_overlapping_bodies()
 	for body in bodies:
 		if body.is_in_group("Player"):
 			body.change_in_health(-dmg,true)
@@ -92,7 +97,7 @@ func _on_hit_timer_timeout() -> void:
 	ATTACK_READY = true
 
 func take_damage(damage: float):
-	if damage > 1:
+	if damage > 1 and health > 0:
 		health -= damage
 		var number :PackedScene = load("res://Scenes/Characters/number.tscn")
 		var new_number :Label3D = number.instantiate()
@@ -102,7 +107,12 @@ func take_damage(damage: float):
 			die()
 
 func die():
-	queue_free()
+	$Ragdoll/CollisionShape3D.disabled = false
+	$Ragdoll.freeze = false
+	$Ragdoll.linear_velocity = velocity
+	$CollisionShape3D.disabled = true
+	$Healthbar.queue_free()
+	velocity = Vector3.ZERO
 
 func push_rigid_body() -> void:
 	var col := get_last_slide_collision()

@@ -16,7 +16,7 @@ var allow_water_effects :bool = true
 var max_health :float = 25.0
 var strength :float = 1.0
 var max_carry_weight :float = 50.0
-var max_inventory :float = 5.0
+var max_inventory :float = 500.0
 
 var health :float = 25.0
 var oxygen :float = 100.0
@@ -46,6 +46,9 @@ var next_health_regen :float = 0.0
 var time_played :int = 0
 
 var head_bobbing :bool = true
+
+var camera_hitbox :bool = true
+var no_clip :bool = true
 
 var ammo :Dictionary = { 
 	"Pistol" = [14,28],

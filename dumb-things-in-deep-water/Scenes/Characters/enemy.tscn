@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://0nmnl5dxtpwx" path="res://Scripts/Characters/enemy.gd" id="1_lsx3x"]
 [ext_resource type="PackedScene" uid="uid://bnmdahypayfna" path="res://Scenes/Characters/healthbar.tscn" id="2_b1c4r"]
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_b1c4r"]
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j51ow"]
 albedo_color = Color(1, 0.227451, 0, 1)
 
@@ -24,32 +26,39 @@ top_radius = 0.2
 bottom_radius = 0.1
 height = 1.3
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_b1c4r"]
-
 [node name="Test_Enemy" type="CharacterBody3D" groups=["Enemy"]]
 script = ExtResource("1_lsx3x")
 
 [node name="Healthbar" parent="." instance=ExtResource("2_b1c4r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00860912, 1.62031, -0.00199196)
 
-[node name="Body" type="MeshInstance3D" parent="."]
+[node name="Ragdoll" type="RigidBody3D" parent="."]
+mass = 8.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ragdoll"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("SphereShape3D_b1c4r")
+disabled = true
+
+[node name="Body" type="MeshInstance3D" parent="Ragdoll"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 mesh = SubResource("SphereMesh_lsx3x")
+skeleton = NodePath("../..")
 
-[node name="Hitbox" type="Area3D" parent="Body"]
+[node name="Hitbox" type="Area3D" parent="Ragdoll/Body"]
 monitorable = false
 
-[node name="Collision" type="CollisionShape3D" parent="Body/Hitbox"]
+[node name="Collision" type="CollisionShape3D" parent="Ragdoll/Body/Hitbox"]
 shape = SubResource("SphereShape3D_lsx3x")
 
-[node name="Collision2" type="CollisionShape3D" parent="Body/Hitbox"]
+[node name="Collision2" type="CollisionShape3D" parent="Ragdoll/Body/Hitbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.313816, -1.29183)
 shape = SubResource("SphereShape3D_ixshx")
 
-[node name="Club" type="MeshInstance3D" parent="Body"]
+[node name="Club" type="MeshInstance3D" parent="Ragdoll/Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.562621, 0.366269, -0.364734)
 mesh = SubResource("CylinderMesh_b1c4r")
-skeleton = NodePath("../..")
+skeleton = NodePath("../../..")
 
 [node name="Raycast" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)

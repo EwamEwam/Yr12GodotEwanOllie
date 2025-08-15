@@ -90,6 +90,28 @@ func item_process() -> void:
 			else:
 				$Body/Light.light_color = Color(0.859, 0.0, 0.0)
 				
+		if property == properties.PAINTING:
+			var raycast :RayCast3D = $Body/Wall_Check
+			if raycast.is_colliding() and Playerstats.object_held != body and not attribute:
+				attribute = true
+				body.freeze = true
+				true_velocity = Vector3.ZERO
+				body.linear_velocity = Vector3.ZERO
+				previous_position = global_position
+				
+				var normal :Vector3 = raycast.get_collision_normal()
+				var is_vertical :bool = abs(normal.dot(Vector3.UP)) > 0.99
+				var forward :Vector3 = -normal.normalized()
+				
+				if not is_vertical:
+					var up = Vector3.UP
+					var right = forward.cross(up).normalized()
+					up = right.cross(forward).normalized()
+					body.basis = Basis(right, up, forward)
+					
+			elif not attribute:
+				body.freeze = false
+				
 func item_use():
 	var held_properties :Array = Playerstats.object_properties
 	var properties := ItemData.properties
@@ -164,7 +186,6 @@ func drop() -> void:
 	grabbable = false
 	Playerstats.object_held = null
 	body.freeze = false
-	print(Playerstats.player.true_velocity)
 	body.linear_velocity = Playerstats.player.true_velocity/(1 + body.mass/(15 * Playerstats.strength))
 	body.angular_velocity = Playerstats.player.true_velocity / (3 + (body.mass/(4 * Playerstats.strength)))
 	collision.disabled = false

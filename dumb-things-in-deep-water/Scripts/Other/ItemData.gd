@@ -100,8 +100,8 @@ const itemdata :Dictionary = {
 	"8":{
 		"Name" = "TV - Barbeque Chicken Alert",
 		"Path" = "res://Scenes/Props/TV_Barbeque_Chicken(8).tscn",
-		"Model" = "res://Assets/Props_Models_And_Collisions/8_Tv_Barbeque_Chicken.tres",
-		"Outline" = "res://Assets/Props_Models_And_Collisions/8_Tv_Barbeque_Chicken_Outline.tres",
+		"Model" = "res://Assets/Props_Models_And_Collisions/8_TV.tres",
+		"Outline" = "res://Assets/Props_Models_And_Collisions/8_TV_Outline.tres",
 		"Mass" = 12.6,
 		"Video" = "res://Assets/Videos_and_Audio/barbequechicken.ogv",
 		"Properties" = [properties.TV],
@@ -135,14 +135,24 @@ const itemdata :Dictionary = {
 	},
 	"11":{
 		"Name" = "Painting - My Love",
-		"Path" = "res://Scenes/Props/Speaker_Carry_on(10).tscn",
-		"Model" = "res://Assets/Props_Models_And_Collisions/10_Speaker_Carry_on.tres",
-		"Outline" = "res://Assets/Props_Models_And_Collisions/10_Speaker_Carry_on_Outline.tres",
-		"Mass" = 5.8,
-		"Audio" = "res://Assets/Videos_and_Audio/Carryonmywaywardson.mp3",
+		"Path" = "res://Scenes/Props/Painting(11).tscn",
+		"Model" = "res://Assets/Props_Models_And_Collisions/11_Painting.tres",
+		"Outline" = "res://Assets/Props_Models_And_Collisions/11_Painting_Outline.tres",
+		"Mass" = 12.6,
 		"Properties" = [properties.PAINTING],
+		"Prompts" = [],
+		"Tooltip" = '"SDIYBT"'
+	},
+	"12":{
+		"Name" = "TV - Intro",
+		"Path" = "res://Scenes/Props/TV_intro(12).tscn",
+		"Model" = "res://Assets/Props_Models_And_Collisions/8_TV.tres",
+		"Outline" = "res://Assets/Props_Models_And_Collisions/8_TV_Outline.tres",
+		"Mass" = 12.6,
+		"Video" = "res://Assets/Videos_and_Audio/0001-0200.ogv",
+		"Properties" = [properties.TV],
 		"Prompts" = [prompts.TOGGLE],
-		"Tooltip" = "Masquerading as a man with a\nreason goes so hard for no\nreason."
+		"Tooltip" = "67 41 gold, fries in the\nbag bro.",
 	},
 	"20": {
 		"Name" = "The Package",

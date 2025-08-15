@@ -388,7 +388,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.86956, -0.5, -11.3352)
 [node name="NPC" type="Node3D" parent="SubViewportContainer/SubViewport"]
 
 [node name="Test_Enemy" parent="SubViewportContainer/SubViewport/NPC" instance=ExtResource("7_vav5l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.9787, -4.5037, -28.0917)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.9217, -4.5037, -17.0116)
 
 [node name="HUD" parent="." instance=ExtResource("8_6bp2a")]
 z_index = -1

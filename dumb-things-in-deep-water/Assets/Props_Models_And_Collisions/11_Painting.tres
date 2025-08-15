@@ -1,45 +1,21 @@
-[gd_resource type="ArrayMesh" load_steps=6 format=4 uid="uid://cg5788c8mn6vk"]
+[gd_resource type="ArrayMesh" load_steps=5 format=4 uid="uid://cg5788c8mn6vk"]
 
-[ext_resource type="Texture2D" uid="uid://da3qvv6qcedqb" path="res://Assets/Textures/My_Love_8d797e08946b5ee317d63a3f9db543ee.jpg" id="1_hc4ly"]
-[ext_resource type="Texture2D" uid="uid://k4cd0o4x2wed" path="res://Assets/Textures/My_Love_My Love.jpg" id="2_ce0q3"]
+[ext_resource type="Texture2D" uid="uid://da3qvv6qcedqb" path="res://Assets/Textures/My_Love_8d797e08946b5ee317d63a3f9db543ee.jpg" id="1_7gpc8"]
+[ext_resource type="Texture2D" uid="uid://k4cd0o4x2wed" path="res://Assets/Textures/My_Love_My Love.jpg" id="2_v0rkk"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vs100"]
 resource_name = "Material.002"
 cull_mode = 2
-albedo_texture = ExtResource("1_hc4ly")
+albedo_texture = ExtResource("1_7gpc8")
 roughness = 0.5
 texture_filter = 2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j85po"]
 resource_name = "Material.001"
 cull_mode = 2
-albedo_texture = ExtResource("2_ce0q3")
+albedo_texture = ExtResource("2_v0rkk")
 roughness = 0.5
 texture_filter = 2
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_3uhww"]
-_surfaces = [{
-"aabb": AABB(-0.6, -0.6, -0.0672985, 1.2, 1.2, 0.0599999),
-"format": 34896613377,
-"index_count": 84,
-"index_data": PackedByteArray("AAABAAIAAwAAAAIAAwACAAQABQAAAAMAAAAFAAEABgADAAQABQADAAYABwAEAAIABwACAAEABgAEAAcABQAIAAEABgAJAAUABQAJAAgABwAKAAYABgAKAAkAAQALAAcAAQAIAAsABwALAAoACQAMAAgACwANAAoACgAOAAkACQAOAAwACgANAA4ACAAMAA8ACAAPAAsADgAPAAwACwAPAA0ADgANAA8A"),
-"name": "Material.002",
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 16,
-"vertex_data": PackedByteArray("AAAAAP//AAAAAP//AAAAAAAA/////wAA//8AAP//AAD///////8AAAAAAAAAAAAA//8AAAAAAAD/////AAAAAFUVqeoAAAAAVRVVFQAAAACp6lUVAAAAAKnqqeoAAAAAVRWp6uDSAACp6lUV4NIAAFUVVRXg0gAAqeqp6uDSAAA=")
-}, {
-"aabb": AABB(-0.5, -0.5, -0.0287589, 1, 1, 1e-05),
-"format": 34896613377,
-"index_count": 6,
-"index_data": PackedByteArray("AAABAAIAAAADAAEA"),
-"name": "Material.001",
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 4,
-"vertex_data": PackedByteArray("//8AANwDAAAAAP//9AEAAAAAAAAAAAAA/////9EFAAA=")
-}]
-blend_shape_mode = 0
 
 [resource]
 resource_name = "My_Love_Cube_001"
@@ -68,5 +44,3 @@ _surfaces = [{
 "vertex_count": 4,
 "vertex_data": PackedByteArray("//8AANwD//8AAP//9AH//wAAAAAAAP///////9EF////f////3////9/////f///")
 }]
-blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_3uhww")
