@@ -1,8 +1,8 @@
 [gd_scene load_steps=9 format=3 uid="uid://35us3w5stkwi"]
 
 [ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/Basic_Props.gd" id="1_oti2x"]
-[ext_resource type="ArrayMesh" uid="uid://c0dodr3xfvk5p" path="res://Assets/Props_Models_And_Collisions/8_TV.tres" id="2_ukggx"]
-[ext_resource type="ArrayMesh" uid="uid://u24c4brm233" path="res://Assets/Props_Models_And_Collisions/8_TV_Outline.tres" id="3_jofw4"]
+[ext_resource type="ArrayMesh" uid="uid://b47tqsj3wp535" path="res://Assets/Props_Models_And_Collisions/8_TV.tres" id="2_ukggx"]
+[ext_resource type="ArrayMesh" path="res://Assets/Props_Models_And_Collisions/8_TV_Outline.tres" id="3_jofw4"]
 [ext_resource type="VideoStream" uid="uid://bmiemxfdu8xo" path="res://Assets/Videos_and_Audio/barbequechicken.ogv" id="5_8llxr"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_k831n"]
