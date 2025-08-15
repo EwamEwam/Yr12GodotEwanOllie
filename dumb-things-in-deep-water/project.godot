@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Dumb Things In Deep Water"
-run/main_scene="uid://31404ggijmfj"
+run/main_scene="uid://cwiithgb7v4ma"
 config/features=PackedStringArray("4.4", "Forward Plus")
 
 [autoload]
