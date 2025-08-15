@@ -217,6 +217,10 @@ func set_props() -> void:
 	outline.mesh = load(data["Outline"])
 	if data.has("Collision"):
 		collision.shape = load(data["Collision"])
+	if object_properties.has(ItemData.properties.TV):
+		$VideoStreamPlayer.stream = load(ItemData.itemdata[str(ID)]["Video"])
+	if object_properties.has(ItemData.properties.SPEAKER):
+		$Body/Audio_Player.stream = load(ItemData.itemdata[str(ID)]["Audio"])
 
 func limit_speed() -> void:
 	if body.linear_velocity.length() > max_speed:

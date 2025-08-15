@@ -51,7 +51,7 @@ var camera_hitbox :bool = true
 var no_clip :bool = true
 
 var ammo :Dictionary = { 
-	"Pistol" = [14,28],
+	"Pistol" = [14,985],
 	"Revolver" = [0,0],
 	"Shotgun" = [0,0],
 	"UZI" = [0,0],
