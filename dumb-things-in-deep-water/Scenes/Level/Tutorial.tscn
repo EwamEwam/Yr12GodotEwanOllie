@@ -1,8 +1,9 @@
-[gd_scene load_steps=20 format=4 uid="uid://31404ggijmfj"]
+[gd_scene load_steps=21 format=4 uid="uid://31404ggijmfj"]
 
 [ext_resource type="Script" uid="uid://bkmwodo6s0oum" path="res://Scripts/World/World.gd" id="1_26fll"]
 [ext_resource type="Texture2D" uid="uid://c3lk6scsul6nk" path="res://Assets/Textures/tutorial map_stone.jpg" id="2_4w8uw"]
 [ext_resource type="Texture2D" uid="uid://wj5364klyd8p" path="res://Assets/Textures/tutorial map_sand.jpg" id="3_2pxma"]
+[ext_resource type="PackedScene" uid="uid://dqxeowc1665ce" path="res://Assets/Level_Models/rocky.glb" id="7_2pxma"]
 [ext_resource type="Material" uid="uid://dlmex6cutmye0" path="res://Scripts/World/World_Material.tres" id="11_vxf0u"]
 [ext_resource type="PackedScene" uid="uid://c4wqxs7funv7h" path="res://Scenes/Characters/player.tscn" id="12_2xaf6"]
 [ext_resource type="PackedScene" uid="uid://baocn3lc445ff" path="res://Scenes/Misc/hud.tscn" id="14_l1lhw"]
@@ -224,5 +225,8 @@ z_index = -1
 [node name="Timer" type="Timer" parent="."]
 autostart = true
 ignore_time_scale = true
+
+[node name="rocky" parent="." instance=ExtResource("7_2pxma")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.4354, -2.08686, -1.65886)
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
