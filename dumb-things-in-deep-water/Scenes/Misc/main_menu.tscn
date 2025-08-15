@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://cwiithgb7v4ma"]
+
+[node name="Main menu" type="Node2D"]
+
+[node name="Button manager" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Start" type="Button" parent="Button manager"]
+layout_mode = 0
+offset_left = 220.0
+offset_top = 142.0
+offset_right = 412.0
+offset_bottom = 200.0
+text = "Start"
+
+[node name="Options" type="Button" parent="Button manager"]
+layout_mode = 0
+offset_left = 221.0
+offset_top = 219.0
+offset_right = 414.0
+offset_bottom = 277.0
+text = "Options"
+
+[node name="Quit" type="Button" parent="Button manager"]
+layout_mode = 0
+offset_left = 220.0
+offset_top = 297.0
+offset_right = 415.0
+offset_bottom = 360.0
+text = "Quit"
+
+[connection signal="pressed" from="Button manager/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="Button manager/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="Button manager/Quit" to="." method="_on_quit_pressed"]

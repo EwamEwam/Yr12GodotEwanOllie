@@ -1,9 +1,11 @@
-[gd_scene load_steps=21 format=4 uid="uid://31404ggijmfj"]
+[gd_scene load_steps=23 format=4 uid="uid://31404ggijmfj"]
 
 [ext_resource type="Script" uid="uid://bkmwodo6s0oum" path="res://Scripts/World/World.gd" id="1_26fll"]
 [ext_resource type="Texture2D" uid="uid://c3lk6scsul6nk" path="res://Assets/Textures/tutorial map_stone.jpg" id="2_4w8uw"]
 [ext_resource type="Texture2D" uid="uid://wj5364klyd8p" path="res://Assets/Textures/tutorial map_sand.jpg" id="3_2pxma"]
-[ext_resource type="PackedScene" uid="uid://dqxeowc1665ce" path="res://Assets/Level_Models/rocky.glb" id="7_2pxma"]
+[ext_resource type="PackedScene" uid="uid://be7i40ywapi16" path="res://Scenes/Misc/Circular_Rock.tscn" id="7_2pxma"]
+[ext_resource type="PackedScene" uid="uid://c1b3508xrxbuh" path="res://Scenes/Misc/Small_Rock.tscn" id="8_jwgaj"]
+[ext_resource type="PackedScene" uid="uid://c6pye77owufbe" path="res://Scenes/Misc/Tall_Rock.tscn" id="9_up8s3"]
 [ext_resource type="Material" uid="uid://dlmex6cutmye0" path="res://Scripts/World/World_Material.tres" id="11_vxf0u"]
 [ext_resource type="PackedScene" uid="uid://c4wqxs7funv7h" path="res://Scenes/Characters/player.tscn" id="12_2xaf6"]
 [ext_resource type="PackedScene" uid="uid://baocn3lc445ff" path="res://Scenes/Misc/hud.tscn" id="14_l1lhw"]
@@ -21,14 +23,14 @@ sky_horizon_color = Color(0.2, 0.501961, 0.701961, 1)
 ground_bottom_color = Color(0.0509804, 0.2, 0.301961, 1)
 ground_horizon_color = Color(0.2, 0.501961, 0.701961, 1)
 
-[sub_resource type="Sky" id="Sky_4w8uw"]
+[sub_resource type="Sky" id="Sky_2pxma"]
 sky_material = SubResource("ProceduralSkyMaterial_vav5l")
 
 [sub_resource type="Environment" id="Environment_erj1f"]
 background_mode = 2
 background_color = Color(0.0276227, 0.113141, 0.702373, 1)
 background_energy_multiplier = 0.25
-sky = SubResource("Sky_4w8uw")
+sky = SubResource("Sky_2pxma")
 ambient_light_source = 2
 ambient_light_color = Color(0.312239, 0.433754, 0.637131, 1)
 ambient_light_energy = 0.25
@@ -214,10 +216,9 @@ material = ExtResource("11_vxf0u")
 offset_right = 640.0
 offset_bottom = 480.0
 
-[node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("12_2xaf6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.22384, -0.5, 0.0719805)
-
 [node name="NPC" type="Node3D" parent="SubViewportContainer/SubViewport"]
+
+[node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("12_2xaf6")]
 
 [node name="HUD" parent="." instance=ExtResource("14_l1lhw")]
 z_index = -1
@@ -226,7 +227,58 @@ z_index = -1
 autostart = true
 ignore_time_scale = true
 
-[node name="rocky" parent="." instance=ExtResource("7_2pxma")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.4354, -2.08686, -1.65886)
+[node name="Rocks" type="Node3D" parent="."]
+transform = Transform3D(4.86975, -0.121598, 0.0867077, 0.123196, 4.86965, -0.0899144, -0.0844211, 0.0920647, 4.87043, 1.17906, -1.53328, -14.0494)
+
+[node name="Node3D12" parent="Rocks" instance=ExtResource("7_2pxma")]
+transform = Transform3D(2.12832, 4.26662e-08, -7.45058e-09, 3.31202e-08, 2.12832, -2.23517e-08, 0, 7.45058e-09, 2.12832, -4.83873, 0.157344, 7.07663)
+
+[node name="Node3D2" parent="Rocks" instance=ExtResource("7_2pxma")]
+transform = Transform3D(1, 8.14907e-10, 0, 7.85803e-10, 1, 0, 0, 0, 1, 2.13139, -0.0231804, 6.21478)
+
+[node name="Node3D" parent="Rocks" instance=ExtResource("7_2pxma")]
+transform = Transform3D(1, 8.14907e-10, 0, 7.85803e-10, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Node3D3" parent="Rocks" instance=ExtResource("7_2pxma")]
+transform = Transform3D(1, 8.14907e-10, 0, 7.85803e-10, 1, 0, 0, 0, 1, 6.66366, 0.15286, 2.41233)
+
+[node name="Node3D4" parent="Rocks" instance=ExtResource("8_jwgaj")]
+transform = Transform3D(0.205156, 0.00519012, -0.00355656, -0.00512275, 0.205152, 0.00387858, 0.00365289, -0.00378799, 0.205186, 0.419488, -0.228418, 4.4015)
+
+[node name="Node3D5" parent="Rocks" instance=ExtResource("9_up8s3")]
+transform = Transform3D(0.497124, -0.13738, -0.704921, 0.081552, 0.862575, -0.110594, 0.713539, -0.00287223, 0.503761, 2.05841, -0.0359787, -0.0276418)
+
+[node name="Node3D6" parent="Rocks" instance=ExtResource("7_2pxma")]
+transform = Transform3D(0.628256, 1.89175e-10, -9.31323e-10, 2.11003e-09, 0.628256, 9.31323e-10, 1.86265e-09, 9.31323e-10, 0.628256, 1.23703, 0.0754947, 5.78361)
+
+[node name="Node3D7" parent="Rocks" instance=ExtResource("7_2pxma")]
+transform = Transform3D(1, 2.59024e-09, 1.86265e-09, 7.85803e-10, 1, 0, 0, 1.86265e-09, 1, 0.682901, -0.325942, -0.232747)
+
+[node name="Node3D8" parent="Rocks" instance=ExtResource("9_up8s3")]
+transform = Transform3D(-0.26706, -0.184771, -0.690351, 0.0319732, 0.733149, -0.208596, 0.713935, -0.101951, -0.248896, 7.32535, 0.284894, 3.45041)
+
+[node name="Node3D9" parent="Rocks" instance=ExtResource("7_2pxma")]
+transform = Transform3D(1.22784, 5.23869e-10, 1.86265e-09, 2.47383e-09, 1.22784, -3.72529e-09, 0, 3.72529e-09, 1.22784, -5.04337, -0.152077, 0.318995)
+
+[node name="Node3D10" parent="Rocks" instance=ExtResource("7_2pxma")]
+transform = Transform3D(1.45888, 5.18048e-09, -1.86265e-09, 5.23869e-09, 1.45888, -7.45058e-09, -1.86265e-09, -1.86265e-09, 1.45888, -5.07333, -0.11941, 2.04716)
+
+[node name="Node3D11" parent="Rocks" instance=ExtResource("8_jwgaj")]
+transform = Transform3D(1.43578, 0.0363228, -0.0248904, -0.0358513, 1.43575, 0.027144, 0.0255646, -0.02651, 1.43598, -5.15667, 1.0211, 1.02976)
+
+[node name="Node3D13" parent="Rocks" instance=ExtResource("7_2pxma")]
+transform = Transform3D(1.69989, 2.85218e-09, 1.86265e-09, 6.63567e-09, 1.69989, 0, -1.86265e-09, 0, 1.69989, 6.60254, 0.219514, 5.93847)
+
+[node name="Node3D15" parent="Rocks" instance=ExtResource("8_jwgaj")]
+transform = Transform3D(0.133037, 0.00678015, -0.00455362, -0.00660525, 0.133027, 0.00509296, 0.00480376, -0.00485773, 0.133113, -1.09315, -0.26802, 4.68625)
+
+[node name="Node3D14" parent="Rocks" instance=ExtResource("8_jwgaj")]
+transform = Transform3D(0.120039, 0.00303678, -0.00208097, -0.00299737, 0.120036, 0.00226939, 0.00213734, -0.00221638, 0.120056, -1.74088, -0.193787, 1.54492)
+
+[node name="Node3D17" parent="Rocks" instance=ExtResource("8_jwgaj")]
+transform = Transform3D(-0.992079, -1.75102, -0.578095, -0.0312861, -0.640365, 1.99337, -1.84371, 0.953071, 0.277233, 6.87771, 2.63224, -1.69322)
+
+[node name="Node3D16" parent="Rocks" instance=ExtResource("8_jwgaj")]
+transform = Transform3D(1.87661, 0.0506245, -0.695641, -0.0346134, 2.00105, 0.0522484, 0.696618, -0.0369479, 1.87657, 6.57034, -0.455738, -0.199026)
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

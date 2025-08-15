@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://co5tcau6m22v"]
+
+[node name="level_select" type="Node2D"]
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 641.0
+offset_bottom = 481.0
+
+[node name="1" type="Button" parent="Control"]
+layout_mode = 0
+offset_left = 315.0
+offset_top = 245.0
+offset_right = 413.0
+offset_bottom = 331.0
+scale = Vector2(2.5, 2.5)
+text = "4"
+
+[node name="2" type="Button" parent="Control"]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 21.0
+offset_right = 150.0
+offset_bottom = 106.0
+scale = Vector2(2.5, 2.5)
+text = "1"
+
+[node name="3" type="Button" parent="Control"]
+layout_mode = 0
+offset_left = 315.0
+offset_top = 21.0
+offset_right = 413.0
+offset_bottom = 106.0
+scale = Vector2(2.5, 2.5)
+text = "2"
+
+[node name="4" type="Button" parent="Control"]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 245.0
+offset_right = 150.0
+offset_bottom = 331.0
+scale = Vector2(2.5, 2.5)
+text = "3"
