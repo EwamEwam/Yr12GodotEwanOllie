@@ -1,15 +1,22 @@
-[gd_scene load_steps=24 format=4 uid="uid://31404ggijmfj"]
+[gd_scene load_steps=31 format=4 uid="uid://31404ggijmfj"]
 
 [ext_resource type="Script" uid="uid://bkmwodo6s0oum" path="res://Scenes/Misc/World.gd" id="1_26fll"]
 [ext_resource type="Texture2D" uid="uid://c3lk6scsul6nk" path="res://Assets/Textures/tutorial map_stone.jpg" id="2_4w8uw"]
 [ext_resource type="PackedScene" uid="uid://1vdsxc2vo8e" path="res://Scenes/Props/Test_Gun(9).tscn" id="2_up8s3"]
 [ext_resource type="Texture2D" uid="uid://wj5364klyd8p" path="res://Assets/Textures/tutorial map_sand.jpg" id="3_2pxma"]
+[ext_resource type="PackedScene" uid="uid://35us3w5stkwi" path="res://Scenes/Props/TV_Barbeque_Chicken(8).tscn" id="4_3j5by"]
 [ext_resource type="PackedScene" uid="uid://be7i40ywapi16" path="res://Scenes/Misc/Circular_Rock.tscn" id="7_2pxma"]
 [ext_resource type="PackedScene" uid="uid://c1b3508xrxbuh" path="res://Scenes/Misc/Small_Rock.tscn" id="8_jwgaj"]
+[ext_resource type="PackedScene" uid="uid://fetnged7gfqt" path="res://Scenes/Props/TV_intro(12).tscn" id="8_t7mbg"]
 [ext_resource type="PackedScene" uid="uid://c6pye77owufbe" path="res://Scenes/Misc/Tall_Rock.tscn" id="9_up8s3"]
+[ext_resource type="PackedScene" uid="uid://4elvwkl063ne" path="res://Scenes/Characters/enemy.tscn" id="10_lkqar"]
+[ext_resource type="PackedScene" uid="uid://cp15s3vsmperh" path="res://Scenes/Props/Basic_Healing(7).tscn" id="11_g004e"]
 [ext_resource type="Material" uid="uid://dlmex6cutmye0" path="res://Scripts/World/World_Material.tres" id="11_vxf0u"]
 [ext_resource type="PackedScene" uid="uid://c4wqxs7funv7h" path="res://Scenes/Characters/player.tscn" id="12_2xaf6"]
+[ext_resource type="PackedScene" uid="uid://culqao60nt1mv" path="res://Scenes/Props/Placeholder(1).tscn" id="12_x8k2a"]
+[ext_resource type="PackedScene" uid="uid://e70gei4dw00j" path="res://Scenes/Props/Speaker_Carry_on(10).tscn" id="13_b1p4s"]
 [ext_resource type="PackedScene" uid="uid://baocn3lc445ff" path="res://Scenes/Misc/hud.tscn" id="14_l1lhw"]
+[ext_resource type="PackedScene" uid="uid://cboonb5vreyst" path="res://Scenes/Props/White_Cyclinder(2).tscn" id="16_jriut"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_rdphb"]
 geometry_parsed_geometry_type = 0
@@ -296,6 +303,39 @@ offset_bottom = 480.0
 [node name="NPC" type="Node3D" parent="SubViewportContainer/SubViewport"]
 
 [node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("12_2xaf6")]
+
+[node name="Test_Enemy2" parent="SubViewportContainer/SubViewport" instance=ExtResource("10_lkqar")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.4656, 4.21763, -8.91249)
+
+[node name="Test_Enemy" parent="SubViewportContainer/SubViewport" instance=ExtResource("10_lkqar")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.3347, 2.10882, -4.45625)
+
+[node name="Healing_Item" parent="SubViewportContainer/SubViewport" instance=ExtResource("11_g004e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.48855, -2.23437, -1.93449)
+
+[node name="Healing_Item2" parent="SubViewportContainer/SubViewport" instance=ExtResource("11_g004e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.57724, -2.23437, -2.08933)
+
+[node name="Box_Prop" parent="SubViewportContainer/SubViewport" instance=ExtResource("12_x8k2a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.14501, -2.23437, 3.60237)
+
+[node name="Speaker_Carry_On" parent="SubViewportContainer/SubViewport" instance=ExtResource("13_b1p4s")]
+transform = Transform3D(0.75093, 0, 0.660382, 0, 1, 0, -0.660382, 0, 0.75093, -14.3948, -0.170702, 10.1888)
+
+[node name="TV_Barbeque_Chicken" parent="SubViewportContainer/SubViewport" instance=ExtResource("4_3j5by")]
+transform = Transform3D(-0.873398, 0, 0.487006, 0, 1, 0, -0.487006, 0, -0.873398, -0.0384831, -1.9922, 11.6869)
+
+[node name="TV_Barbeque_Chicken2" parent="SubViewportContainer/SubViewport" instance=ExtResource("8_t7mbg")]
+transform = Transform3D(0.441944, 0, 0.897043, 0, 1, 0, -0.897043, 0, 0.441944, 9.66739, -1.9922, 8.54437)
+
+[node name="Test_Gun" parent="SubViewportContainer/SubViewport" instance=ExtResource("2_up8s3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.0746, -2.23437, -5.69581)
+
+[node name="White_Cyclinder" parent="SubViewportContainer/SubViewport" instance=ExtResource("16_jriut")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5203, -2.05807, 8.87767)
+
+[node name="White_Cyclinder2" parent="SubViewportContainer/SubViewport" instance=ExtResource("16_jriut")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.59492, -2.05807, 7.53535)
 
 [node name="HUD" parent="." instance=ExtResource("14_l1lhw")]
 z_index = -1
