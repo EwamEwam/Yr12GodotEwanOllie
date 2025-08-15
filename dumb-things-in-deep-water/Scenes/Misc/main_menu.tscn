@@ -1,4 +1,7 @@
-[gd_scene format=3 uid="uid://cwiithgb7v4ma"]
+[gd_scene load_steps=3 format=3 uid="uid://cwiithgb7v4ma"]
+
+[ext_resource type="Script" uid="uid://yow6nc23veun" path="res://Scenes/Misc/start.gd" id="1_34dcf"]
+[ext_resource type="Texture2D" uid="uid://bb4fxa37arr03" path="res://Assets/Textures/Screenshot (46).png" id="1_h4vnr"]
 
 [node name="Main menu" type="Node2D"]
 
@@ -15,6 +18,7 @@ offset_top = 142.0
 offset_right = 412.0
 offset_bottom = 200.0
 text = "Start"
+script = ExtResource("1_34dcf")
 
 [node name="Options" type="Button" parent="Button manager"]
 layout_mode = 0
@@ -32,6 +36,13 @@ offset_right = 415.0
 offset_bottom = 360.0
 text = "Quit"
 
+[node name="Screenshot(46)" type="Sprite2D" parent="."]
+z_index = -1
+position = Vector2(317, 238)
+scale = Vector2(0.555556, 0.555556)
+texture = ExtResource("1_h4vnr")
+
 [connection signal="pressed" from="Button manager/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="Button manager/Start" to="Button manager/Start" method="_on_pressed"]
 [connection signal="pressed" from="Button manager/Options" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="Button manager/Quit" to="." method="_on_quit_pressed"]

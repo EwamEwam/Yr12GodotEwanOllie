@@ -1,6 +1,6 @@
 [gd_scene load_steps=34 format=4 uid="uid://dobik07wuoko6"]
 
-[ext_resource type="Script" uid="uid://bkmwodo6s0oum" path="res://Scripts/World/World.gd" id="1_11b34"]
+[ext_resource type="Script" uid="uid://bkmwodo6s0oum" path="res://Scenes/Misc/World.gd" id="1_11b34"]
 [ext_resource type="PackedScene" uid="uid://culqao60nt1mv" path="res://Scenes/Props/Placeholder(1).tscn" id="2_5btts"]
 [ext_resource type="PackedScene" uid="uid://cboonb5vreyst" path="res://Scenes/Props/White_Cyclinder(2).tscn" id="3_k7qte"]
 [ext_resource type="Texture2D" uid="uid://n5c7nr78grj5" path="res://Assets/Textures/map_download (3).png" id="4_4rysj"]

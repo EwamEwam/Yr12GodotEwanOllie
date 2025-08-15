@@ -5,6 +5,9 @@ extends Node
 
 var time_in_level :float = 0.0
 
+func _ready() -> void:
+	Playerstats.player = player
+
 func _physics_process(delta: float) -> void:
 	get_tree().call_group("Enemy", "update_target_location", player.global_position)
 	check_below_map()
@@ -24,6 +27,7 @@ func check_below_map() -> void:
 			object.position = Vector3.ZERO
 			object.linear_velocity = Vector3.ZERO
 			object.get_parent().true_velocity = Vector3.ZERO
+			object.get_parent().previous_position = object.global_position
 
 func _on_timer_timeout() -> void:
 	$HUD.format_time()
