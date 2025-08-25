@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=4 uid="uid://b2jsdiolqj2iw"]
 
 [ext_resource type="Script" uid="uid://bu6vq0sb64lli" path="res://Scripts/World/sign.gd" id="1_w2mlg"]
-[ext_resource type="Texture2D" uid="uid://c3ewa7ir2xl6s" path="res://Assets/Textures/sign_wood.jpg" id="2_2ubov"]
+[ext_resource type="Texture2D" uid="uid://cap4hv3cydgvy" path="res://Assets/Textures/sign_wood.jpg" id="2_2ubov"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kkxa2"]
 resource_name = "Material.001"

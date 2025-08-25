@@ -148,7 +148,7 @@ func _input(event: InputEvent) -> void:
 			else:
 				$"../../../HUD".alert("Too heavy for inventory!")
 
-	if event.is_action_pressed("Q"):
+	if event.is_action_pressed("F"):
 		if Playerstats.object_held == null and not movement_state == movement_states.THROWING and Playerstats.inventory.size() > 0 and can_move:
 			var new_prop_ID: int = Playerstats.inventory.pop_back()
 			var prop :PackedScene = load(ItemData.itemdata[str(new_prop_ID)]["Path"])
@@ -174,7 +174,7 @@ func _input(event: InputEvent) -> void:
 		elif movement_state == movement_states.NORMAL or Playerstats.object_properties.has(ItemData.properties.CANT_DROP_THROW):
 			Playerstats.object_held.get_parent().item_use()
 		
-	if event.is_action_pressed("Right_Click"):
+	if event.is_action_pressed("Q"):
 		if Playerstats.object_held != null and movement_state != movement_states.THROWING:
 			if check_if_in_wall(Playerstats.object_held) and not Playerstats.object_properties.has(ItemData.properties.CANT_DROP_THROW):
 				Playerstats.object_held.get_parent().drop()
@@ -299,7 +299,7 @@ func set_camera(delta: float) -> Basis:
 	return camera_offset
 	
 func set_movement_mode(delta :float) -> void:
-	if Input.is_action_pressed("Alt") or (Playerstats.object_properties.has(ItemData.properties.AIM) and Input.is_action_pressed("Right_Click")):
+	if Input.is_action_pressed("Right_Click") or (Playerstats.object_properties.has(ItemData.properties.AIM) and Input.is_action_pressed("Right_Click")):
 		if Playerstats.object_held != null:
 			movement_state = movement_states.AIMING
 			throw_process(delta)
@@ -314,7 +314,7 @@ func throw_process(delta :float) -> void:
 	if Input.is_action_pressed("Left_Click") and not Playerstats.object_properties.has(ItemData.properties.CANT_DROP_THROW):
 		movement_state = movement_states.THROWING
 		throw_power = clamp(throw_power + delta * 5,1,6)
-	elif throw_power > 1 and Input.is_action_pressed("Alt"):
+	elif throw_power > 1 and Input.is_action_pressed("Right_Click"):
 		if check_if_in_wall(Playerstats.object_held):
 			Playerstats.object_held.get_parent().throw(throw_power)
 			movement_state = movement_states.AIMING

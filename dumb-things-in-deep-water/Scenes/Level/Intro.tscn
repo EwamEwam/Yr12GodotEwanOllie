@@ -1,6 +1,6 @@
-[gd_scene load_steps=23 format=4 uid="uid://cd3661sn4ffct"]
+[gd_scene load_steps=23 format=4 uid="uid://dvgnrr5dkb1gx"]
 
-[ext_resource type="Script" uid="uid://byp5ail5cjwh5" path="res://Scripts/World/intro.gd" id="1_te0c7"]
+[ext_resource type="Script" path="res://Scripts/World/intro.gd" id="1_te0c7"]
 [ext_resource type="PackedScene" uid="uid://1vdsxc2vo8e" path="res://Scenes/Props/Test_Gun(9).tscn" id="2_te0c7"]
 [ext_resource type="Texture2D" uid="uid://nyjtrlrouefc" path="res://Assets/Textures/tutorial map_stone.jpg" id="3_2q1dc"]
 [ext_resource type="PackedScene" uid="uid://culqao60nt1mv" path="res://Scenes/Props/Placeholder(1).tscn" id="3_7if0c"]
