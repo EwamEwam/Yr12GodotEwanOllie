@@ -21,8 +21,8 @@ radius = 0.07
 height = 0.14
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_40svl"]
-radius = 1.08102
-height = 2.31043
+radius = 1.17921
+height = 2.5285
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3etf2"]
 blend_mode = 4
@@ -92,7 +92,7 @@ collision_mask = 2
 monitorable = false
 
 [node name="Collision_2" type="CollisionShape3D" parent="Mesh/Item_Detection"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, -1.17413)
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, -1.05377)
 shape = SubResource("CapsuleShape3D_40svl")
 
 [node name="Outline" type="MeshInstance3D" parent="Mesh"]

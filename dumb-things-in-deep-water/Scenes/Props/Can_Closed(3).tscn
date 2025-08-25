@@ -33,6 +33,8 @@ collision_layer = 19
 collision_mask = 146
 physics_material_override = SubResource("PhysicsMaterial_k831n")
 continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 5
 
 [node name="Model" type="MeshInstance3D" parent="Body"]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
@@ -48,4 +50,12 @@ shape = SubResource("ConvexPolygonShape3D_83ocu")
 
 [node name="Onscreen" type="VisibleOnScreenNotifier3D" parent="Body"]
 
-[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="."]
+[node name="Obstacle" type="NavigationObstacle3D" parent="Body"]
+radius = 0.8
+
+[node name="Audio" type="AudioStreamPlayer3D" parent="Body"]
+volume_db = -10.0
+unit_size = 5.0
+max_polyphony = 3
+
+[connection signal="body_entered" from="Body" to="." method="_on_body_body_entered"]

@@ -9,14 +9,14 @@ var sensitivity :float = 0.4
 var aiming_sensitivity :float = 0.25
 var screen_factor :float = 1.0
 var shift_lock :bool = false
-var allow_shaking :bool = true
 var show_prompts :bool = true
 var allow_water_effects :bool = true
+var allow_camera_jerk :bool = true
 
 var max_health :float = 25.0
-var strength :float = 1.0
+var strength :float = 50.0
 var max_carry_weight :float = 50.0
-var max_inventory :float = 500.0
+var max_inventory :float = 50.0
 
 var health :float = 25.0
 var oxygen :float = 100.0
@@ -42,6 +42,7 @@ var regen :bool = true
 var sprint_key :bool = false
 var time_since_last_damage :float = 0.0
 var next_health_regen :float = 0.0
+var oxygen_depletes :bool = true
 
 var time_played :int = 0
 
@@ -51,7 +52,7 @@ var camera_hitbox :bool = true
 var no_clip :bool = true
 
 var ammo :Dictionary = { 
-	"Pistol" = [14,985],
+	"Pistol" = [0,28],
 	"Revolver" = [0,0],
 	"Shotgun" = [0,0],
 	"UZI" = [0,0],

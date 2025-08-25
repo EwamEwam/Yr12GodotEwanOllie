@@ -15,11 +15,14 @@ var object_properties :Array
 @export var attribute :bool = false
 @export var max_speed :float = 60.0
 
+var distance_to_player :float = 0.0
 var previous_velocity :Vector3 = Vector3.ZERO
 var previous_position :Vector3 = Vector3.ZERO
 var true_velocity :Vector3 = Vector3.ZERO 
 
 var grabbable :bool = true
+var can_play_audio :bool = true
+var velocity_check :bool = true
 var outline_shader :StandardMaterial3D
 
 func _ready() -> void:
@@ -29,27 +32,31 @@ func _ready() -> void:
 	
 func _physics_process(delta: float) -> void:
 	if onscreen.is_on_screen():
-		item_process()
-		limit_speed()
-		previous_velocity = body.linear_velocity
-		body.can_sleep = false
-		model.visible = true
-		if Playerstats.object_detected == body and grabbable:
-			outline_shader.albedo_color = Color(1,1,1,1)
-		else:
-			outline_shader.albedo_color = Color(0,0,0,1)
+		distance_to_player = (body.global_position - Playerstats.player.global_position).length()
+		if distance_to_player < 50:
+			item_process()
+			limit_speed()
+			previous_velocity = body.linear_velocity
+			body.can_sleep = false
+			model.visible = true
+			if Playerstats.object_detected == body and grabbable:
+				outline_shader.albedo_color = Color(1,1,1,1)
+			else:
+				outline_shader.albedo_color = Color(0,0,0,1)
+				
+			if (true_velocity - body.linear_velocity).length() > 2 and true_velocity != Vector3.ZERO and Playerstats.object_held != body and velocity_check:
+				body.linear_velocity = true_velocity
+				#print(body.linear_velocity)
+				previous_position = body.global_position
 			
-		if (true_velocity - body.linear_velocity).length() > 2 and true_velocity != Vector3.ZERO and Playerstats.object_held != body and grabbable:
-			body.linear_velocity = true_velocity
-			print(body.linear_velocity)
-			previous_position = body.global_position
-		
+		else:
+			body.can_sleep = true
+			model.visible = false
 	else:
 		body.can_sleep = true
 		model.visible = false
 	
 	if object_properties.has(ItemData.properties.TV):
-		var distance_to_player :float = (global_position - Playerstats.player.global_position).length()
 		$VideoStreamPlayer.volume_db = -10 - distance_to_player/1.5
 		if attribute and not $VideoStreamPlayer.is_playing():
 			$VideoStreamPlayer.play()
@@ -92,26 +99,34 @@ func item_process() -> void:
 				
 		if property == properties.PAINTING:
 			var raycast :RayCast3D = $Body/Wall_Check
+
 			if raycast.is_colliding() and Playerstats.object_held != body and not attribute:
-				attribute = true
-				body.freeze = true
-				true_velocity = Vector3.ZERO
-				body.linear_velocity = Vector3.ZERO
-				previous_position = global_position
-				
 				var normal :Vector3 = raycast.get_collision_normal()
 				var is_vertical :bool = abs(normal.dot(Vector3.UP)) > 0.99
-				var forward :Vector3 = -normal.normalized()
+#				var forward :Vector3 = -normal.normalized()
 				
 				if not is_vertical:
-					var up = Vector3.UP
-					var right = forward.cross(up).normalized()
-					up = right.cross(forward).normalized()
-					body.basis = Basis(right, up, forward)
+					attribute = true
+					body.freeze = true
+					true_velocity = Vector3.ZERO
+					body.linear_velocity = Vector3.ZERO
+					previous_position = global_position
 					
-			elif not attribute:
-				body.freeze = false
+					body.look_at(body.global_position + normal,Vector3.UP)
+					
+#					var up :Vector3 = Vector3.UP
+#					if abs(forward.dot(up)) > 0.99:
+#						up = Vector3.FORWARD
+#					var right :Vector3 = up.cross(forward).normalized()
+#					up = forward.cross(right).normalized()
+#					body.basis = Basis(right, up, forward)
 				
+			elif not raycast.is_colliding() and Playerstats.object_held != body:
+				attribute = false
+				body.freeze = false
+			
+			body.scale = Vector3.ONE
+			
 func item_use():
 	var held_properties :Array = Playerstats.object_properties
 	var properties := ItemData.properties
@@ -180,6 +195,8 @@ func hold() -> void:
 		
 func drop() -> void:
 	global_position = Playerstats.player.hand.global_position
+	can_play_audio = false
+	disable_velocity_check(0.75)
 	Playerstats.object_ID = 0
 	Playerstats.object_properties = []
 	Playerstats.object_prompts = []
@@ -190,15 +207,19 @@ func drop() -> void:
 	body.angular_velocity = Playerstats.player.true_velocity / (3 + (body.mass/(4 * Playerstats.strength)))
 	collision.disabled = false
 	Playerstats.object_mass = 0.0
+	await get_tree().create_timer(0.05).timeout
+	can_play_audio = true
 	await get_tree().create_timer(0.75).timeout
 	grabbable = true
 	
 func throw(power :float) -> void:
 	if Playerstats.object_held == body:
+		can_play_audio = false
 		Playerstats.object_mass = 0.0
 		Playerstats.object_properties = []
 		Playerstats.object_prompts = []
 		global_position = Playerstats.player.hand.global_position
+		disable_velocity_check(0.75)
 		Playerstats.object_ID = 0
 		grabbable = false
 		Playerstats.object_held = null
@@ -206,7 +227,9 @@ func throw(power :float) -> void:
 		collision.disabled = false
 		body.apply_central_impulse(5 * Playerstats.strength * power * Vector3(-sin(Playerstats.player.camera_yaw.rotation.y) ,(Playerstats.player.pitch-2)/60, -cos(Playerstats.player.camera_yaw.rotation.y)))
 		body.angular_velocity = (0.25 + Playerstats.strength/35) * power * Vector3(1.5,1.5,1.5) / (2.2 + (body.mass/(5 * Playerstats.strength)))
-		await get_tree().create_timer(0.75).timeout
+		await get_tree().create_timer(0.05).timeout
+		can_play_audio = true
+		await get_tree().create_timer(0.70).timeout
 		grabbable = true
 	
 func set_props() -> void:
@@ -232,3 +255,27 @@ func create_bullet(target_position :Array) -> void:
 	$"../..".add_child(new_bullet)
 	new_bullet.global_position = $Body/Spawner.global_position
 	new_bullet.create(target_position)
+
+func disable_velocity_check(time :float) -> void:
+	velocity_check = false
+	await get_tree().create_timer(time).timeout
+	velocity_check = true
+	
+func _on_body_body_entered(object: Node) -> void:
+	if object is StaticBody3D or object is RigidBody3D or object is CharacterBody3D:
+		print(object)
+		if body.linear_velocity.length() > 0.5:
+			play_sound((body.linear_velocity.length()/3) - 12)
+			
+func play_sound(volume :float) -> void:
+	if can_play_audio:
+		can_play_audio = false
+		var material_type = ItemData.itemdata[str(ID)]["Material"]
+		var audios :Array = ItemData.Audio_bank[material_type]
+		var audio_file :StringName = audios[randi_range(0,audios.size() - 1)]
+		$Body/Audio.volume_db = min(volume,0)
+		$Body/Audio.stream = load(audio_file)
+		$Body/Audio.pitch_scale = randf_range(0.75,1.25) + (volume + 12)/60
+		$Body/Audio.play()
+		await get_tree().create_timer(0.1).timeout
+		can_play_audio = true

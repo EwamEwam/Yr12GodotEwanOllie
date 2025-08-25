@@ -20,8 +20,8 @@ points = PackedVector3Array(0.6, 0.6, -0.0072986, 0.6, -0.6, -0.0072986, 0.6, 0.
 [node name="Painting" type="Node3D" groups=["Prop"]]
 script = ExtResource("1_0jc0x")
 ID = 11
-pick_up_position = Vector3(0, 0, -0.6)
-pick_up_rotation = Vector3(0, -180, 0)
+pick_up_position = Vector3(0, 0, 0.6)
+pick_up_rotation = Vector3(0, 180, 0)
 
 [node name="Damage_Timer" type="Timer" parent="."]
 wait_time = 0.25
@@ -29,11 +29,14 @@ one_shot = true
 autostart = true
 
 [node name="Body" type="RigidBody3D" parent="." groups=["Prop"]]
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 0, 0)
 collision_layer = 19
 collision_mask = 146
 physics_material_override = SubResource("PhysicsMaterial_k831n")
 freeze_mode = 1
 continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 5
 
 [node name="Model" type="MeshInstance3D" parent="Body"]
 mesh = ExtResource("2_48ad4")
@@ -51,3 +54,13 @@ shape = SubResource("ConvexPolygonShape3D_u87u7")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0141011)
 target_position = Vector3(0, 0, 0.05)
 collision_mask = 128
+
+[node name="Audio" type="AudioStreamPlayer3D" parent="Body"]
+volume_db = -10.0
+unit_size = 5.0
+max_polyphony = 3
+
+[node name="Obstacle" type="NavigationObstacle3D" parent="Body"]
+radius = 1.3
+
+[connection signal="body_entered" from="Body" to="." method="_on_body_body_entered"]

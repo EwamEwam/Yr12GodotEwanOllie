@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Dumb Things In Deep Water"
-run/main_scene="uid://cwiithgb7v4ma"
+run/main_scene="uid://cd3661sn4ffct"
 config/features=PackedStringArray("4.4", "Forward Plus")
 
 [autoload]
@@ -23,7 +23,6 @@ ItemData="*res://Scripts/Other/ItemData.gd"
 
 window/size/viewport_width=640
 window/size/viewport_height=480
-window/size/mode=2
 window/stretch/mode="viewport"
 
 [editor_plugins]
