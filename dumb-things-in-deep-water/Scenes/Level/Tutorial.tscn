@@ -1,13 +1,13 @@
-[gd_scene load_steps=31 format=4 uid="uid://31404ggijmfj"]
+[gd_scene load_steps=32 format=4 uid="uid://31404ggijmfj"]
 
-[ext_resource type="Script" uid="uid://bkmwodo6s0oum" path="res://Scenes/Misc/World.gd" id="1_26fll"]
-[ext_resource type="Texture2D" uid="uid://c3lk6scsul6nk" path="res://Assets/Textures/tutorial map_stone.jpg" id="2_4w8uw"]
+[ext_resource type="Script" uid="uid://bkmwodo6s0oum" path="res://Scripts/World/World.gd" id="1_26fll"]
+[ext_resource type="Texture2D" uid="uid://nyjtrlrouefc" path="res://Assets/Textures/tutorial map_stone.jpg" id="2_4w8uw"]
 [ext_resource type="PackedScene" uid="uid://1vdsxc2vo8e" path="res://Scenes/Props/Test_Gun(9).tscn" id="2_up8s3"]
-[ext_resource type="Texture2D" uid="uid://wj5364klyd8p" path="res://Assets/Textures/tutorial map_sand.jpg" id="3_2pxma"]
+[ext_resource type="Texture2D" uid="uid://du3vuflxweujy" path="res://Assets/Textures/tutorial map_sand.jpg" id="3_2pxma"]
 [ext_resource type="PackedScene" uid="uid://35us3w5stkwi" path="res://Scenes/Props/TV_Barbeque_Chicken(8).tscn" id="4_3j5by"]
 [ext_resource type="PackedScene" uid="uid://be7i40ywapi16" path="res://Scenes/Misc/Circular_Rock.tscn" id="7_2pxma"]
 [ext_resource type="PackedScene" uid="uid://c1b3508xrxbuh" path="res://Scenes/Misc/Small_Rock.tscn" id="8_jwgaj"]
-[ext_resource type="PackedScene" uid="uid://fetnged7gfqt" path="res://Scenes/Props/TV_intro(12).tscn" id="8_t7mbg"]
+[ext_resource type="PackedScene" path="res://Scenes/Props/TV_intro(12).tscn" id="8_t7mbg"]
 [ext_resource type="PackedScene" uid="uid://c6pye77owufbe" path="res://Scenes/Misc/Tall_Rock.tscn" id="9_up8s3"]
 [ext_resource type="PackedScene" uid="uid://4elvwkl063ne" path="res://Scenes/Characters/enemy.tscn" id="10_lkqar"]
 [ext_resource type="PackedScene" uid="uid://cp15s3vsmperh" path="res://Scenes/Props/Basic_Healing(7).tscn" id="11_g004e"]
@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://e70gei4dw00j" path="res://Scenes/Props/Speaker_Carry_on(10).tscn" id="13_b1p4s"]
 [ext_resource type="PackedScene" uid="uid://baocn3lc445ff" path="res://Scenes/Misc/hud.tscn" id="14_l1lhw"]
 [ext_resource type="PackedScene" uid="uid://cboonb5vreyst" path="res://Scenes/Props/White_Cyclinder(2).tscn" id="16_jriut"]
+[ext_resource type="PackedScene" uid="uid://deqweex802pms" path="res://Scenes/Props/Speaker_radio.tscn" id="18_g004e"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_rdphb"]
 geometry_parsed_geometry_type = 0
@@ -346,5 +347,8 @@ ignore_time_scale = true
 
 [node name="Node3D" parent="." instance=ExtResource("7_2pxma")]
 transform = Transform3D(12.494, 0, 0, 0, 7.70686, 0, 0, 0, 7.70686, -46.8337, 10.0105, -23.0869)
+
+[node name="Speaker_Carry_On" parent="." instance=ExtResource("18_g004e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.4506, 2.2346, -2.73702)
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
