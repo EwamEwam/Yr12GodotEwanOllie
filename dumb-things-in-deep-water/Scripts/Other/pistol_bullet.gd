@@ -2,7 +2,8 @@ extends RigidBody3D
 
 @export var impulse_strength: float = 10.0
 @export var bullet_speed: float = 300.0
-var damage :float = 2.0
+var damage :float = 7.0
+var base_impulse_strength :float = 10.0
 
 var velocity: Vector3 = Vector3.ZERO
 var target :Vector3 = Vector3.ZERO
@@ -20,16 +21,41 @@ func create(target_position: Array) -> void:
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	var direction = -global_transform.basis.z
 	state.linear_velocity = direction * bullet_speed
+	#check_if_in_object()
 
-func _on_body_entered(body: Node) -> void:
+func check_if_in_object() -> void:
+	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
+	var collision_node: CollisionShape3D = $Collision
+	
+	var shape : = collision_node.shape.duplicate()
+	
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = shape
+	query.transform = global_transform
+	query.collision_mask = 1
+	query.exclude = [self]
+	
+	var results := space_state.intersect_shape(query, 32)
+	
+	for result in results:
+		var collider = result.collider
+		if collider is StaticBody3D or collider is RigidBody3D or collider is CharacterBody3D:
+			collide(collider)
+
+func collide(body: Node) -> void:
 	print(body)
 	if body is RigidBody3D:
-		var hit_position :Vector3 = global_transform.origin
-		var direction :Vector3 = velocity.normalized()
-		var impulse :Vector3 = direction * impulse_strength
-		var offset :Vector3 = hit_position - body.global_transform.origin
-
-		body.apply_impulse(-offset, impulse)
+		var collision_normal = (global_position - body.global_position).normalized()
+		var bullet_direction = velocity.normalized()
+		var impact_factor = -bullet_direction.dot(collision_normal)
+		impact_factor = max(impact_factor, 0.0)
+		var impulse_magnitude = base_impulse_strength * impact_factor
+		var impulse = bullet_direction * impulse_magnitude
+		body.apply_impulse(impulse, global_position - body.global_position)
+		
+		if body.is_in_group("Prop"):
+			body.get_parent().disable_velocity_check(0.5)
+			body.get_parent().play_sound(randf_range(-7,-5))
 
 	if body.is_in_group("Enemy"):
 		body.take_damage(damage)
@@ -73,3 +99,6 @@ func _on_body_entered(body: Node) -> void:
 
 func _on_timer_timeout() -> void:
 	queue_free()
+
+func _on_body_entered(body: Node) -> void:
+	collide(body)

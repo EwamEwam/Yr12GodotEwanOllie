@@ -33,7 +33,8 @@ script = ExtResource("1_lsx3x")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00860912, 1.62031, -0.00199196)
 
 [node name="Ragdoll" type="RigidBody3D" parent="."]
-mass = 8.0
+collision_layer = 17
+collision_mask = 144
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ragdoll"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)

@@ -105,7 +105,7 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor() and not debug_movement:
 		calculated_velocity.y -= gravity * delta
 		
-	if Playerstats.current_state == Playerstats.game_states.PLAYING:
+	if Playerstats.current_state == Playerstats.game_states.PLAYING and Playerstats.oxygen_depletes:
 		Playerstats.oxygen -= delta/2.5
 		
 	position_last_frame = global_position
@@ -224,7 +224,7 @@ func set_camera_movement(delta :float) -> void:
 			head_bob_timer += delta * 3
 		camera_bob.x = move_toward(camera_bob.x,sin(head_bob_timer + PI/2)/16 + camera_shake.x,delta * 15)
 		camera_bob.y = move_toward(camera_bob.y, abs(sin(head_bob_timer))/16 + camera_shake.y,delta * 15)
-	if abs(camera_jerk) > 0.005 or abs(jerk_velocity) > 0.005:
+	if abs(camera_jerk) > 0.005 or abs(jerk_velocity) > 0.005 and Playerstats.allow_camera_jerk:
 		jerk_velocity = min(jerk_velocity,65)
 		var camera_acceleration = -100 * camera_jerk - 25 * jerk_velocity
 		jerk_velocity += camera_acceleration * delta
@@ -495,9 +495,9 @@ func get_all_connected_bodies(start_body: RigidBody3D, max_bodies: int = 6) -> A
 	
 func fall_damage_calculation() -> void:
 	if is_on_floor():
-		if calculated_velocity.y < -22:
-			change_in_health(calculated_velocity.y/8 ,true)
-			Playerstats.legs_hp -= abs(calculated_velocity.y/8)
+		if calculated_velocity.y < -20:
+			change_in_health(calculated_velocity.y/7 ,true)
+			Playerstats.legs_hp -= abs(calculated_velocity.y/6)
 			$"../../../HUD".shake_part("Legs")
 
 func change_in_health(amt :float, particles :bool) -> void:

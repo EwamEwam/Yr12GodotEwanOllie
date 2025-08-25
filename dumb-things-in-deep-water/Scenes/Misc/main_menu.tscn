@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://cwiithgb7v4ma"]
+[gd_scene load_steps=2 format=3 uid="uid://cwiithgb7v4ma"]
 
-[ext_resource type="Script" uid="uid://yow6nc23veun" path="res://Scripts/World/start.gd" id="1_34dcf"]
-[ext_resource type="Texture2D" uid="uid://bb4fxa37arr03" path="res://Assets/Textures/Screenshot (46).png" id="1_h4vnr"]
+[ext_resource type="Script" uid="uid://b46g6wvoyhoef" path="res://Scripts/Other/main_menu.gd" id="1_h4vnr"]
 
 [node name="Main menu" type="Node2D"]
+script = ExtResource("1_h4vnr")
 
 [node name="Button manager" type="Control" parent="."]
 layout_mode = 3
@@ -13,36 +13,50 @@ offset_bottom = 40.0
 
 [node name="Start" type="Button" parent="Button manager"]
 layout_mode = 0
-offset_left = 220.0
-offset_top = 142.0
-offset_right = 412.0
-offset_bottom = 200.0
+offset_left = 25.0
+offset_top = 242.0
+offset_right = 245.0
+offset_bottom = 300.0
 text = "Start"
-script = ExtResource("1_34dcf")
 
 [node name="Options" type="Button" parent="Button manager"]
 layout_mode = 0
-offset_left = 221.0
-offset_top = 219.0
-offset_right = 414.0
-offset_bottom = 277.0
-text = "Options"
+offset_left = 26.0
+offset_top = 319.0
+offset_right = 219.0
+offset_bottom = 377.0
+text = "Options
+(This does nothing yet)"
 
 [node name="Quit" type="Button" parent="Button manager"]
 layout_mode = 0
-offset_left = 220.0
-offset_top = 297.0
-offset_right = 415.0
-offset_bottom = 360.0
+offset_left = 25.0
+offset_top = 397.0
+offset_right = 247.0
+offset_bottom = 460.0
 text = "Quit"
 
-[node name="Screenshot(46)" type="Sprite2D" parent="."]
-z_index = -1
-position = Vector2(317, 238)
-scale = Vector2(0.555556, 0.555556)
-texture = ExtResource("1_h4vnr")
+[node name="Title" type="Label" parent="."]
+offset_left = 15.0
+offset_top = 11.0
+offset_right = 273.0
+offset_bottom = 31.0
+scale = Vector2(2, 2)
+text = "Dumb Things In Deep Water"
+
+[node name="Game By" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 55.0
+offset_right = 386.0
+offset_bottom = 75.0
+text = "Game by Roobuc and Bourbon and Coke"
+
+[node name="Build" type="Label" parent="."]
+offset_left = 17.0
+offset_top = 77.0
+offset_right = 387.0
+offset_bottom = 97.0
+text = "Sprint 3 Build (15/8/25)"
 
 [connection signal="pressed" from="Button manager/Start" to="." method="_on_start_pressed"]
-[connection signal="pressed" from="Button manager/Start" to="Button manager/Start" method="_on_pressed"]
-[connection signal="pressed" from="Button manager/Options" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="Button manager/Quit" to="." method="_on_quit_pressed"]

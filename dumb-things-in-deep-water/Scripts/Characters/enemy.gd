@@ -36,9 +36,10 @@ func _physics_process(delta :float) -> void:
 		var collision = get_slide_collision(i)
 		var collider = collision.get_collider()
 		
-		if collider is RigidBody3D and $Invinicibility.is_stopped() and health > 0:
+		if collider is RigidBody3D and collider.is_in_group("Prop") and $Invinicibility.is_stopped() and health > 0:
 			take_damage(collider.get_parent().previous_velocity.length()/5 * collider.mass)
 			$Invinicibility.start()
+			
 	
 	if health > 0:
 		if not is_on_floor():
@@ -282,3 +283,6 @@ func get_all_connected_bodies(start_body: RigidBody3D, max_bodies: int = 6) -> A
 					stack.append(collider)
 
 	return connected_bodies
+	
+func push_back() -> void:
+	pass
