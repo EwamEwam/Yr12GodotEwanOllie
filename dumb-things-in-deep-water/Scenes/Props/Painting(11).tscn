@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://cik8qbnt34to7"]
 
 [ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/Basic_Props.gd" id="1_0jc0x"]
-[ext_resource type="ArrayMesh" uid="uid://cg5788c8mn6vk" path="res://Assets/Props_Models_And_Collisions/11_Painting.tres" id="2_48ad4"]
-[ext_resource type="ArrayMesh" uid="uid://birrfkg0cxqnt" path="res://Assets/Props_Models_And_Collisions/11_Painting_Outline.tres" id="3_ho72s"]
+[ext_resource type="ArrayMesh" path="res://Assets/Props_Models_And_Collisions/11_Painting.tres" id="2_48ad4"]
+[ext_resource type="ArrayMesh" path="res://Assets/Props_Models_And_Collisions/11_Painting_Outline.tres" id="3_ho72s"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_k831n"]
 

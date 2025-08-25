@@ -109,6 +109,7 @@ script = ExtResource("1_7lq3g")
 
 [node name="ScreenBorder" type="Sprite2D" parent="."]
 modulate = Color(1, 1, 1, 0.815686)
+z_index = -1
 texture = ExtResource("2_uj57v")
 centered = false
 
