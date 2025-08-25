@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=4 uid="uid://c6pye77owufbe"]
 
-[ext_resource type="Texture2D" uid="uid://dvxecfdo8imor" path="res://Assets/Level_Models/rocky_rcoky.jpg" id="1_am72s"]
+[ext_resource type="Texture2D" uid="uid://dvxecfdo8imor" path="res://Assets/Textures/rocky_rcoky.jpg" id="1_am72s"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_epxym"]
 resource_name = "Material.001"

@@ -7,6 +7,7 @@ var time_in_level :float = 0.0
 
 func _ready() -> void:
 	Playerstats.player = player
+	$SubViewportContainer/SubViewport/NavigationRegion3D/Environment/WorldEnvironment.environment = load("res://Scripts/World/Environment.tres")
 
 func _physics_process(delta: float) -> void:
 	get_tree().call_group("Enemy", "update_target_location", player.global_position)

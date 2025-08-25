@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c4xqjrlgbj3dn"
-path.s3tc="res://.godot/imported/sign_wood.jpg-66422c70f50827af04227c105358a11e.s3tc.ctex"
+uid="uid://c3ewa7ir2xl6s"
+path.s3tc="res://.godot/imported/sign_wood.jpg-5cfccca628a134779df3c2b24d874c41.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://Scripts/World/sign_wood.jpg"
-dest_files=["res://.godot/imported/sign_wood.jpg-66422c70f50827af04227c105358a11e.s3tc.ctex"]
+source_file="res://Assets/Textures/sign_wood.jpg"
+dest_files=["res://.godot/imported/sign_wood.jpg-5cfccca628a134779df3c2b24d874c41.s3tc.ctex"]
 
 [params]
 
