@@ -273,9 +273,6 @@ func play_sound(volume :float) -> void:
 		var material_type = ItemData.itemdata[str(ID)]["Material"]
 		var audios :Array = ItemData.Audio_bank[material_type]
 		var audio_file :StringName = audios[randi_range(0,audios.size() - 1)]
-		$Body/Audio.volume_db = min(volume,0)
-		$Body/Audio.stream = load(audio_file)
-		$Body/Audio.pitch_scale = randf_range(0.75,1.25) + (volume + 12)/60
-		$Body/Audio.play()
+		SoundManager.create_sound(audio_file,min(volume,0),min(randf_range(0.75,1.25) + (volume + 12)/60,1.5),2,body.global_position)
 		await get_tree().create_timer(0.1).timeout
 		can_play_audio = true

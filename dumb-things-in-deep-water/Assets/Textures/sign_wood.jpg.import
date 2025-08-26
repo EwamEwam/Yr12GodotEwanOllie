@@ -2,11 +2,14 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cap4hv3cydgvy"
+uid="uid://dedrmt2224mqp"
 path.s3tc="res://.godot/imported/sign_wood.jpg-5cfccca628a134779df3c2b24d874c41.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
+}
+generator_parameters={
+"md5": "ed4c69d672fa24026f2cdb68e5f57655"
 }
 
 [deps]

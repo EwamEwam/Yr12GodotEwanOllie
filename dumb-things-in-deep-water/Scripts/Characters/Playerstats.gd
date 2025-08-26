@@ -12,6 +12,7 @@ var shift_lock :bool = false
 var show_prompts :bool = true
 var allow_water_effects :bool = true
 var allow_camera_jerk :bool = true
+var post_processing :bool = true
 
 var max_health :float = 25.0
 var strength :float = 50.0

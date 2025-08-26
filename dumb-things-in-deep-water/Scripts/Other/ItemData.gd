@@ -196,15 +196,16 @@ const itemdata :Dictionary = {
 		"Tooltip" = "Game by Bourbon and Coke,\nand roobuc, better known\nby his stage name Passionfruit\nman.",
 	},
 	"14":{
-		"Name" = "Speaker radio",
-		"Path" = "res://Scenes/Props/Speaker_radio.tscn",
+		"Name" = "Speaker - Radio",
+		"Path" = "res://Scenes/Props/Speaker_Radio(14).tscn",
 		"Model" = "res://Assets/Props_Models_And_Collisions/10_Speaker_Carry_on.tres",
 		"Outline" = "res://Assets/Props_Models_And_Collisions/10_Speaker_Carry_on_Outline.tres",
 		"Mass" = 5.8,
 		"Audio" = "res://Assets/Videos_and_Audio/output.mp3",
 		"Properties" = [properties.SPEAKER],
 		"Prompts" = [prompts.TOGGLE],
-		"Tooltip" = "Masquerading as a man with a\nreason goes so hard for no\nreason."
+		"Material" = materials.DEFAULT,
+		"Tooltip" = "Simply Beautiful."
 	},
 	"20": {
 		"Name" = "The Package",

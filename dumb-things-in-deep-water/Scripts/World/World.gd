@@ -19,6 +19,13 @@ func _physics_process(delta: float) -> void:
 	else:
 		shader.set_shader_parameter("wave_amplitude",0)
 	
+	if Playerstats.post_processing:
+		$SubViewportContainer/SubViewport/ColorRect.visible = true
+		$SubViewportContainer/SubViewport/ColorRect.process_mode = Node.PROCESS_MODE_INHERIT
+	else:
+		$SubViewportContainer/SubViewport/ColorRect.visible = false
+		$SubViewportContainer/SubViewport/ColorRect.process_mode = Node.PROCESS_MODE_DISABLED
+	
 func check_below_map() -> void:
 	var detected :Array[Node3D] = $SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Death_Barrier.get_overlapping_bodies()
 	for object in detected:

@@ -49,11 +49,6 @@ shape = SubResource("ConvexPolygonShape3D_k831n")
 
 [node name="Onscreen" type="VisibleOnScreenNotifier3D" parent="Body"]
 
-[node name="Audio" type="AudioStreamPlayer3D" parent="Body"]
-volume_db = -10.0
-unit_size = 5.0
-max_polyphony = 3
-
 [node name="Obstacle" type="NavigationObstacle3D" parent="Body"]
 radius = 1.3
 

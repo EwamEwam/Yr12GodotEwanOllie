@@ -54,4 +54,3 @@ if (dither_strength > 0.0) {
 // Apply blue-green tint for underwater effect
 col *= tint_color;
 COLOR = vec4(col, 1.0);}
-

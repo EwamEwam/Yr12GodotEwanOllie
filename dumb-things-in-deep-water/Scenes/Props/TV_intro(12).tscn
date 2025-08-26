@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://fetnged7gfqt"]
 
 [ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/Basic_Props.gd" id="1_diorw"]
-[ext_resource type="ArrayMesh" uid="uid://c0dodr3xfvk5p" path="res://Assets/Props_Models_And_Collisions/8_TV.tres" id="2_mx71o"]
+[ext_resource type="ArrayMesh" uid="uid://b47tqsj3wp535" path="res://Assets/Props_Models_And_Collisions/8_TV.tres" id="2_mx71o"]
 [ext_resource type="ArrayMesh" uid="uid://u24c4brm233" path="res://Assets/Props_Models_And_Collisions/8_TV_Outline.tres" id="3_iwiqc"]
 [ext_resource type="VideoStream" uid="uid://bmiemxfdu8xo" path="res://Assets/Videos_and_Audio/barbequechicken.ogv" id="4_mc54x"]
 
@@ -71,11 +71,6 @@ aabb = AABB(-1.5339, -1, -1, 3.06781, 2, 2)
 
 [node name="Obstacle" type="NavigationObstacle3D" parent="Body"]
 radius = 1.3
-
-[node name="Audio" type="AudioStreamPlayer3D" parent="Body"]
-volume_db = -10.0
-unit_size = 5.0
-max_polyphony = 3
 
 [node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="."]
 visible = false

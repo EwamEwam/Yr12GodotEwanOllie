@@ -299,7 +299,7 @@ func set_camera(delta: float) -> Basis:
 	return camera_offset
 	
 func set_movement_mode(delta :float) -> void:
-	if Input.is_action_pressed("Right_Click") or (Playerstats.object_properties.has(ItemData.properties.AIM) and Input.is_action_pressed("Right_Click")):
+	if Input.is_action_pressed("Right_Click") or Input.is_action_pressed("Alt"):
 		if Playerstats.object_held != null:
 			movement_state = movement_states.AIMING
 			throw_process(delta)
@@ -314,7 +314,7 @@ func throw_process(delta :float) -> void:
 	if Input.is_action_pressed("Left_Click") and not Playerstats.object_properties.has(ItemData.properties.CANT_DROP_THROW):
 		movement_state = movement_states.THROWING
 		throw_power = clamp(throw_power + delta * 5,1,6)
-	elif throw_power > 1 and Input.is_action_pressed("Right_Click"):
+	elif throw_power > 1 and (Input.is_action_pressed("Right_Click") or Input.is_action_pressed("Alt")):
 		if check_if_in_wall(Playerstats.object_held):
 			Playerstats.object_held.get_parent().throw(throw_power)
 			movement_state = movement_states.AIMING
