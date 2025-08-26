@@ -8,7 +8,7 @@ var current_camera :camera_states = camera_states.NORMAL
 var sensitivity :float = 0.4
 var aiming_sensitivity :float = 0.25
 var screen_factor :float = 1.0
-var shift_lock :bool = true
+var shift_lock :bool = false
 var show_prompts :bool = true
 var allow_water_effects :bool = true
 var allow_camera_jerk :bool = true
@@ -86,8 +86,6 @@ func _process(delta :float) -> void:
 	time_since_last_damage = min(time_since_last_damage + delta, 60)
 	
 	can_regen = arms_hp < max_health or legs_hp < max_health or torso_hp < max_health or head_hp < max_health or health < max_health 
-	
-	print(can_regen)
 	
 	if regen and can_regen and current_state == game_states.PLAYING: 
 		next_health_regen += (time_since_last_damage/60)*(delta/2)

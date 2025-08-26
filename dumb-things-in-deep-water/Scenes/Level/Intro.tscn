@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://byp5ail5cjwh5" path="res://Scripts/World/intro.gd" id="1_te0c7"]
 [ext_resource type="PackedScene" uid="uid://1vdsxc2vo8e" path="res://Scenes/Props/Test_Gun(9).tscn" id="2_te0c7"]
-[ext_resource type="Texture2D" uid="uid://nyjtrlrouefc" path="res://Assets/Textures/tutorial map_stone.jpg" id="3_2q1dc"]
+[ext_resource type="Texture2D" uid="uid://b46xu5eere5fj" path="res://Assets/Textures/tutorial map_stone.jpg" id="3_2q1dc"]
 [ext_resource type="PackedScene" uid="uid://culqao60nt1mv" path="res://Scenes/Props/Placeholder(1).tscn" id="3_7if0c"]
-[ext_resource type="Texture2D" uid="uid://du3vuflxweujy" path="res://Assets/Textures/tutorial map_sand.jpg" id="4_7if0c"]
+[ext_resource type="Texture2D" uid="uid://dv847m3k2ors6" path="res://Assets/Textures/tutorial map_sand.jpg" id="4_7if0c"]
 [ext_resource type="PackedScene" uid="uid://fetnged7gfqt" path="res://Scenes/Props/TV_intro(12).tscn" id="4_p4a15"]
 [ext_resource type="PackedScene" uid="uid://b8uxpv3fd0038" path="res://Scenes/Props/Can_Closed(3).tscn" id="5_l3wab"]
 [ext_resource type="PackedScene" uid="uid://djvoa4cesveap" path="res://Scenes/Props/Can_Empty(6).tscn" id="6_0luxd"]

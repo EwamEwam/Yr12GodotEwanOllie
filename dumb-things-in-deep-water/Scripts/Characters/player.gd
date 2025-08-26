@@ -494,7 +494,7 @@ func get_all_connected_bodies(start_body: RigidBody3D, max_bodies: int = 6) -> A
 	return connected_bodies
 	
 func fall_damage_calculation() -> void:
-	if is_on_floor():
+	if is_on_floor(): 
 		if calculated_velocity.y < -20:
 			change_in_health(calculated_velocity.y/7 ,true)
 			Playerstats.legs_hp -= abs(calculated_velocity.y/6)
