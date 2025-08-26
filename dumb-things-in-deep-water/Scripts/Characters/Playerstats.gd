@@ -8,7 +8,7 @@ var current_camera :camera_states = camera_states.NORMAL
 var sensitivity :float = 0.4
 var aiming_sensitivity :float = 0.25
 var screen_factor :float = 1.0
-var shift_lock :bool = false
+var shift_lock :bool = true
 var show_prompts :bool = true
 var allow_water_effects :bool = true
 var allow_camera_jerk :bool = true
@@ -35,7 +35,7 @@ var object_prompts :Array = []
 
 var head_hp :float = 125.0
 var torso_hp :float = 125.0
-var legs_hp :float = 125.0
+var legs_hp :float = 22.0
 var arms_hp :float = 125.0
 
 var invincibility :bool = false
@@ -44,6 +44,7 @@ var sprint_key :bool = false
 var time_since_last_damage :float = 0.0
 var next_health_regen :float = 0.0
 var oxygen_depletes :bool = true
+var can_regen :bool = false
 
 var time_played :int = 0
 
@@ -83,8 +84,12 @@ func _process(delta :float) -> void:
 		get_tree().quit()
 		
 	time_since_last_damage = min(time_since_last_damage + delta, 60)
-		
-	if regen and health < max_health and current_state == game_states.PLAYING: 
+	
+	can_regen = arms_hp < max_health or legs_hp < max_health or torso_hp < max_health or head_hp < max_health or health < max_health 
+	
+	print(can_regen)
+	
+	if regen and can_regen and current_state == game_states.PLAYING: 
 		next_health_regen += (time_since_last_damage/60)*(delta/2)
 		if next_health_regen >= 0.25:
 			player.change_in_health(0.25,false) 

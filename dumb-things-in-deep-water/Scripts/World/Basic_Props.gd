@@ -207,9 +207,9 @@ func drop() -> void:
 	body.angular_velocity = Playerstats.player.true_velocity / (3 + (body.mass/(4 * Playerstats.strength)))
 	collision.disabled = false
 	Playerstats.object_mass = 0.0
-	await get_tree().create_timer(0.05).timeout
+	await get_tree().create_timer(0.025).timeout
 	can_play_audio = true
-	await get_tree().create_timer(0.75).timeout
+	await get_tree().create_timer(0.725).timeout
 	grabbable = true
 	
 func throw(power :float) -> void:
@@ -227,9 +227,9 @@ func throw(power :float) -> void:
 		collision.disabled = false
 		body.apply_central_impulse(5 * Playerstats.strength * power * Vector3(-sin(Playerstats.player.camera_yaw.rotation.y) ,(Playerstats.player.pitch-2)/60, -cos(Playerstats.player.camera_yaw.rotation.y)))
 		body.angular_velocity = (0.25 + Playerstats.strength/35) * power * Vector3(1.5,1.5,1.5) / (2.2 + (body.mass/(5 * Playerstats.strength)))
-		await get_tree().create_timer(0.05).timeout
+		await get_tree().create_timer(0.025).timeout
 		can_play_audio = true
-		await get_tree().create_timer(0.70).timeout
+		await get_tree().create_timer(0.725).timeout
 		grabbable = true
 	
 func set_props() -> void:
