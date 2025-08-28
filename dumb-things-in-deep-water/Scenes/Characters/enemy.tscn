@@ -71,7 +71,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("SphereShape3D_b1c4r")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+simplify_path = true
 avoidance_enabled = true
+time_horizon_obstacles = 0.4
+use_3d_avoidance = true
 debug_enabled = true
 
 [node name="Hit_Timer" type="Timer" parent="."]
@@ -83,4 +86,5 @@ wait_time = 0.2
 one_shot = true
 autostart = true
 
+[connection signal="velocity_computed" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_velocity_computed"]
 [connection signal="timeout" from="Hit_Timer" to="." method="_on_hit_timer_timeout"]

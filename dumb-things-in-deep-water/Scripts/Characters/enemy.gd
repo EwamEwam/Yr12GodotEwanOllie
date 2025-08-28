@@ -286,3 +286,7 @@ func get_all_connected_bodies(start_body: RigidBody3D, max_bodies: int = 6) -> A
 	
 func push_back() -> void:
 	pass
+
+
+func _on_navigation_agent_3d_velocity_computed(safe_velocity: Vector3) -> void:
+	print(safe_velocity)
