@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=4 uid="uid://31404ggijmfj"]
+[gd_scene load_steps=35 format=4 uid="uid://31404ggijmfj"]
 
 [ext_resource type="Script" uid="uid://bkmwodo6s0oum" path="res://Scripts/World/World.gd" id="1_26fll"]
 [ext_resource type="Texture2D" uid="uid://b46xu5eere5fj" path="res://Assets/Textures/tutorial map_stone.jpg" id="2_4w8uw"]
@@ -20,7 +20,6 @@
 [ext_resource type="PackedScene" uid="uid://e70gei4dw00j" path="res://Scenes/Props/Speaker_Carry_on(10).tscn" id="13_b1p4s"]
 [ext_resource type="PackedScene" uid="uid://baocn3lc445ff" path="res://Scenes/Misc/hud.tscn" id="14_l1lhw"]
 [ext_resource type="PackedScene" uid="uid://cboonb5vreyst" path="res://Scenes/Props/White_Cyclinder(2).tscn" id="16_jriut"]
-[ext_resource type="PackedScene" uid="uid://deqweex802pms" path="res://Scenes/Props/Speaker_Radio(14).tscn" id="20_cv485"]
 [ext_resource type="PackedScene" uid="uid://b2jsdiolqj2iw" path="res://Scenes/Level/sign.tscn" id="21_vjva1"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_rdphb"]
@@ -164,6 +163,7 @@ z_index = -2
 offset_right = 640.0
 offset_bottom = 480.0
 stretch = true
+metadata/_edit_use_anchors_ = true
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
 handle_input_locally = false
@@ -275,8 +275,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59.4779, 13.4126, -4.26211)
 [node name="Closed_Can8" parent="SubViewportContainer/SubViewport/Props" instance=ExtResource("9_x8k2a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59.3214, 12.3956, -8.23042)
 
-[node name="Speaker_radio" parent="SubViewportContainer/SubViewport/Props" instance=ExtResource("20_cv485")]
+[node name="Speaker_radio" parent="SubViewportContainer/SubViewport/Props"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.1807, 6.21696, 7.33568)
+script = null
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="SubViewportContainer/SubViewport"]
 navigation_mesh = SubResource("NavigationMesh_rdphb")
