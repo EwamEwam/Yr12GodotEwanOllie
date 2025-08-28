@@ -13,6 +13,7 @@ var show_prompts :bool = true
 var allow_water_effects :bool = true
 var allow_camera_jerk :bool = true
 var post_processing :bool = true
+var Add_world_environment :bool = true
 
 var max_health :float = 25.0
 var strength :float = 50.0
@@ -35,7 +36,7 @@ var object_prompts :Array = []
 
 var head_hp :float = 125.0
 var torso_hp :float = 125.0
-var legs_hp :float = 22.0
+var legs_hp :float = 125.0
 var arms_hp :float = 125.0
 
 var invincibility :bool = false

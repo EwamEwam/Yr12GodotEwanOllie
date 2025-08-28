@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://birq713iwjhfa"
-path.s3tc="res://.godot/imported/Screen_Border.png-0c7b5a7e16ea4674605fe8de72ac65e9.s3tc.ctex"
+uid="uid://cpy6auhrgb3f1"
+path.s3tc="res://.godot/imported/Water.jpg-dd1cb09885fd2c55f44d8f28864af186.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://Assets/Sprites/Screen_Border.png"
-dest_files=["res://.godot/imported/Screen_Border.png-0c7b5a7e16ea4674605fe8de72ac65e9.s3tc.ctex"]
+source_file="res://Assets/Textures/Water.jpg"
+dest_files=["res://.godot/imported/Water.jpg-dd1cb09885fd2c55f44d8f28864af186.s3tc.ctex"]
 
 [params]
 
