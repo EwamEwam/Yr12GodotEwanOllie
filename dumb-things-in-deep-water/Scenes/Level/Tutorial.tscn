@@ -275,19 +275,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59.4779, 13.4126, -4.26211)
 [node name="Closed_Can8" parent="SubViewportContainer/SubViewport/Props" instance=ExtResource("9_x8k2a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59.3214, 12.3956, -8.23042)
 
-[node name="Speaker_radio" parent="SubViewportContainer/SubViewport/Props"]
-_import_path = NodePath("")
-unique_name_in_owner = false
-process_mode = 0
-process_priority = 0
-process_physics_priority = 0
-process_thread_group = 0
-physics_interpolation_mode = 0
-auto_translate_mode = 0
-editor_description = ""
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.1807, 6.21696, 7.33568)
-script = null
-
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="SubViewportContainer/SubViewport"]
 navigation_mesh = SubResource("NavigationMesh_rdphb")
 

@@ -315,7 +315,6 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -23.0903, 9.90543, -24.
 shape = SubResource("ConcavePolygonShape3D_w8b8k")
 
 [node name="Level_walls" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Level_GeometryDash/CollisionShape3D3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("ArrayMesh_jkakn")
 skeleton = NodePath("")
 
