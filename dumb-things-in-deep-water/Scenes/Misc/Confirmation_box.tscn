@@ -1,0 +1,85 @@
+[gd_scene load_steps=5 format=3 uid="uid://b5erkpywyax4"]
+
+[ext_resource type="Script" uid="uid://7teuwce43v7y" path="res://Scripts/Other/confirmation_box.gd" id="1_hxbx0"]
+[ext_resource type="Texture2D" uid="uid://cbosaky8rxksb" path="res://Assets/Sprites/Tootltip.png" id="1_qsdit"]
+[ext_resource type="PackedScene" uid="uid://d4numnakjau2d" path="res://Scenes/Misc/Menu_Button.tscn" id="2_hxbx0"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_hxbx0"]
+shadow_size = 2
+shadow_color = Color(0, 0, 0, 0.380392)
+shadow_offset = Vector2(0, 2)
+
+[node name="Confirmation_Box" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hxbx0")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -330.0
+offset_top = -254.5
+offset_right = 330.0
+offset_bottom = 254.5
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.00392157, 0, 0.227451, 0.443137)
+
+[node name="Text_box" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -84.0
+offset_top = -33.0
+offset_right = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+texture = ExtResource("1_qsdit")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="?" type="Label" parent="Text_box"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 145.0
+offset_bottom = 25.0
+scale = Vector2(0.5, 0.5)
+text = "Are you Sure?"
+label_settings = SubResource("LabelSettings_hxbx0")
+
+[node name="Yes" parent="Text_box" instance=ExtResource("2_hxbx0")]
+layout_mode = 0
+offset_left = 19.0
+offset_top = 18.0
+offset_right = 53.0
+offset_bottom = 38.0
+scale = Vector2(0.5, 0.5)
+text = "Yes"
+
+[node name="No" parent="Text_box" instance=ExtResource("2_hxbx0")]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 18.0
+offset_right = 70.0
+offset_bottom = 38.0
+scale = Vector2(0.5, 0.5)
+text = "No
+"
+
+[connection signal="pressed" from="Text_box/Yes" to="." method="_on_yes_pressed"]
+[connection signal="pressed" from="Text_box/No" to="." method="_on_no_pressed"]

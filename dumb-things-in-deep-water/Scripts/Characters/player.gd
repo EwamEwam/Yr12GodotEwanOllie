@@ -132,13 +132,15 @@ func _input(event: InputEvent) -> void:
 		pitch = clamp(pitch, -60,65)
 		
 	if event.is_action_pressed("Escape"):
-		get_tree().quit()
+		if not Playerstats.escape_pressed:
+			$"../../../Pause".open_pause_menu()
 		
 	if event.is_action_pressed("E"):
 		if Playerstats.object_held != null and not movement_state == movement_states.THROWING and can_move:
-			if roundf(Playerstats.inventory_mass * 10) / 10 + roundf(Playerstats.object_mass * 10) / 10 <= roundf(Playerstats.max_inventory):
-				Playerstats.inventory.append(Playerstats.object_ID)
-				Playerstats.inventory_mass += Playerstats.object_mass
+			if (roundf(Playerstats.inventory_mass * 10) / 10 + roundf(Playerstats.object_mass * 10) / 10 <= roundf(Playerstats.max_inventory)) or Playerstats.infinte_inventory:
+				if !Playerstats.infinte_inventory:
+					Playerstats.inventory.append(Playerstats.object_ID)
+					Playerstats.inventory_mass += Playerstats.object_mass
 				Playerstats.object_held.get_parent().queue_free()
 				Playerstats.object_held = null
 				Playerstats.object_ID = 0
@@ -260,13 +262,15 @@ func set_speed() -> void:
 func set_camera(delta: float) -> Basis:
 	var camera_offset: Basis
 	
-	if Playerstats.current_state == Playerstats.game_states.PLAYING and movement_state == movement_states.NORMAL and can_move:
-		camera.h_offset = camera_bob.x
-		camera.v_offset = camera_bob.y
+	if get_window().has_focus():
 		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		var screen_size: Vector2 = get_viewport().get_texture().get_size()
 		get_viewport().warp_mouse(screen_size / 2)
+	
+	if Playerstats.current_state == Playerstats.game_states.PLAYING and movement_state == movement_states.NORMAL and can_move:
+		camera.h_offset = camera_bob.x
+		camera.v_offset = camera_bob.y
 		camera_yaw.rotation_degrees.y = lerp(camera_yaw.rotation_degrees.y, yaw, camera_speed * delta)
 		camera_pitch.rotation_degrees.x = lerp(camera_pitch.rotation_degrees.x, pitch, camera_speed * delta)
 		pivot.position.x = move_toward(pivot.position.x, 0.0, delta * 2)
@@ -274,13 +278,13 @@ func set_camera(delta: float) -> Basis:
 		pivot.position.y = lerp(pivot.position.y, zoom * (3 - (pitch + 45) / 45), delta * 10)
 		camera_spring.spring_length = lerp(camera_spring.spring_length, zoom * ((abs(calculated_velocity.length()) / 7.5) + 6.5), delta * 5)
 		camera_spring.spring_length = clamp(move_toward(camera_spring.spring_length, camera_spring.spring_length * zoom, delta * 5), 2.0, 8.0)
-		camera.fov = move_toward(camera.fov, 80.0 + abs(calculated_velocity.length() / 2.5), delta * 80)
+		camera.fov = move_toward(camera.fov, Playerstats.FOV + abs(calculated_velocity.length() / 2.5), delta * 80)
 	elif Playerstats.current_camera == Playerstats.camera_states.FIRST:
 		camera.h_offset = camera_bob.x
 		camera.v_offset = camera_bob.y
 		camera_yaw.rotation_degrees.y = lerp(camera_yaw.rotation_degrees.y, yaw, camera_speed * delta)
 		camera_pitch.rotation_degrees.x = lerp(camera_pitch.rotation_degrees.x, pitch, camera_speed * delta)
-		camera.fov = 90.0
+		camera.fov =  Playerstats.FOV  + 10
 	else:
 		speed /= 2
 		camera.h_offset = camera_bob.x / 2
@@ -293,7 +297,7 @@ func set_camera(delta: float) -> Basis:
 		camera_yaw.rotation_degrees.y = yaw
 		camera_pitch.rotation_degrees.x = lerp(camera_pitch.rotation_degrees.x, pitch, camera_speed * delta)
 		camera_spring.spring_length = lerp(camera_spring.spring_length, 2.0 * zoom, 0.075)
-		camera.fov = move_toward(camera.fov, 80.0 + abs(calculated_velocity.length() / 3), delta * 80)
+		camera.fov = move_toward(camera.fov, Playerstats.FOV + abs(calculated_velocity.length() / 3), delta * 80)
 	
 	camera_offset = camera_yaw.transform.basis
 	return camera_offset
@@ -514,6 +518,7 @@ func change_in_health(amt :float, particles :bool) -> void:
 			$"../NavigationRegion3D/Environment".add_child(new_number)
 			$"../../../HUD".health_bar_animation(before)
 			shake(max(0.1,-(25*amt)/Playerstats.max_health),0.3)
+			$"../../../HUD".set_red(-amt/(1.4*Playerstats.max_health)+0.2)
 			jerk_velocity = min((20*amt)/Playerstats.max_health,-1)
 		else:
 			$"../../../HUD".update_health_bar()
@@ -615,25 +620,29 @@ func set_camera_mode() -> void:
 func check_if_in_wall(body: RigidBody3D) -> bool:
 	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
 	var collision_node: CollisionShape3D = body.get_node("Collision")
+	var model_position :Vector3 = body.get_node("Model").position
+	var parent_rotation :Basis = body.get_parent().basis
 	
 	var scaled_shape : = collision_node.shape.duplicate()
 	var verts = scaled_shape.points
 	for i in range(verts.size()):
-		verts[i] *= 0.95 * collision_node.scale.x
+		verts[i] *= 0.9 * collision_node.scale.x
 	scaled_shape.points = verts
 	
 	var query := PhysicsShapeQueryParameters3D.new()
 	query.shape = scaled_shape
 	query.transform = body.global_transform
+	query.transform = query.transform.translated(parent_rotation * model_position)
 	query.collision_mask = 1
 	query.exclude = [body]
 	
 	var results := space_state.intersect_shape(query, 32)
+	if Playerstats.show_collision_checks:
+		debug_show_scaled_shape(body)
 	
 	for result in results:
 		var collider = result.collider
 		if collider is StaticBody3D or collider is RigidBody3D:
-			print(collider)
 			return false
 	return true
 
@@ -725,4 +734,28 @@ func debug() -> void:
 		camera_spring.collision_mask = 128
 	else:
 		camera_spring.collision_mask = 0
+		
+func debug_show_scaled_shape(body: RigidBody3D) -> void:
+	var collision_node: CollisionShape3D = body.get_node("Collision")
+	var orig_shape: ConvexPolygonShape3D = collision_node.shape
+	var model_position :Vector3 = body.get_node("Model").position
+	var parent_rotation :Basis = body.get_parent().basis
 	
+	var scaled_shape: ConvexPolygonShape3D = orig_shape.duplicate()
+	var verts :PackedVector3Array = scaled_shape.points
+	for i in range(verts.size()):
+		verts[i] *= 0.9 * collision_node.scale.x
+	scaled_shape.points = verts
+	
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	st.add_triangle_fan(verts)
+	var debug_mesh :ArrayMesh = st.commit()
+	
+	var mesh_instance := MeshInstance3D.new()
+	mesh_instance.mesh = debug_mesh
+	mesh_instance.transform = body.global_transform
+	mesh_instance.transform = mesh_instance.transform.translated(parent_rotation * model_position)
+	mesh_instance.name = "DebugScaledShape"
+
+	$"..".add_child(mesh_instance)

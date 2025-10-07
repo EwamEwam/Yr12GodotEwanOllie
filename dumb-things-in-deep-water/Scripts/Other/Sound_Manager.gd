@@ -11,4 +11,4 @@ func create_sound(Audio :StringName, Volume: float, Pitch: float, Unit_size :flo
 	Audio_node.play()
 	await Audio_node.finished
 	Audio_node.call_deferred("queue_free")
-	print("Audio node at " + str(Position) + " was successfully deleted")
+	#print("Audio node at " + str(Position) + " was successfully deleted")

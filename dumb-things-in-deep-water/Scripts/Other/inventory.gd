@@ -10,17 +10,20 @@ func _ready() -> void:
 
 func _process(_delta :float) -> void:
 	if opened:
-		$Inventory_panel/Mass.text = str(round(Playerstats.inventory_mass*10)/10) + "/" + (str(Playerstats.max_inventory))
-		
+		if !Playerstats.infinte_inventory:
+			$Inventory_panel/Mass.text = str(round(Playerstats.inventory_mass*10)/10) + "/" + (str(Playerstats.max_inventory))
+		else:
+			$Inventory_panel/Mass.text = "inf/inf"
+			
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("E"):
-		if not opened and Playerstats.object_held == null:
+		if not opened and Playerstats.object_held == null and Playerstats.current_camera != Playerstats.camera_states.FIRST and not Playerstats.pause_menu_open:
 			Playerstats.current_state = Playerstats.game_states.PAUSED
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			get_tree().paused = true
 			visible = true
 			opened = true
-			if len(Playerstats.organised_inventory) == 0:
+			if len(Playerstats.organised_inventory) == 0 and !Playerstats.infinte_inventory:
 				var label = Label.new()
 				label.text = "Nothing..."
 				$Inventory_panel/ScrollContainer/VBoxContainer.add_child(label)
@@ -47,7 +50,7 @@ func close() -> void:
 		nodes.queue_free()
 		
 func make_buttons() -> void:
-	if len(Playerstats.organised_inventory) > 0:
+	if len(Playerstats.organised_inventory) > 0 and !Playerstats.infinte_inventory:
 		for item in Playerstats.organised_inventory:
 			var button_node = button.instantiate()
 			button_node.ID = item
@@ -55,6 +58,14 @@ func make_buttons() -> void:
 				button_node.text = str(ItemData.itemdata[str(item)]["Name"]) + " X" + str(Playerstats.organised_inventory[str(item)]) + "\n" +  str(Playerstats.organised_inventory[str(item)] * ItemData.itemdata[item]["Mass"]) + "Kg (" + str(Playerstats.organised_inventory[str(item)]) + " X " + str(ItemData.itemdata[item]["Mass"]) + "Kg)"    
 			else:
 				button_node.text = str(ItemData.itemdata[str(item)]["Name"]) + " X" + str(Playerstats.organised_inventory[str(item)]) + "\n" +  str(Playerstats.organised_inventory[str(item)] * ItemData.itemdata[item]["Mass"]) + "Kg"    
+			var path = "res://Assets/Sprites/Item_Icons/" + str(item) + ".png"
+			button_node.icon = load(path)
+			$Inventory_panel/ScrollContainer/VBoxContainer.add_child(button_node)
+	else:
+		for item in ItemData.itemdata:
+			var button_node = button.instantiate()
+			button_node.ID = item
+			button_node.text = str(ItemData.itemdata[str(item)]["Name"]) + "\n" +  str(ItemData.itemdata[item]["Mass"]) + "Kg"    
 			var path = "res://Assets/Sprites/Item_Icons/" + str(item) + ".png"
 			button_node.icon = load(path)
 			$Inventory_panel/ScrollContainer/VBoxContainer.add_child(button_node)

@@ -1,0 +1,72 @@
+[gd_scene load_steps=5 format=3 uid="uid://bep3cdsaa5o3c"]
+
+[ext_resource type="PackedScene" uid="uid://d4numnakjau2d" path="res://Scenes/Misc/Menu_Button.tscn" id="1_5ee2q"]
+[ext_resource type="Script" uid="uid://c4ot5wvia3cmr" path="res://Scripts/Other/paused.gd" id="1_5s6bc"]
+[ext_resource type="Texture2D" uid="uid://birq713iwjhfa" path="res://Assets/Sprites/Screen_Border.png" id="2_3e15a"]
+[ext_resource type="PackedScene" uid="uid://b5erkpywyax4" path="res://Scenes/Misc/Confirmation_box.tscn" id="4_sxu7o"]
+
+[node name="Pause" type="Node2D"]
+process_mode = 3
+script = ExtResource("1_5s6bc")
+
+[node name="ScreenBorder" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.815686)
+z_index = -1
+texture = ExtResource("2_3e15a")
+centered = false
+
+[node name="Background" type="ColorRect" parent="."]
+offset_left = -10.0
+offset_top = -5.0
+offset_right = 650.0
+offset_bottom = 504.0
+color = Color(0.0270186, 8.78386e-07, 0.219096, 0.521569)
+
+[node name="Paused" type="Label" parent="."]
+offset_left = 48.0
+offset_top = 59.0
+offset_right = 115.0
+offset_bottom = 79.0
+scale = Vector2(3, 3)
+text = "Paused"
+
+[node name="Resume" parent="." instance=ExtResource("1_5ee2q")]
+offset_left = 56.0
+offset_top = 182.0
+offset_right = 122.0
+offset_bottom = 202.0
+text = "Resume
+"
+
+[node name="Settings" parent="." instance=ExtResource("1_5ee2q")]
+offset_left = 56.0
+offset_top = 222.0
+offset_right = 130.0
+offset_bottom = 242.0
+text = "Settings
+"
+
+[node name="Exit_Stage" parent="." instance=ExtResource("1_5ee2q")]
+offset_left = 56.0
+offset_top = 262.0
+offset_right = 154.0
+offset_bottom = 282.0
+text = "Exit Stage"
+
+[node name="Leave_Game" parent="." instance=ExtResource("1_5ee2q")]
+offset_left = 56.0
+offset_top = 347.0
+offset_right = 166.0
+offset_bottom = 367.0
+text = "Leave Game"
+
+[node name="Confirmation_Box" parent="." instance=ExtResource("4_sxu7o")]
+visible = false
+offset_left = 320.0
+offset_top = 256.0
+offset_right = 320.0
+offset_bottom = 256.0
+scale = Vector2(1.667, 1.667)
+
+[connection signal="pressed" from="Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Leave_Game" to="." method="_on_leave_game_pressed"]

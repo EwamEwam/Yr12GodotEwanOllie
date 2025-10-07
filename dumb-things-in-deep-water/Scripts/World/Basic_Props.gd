@@ -207,9 +207,9 @@ func drop() -> void:
 	body.angular_velocity = Playerstats.player.true_velocity / (3 + (body.mass/(4 * Playerstats.strength)))
 	collision.disabled = false
 	Playerstats.object_mass = 0.0
-	await get_tree().create_timer(0.005).timeout
+	await get_tree().create_timer(0.005,false,true,false).timeout
 	can_play_audio = true
-	await get_tree().create_timer(0.745).timeout
+	await get_tree().create_timer(0.745,false,true,false).timeout
 	grabbable = true
 	
 func throw(power :float) -> void:
@@ -227,9 +227,9 @@ func throw(power :float) -> void:
 		collision.disabled = false
 		body.apply_central_impulse(5 * Playerstats.strength * power * Vector3(-sin(Playerstats.player.camera_yaw.rotation.y) ,(Playerstats.player.pitch-2)/60, -cos(Playerstats.player.camera_yaw.rotation.y)))
 		body.angular_velocity = (0.25 + Playerstats.strength/35) * power * Vector3(1.5,1.5,1.5) / (2.2 + (body.mass/(5 * Playerstats.strength)))
-		await get_tree().create_timer(0.005).timeout
+		await get_tree().create_timer(0.005,false,true,false).timeout
 		can_play_audio = true
-		await get_tree().create_timer(0.745).timeout
+		await get_tree().create_timer(0.745,false,true,false).timeout
 		grabbable = true
 	
 func set_props() -> void:
@@ -258,12 +258,11 @@ func create_bullet(target_position :Array) -> void:
 
 func disable_velocity_check(time :float) -> void:
 	velocity_check = false
-	await get_tree().create_timer(time).timeout
+	await get_tree().create_timer(time,false,true,false).timeout
 	velocity_check = true
 	
 func _on_body_body_entered(object: Node) -> void:
 	if object is StaticBody3D or object is RigidBody3D or object is CharacterBody3D:
-		print(object)
 		if body.linear_velocity.length() > 0.5:
 			play_sound((body.linear_velocity.length()/3) - 12)
 			
@@ -274,5 +273,5 @@ func play_sound(volume :float) -> void:
 		var audios :Array = ItemData.Audio_bank[material_type]
 		var audio_file :StringName = audios[randi_range(0,audios.size() - 1)]
 		SoundManager.create_sound(audio_file,min(volume,0),min(randf_range(0.75,1.25) + (volume + 12)/60,1.5),2,body.global_position)
-		await get_tree().create_timer(0.1).timeout
+		await get_tree().create_timer(0.1,false,true,false).timeout
 		can_play_audio = true

@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://d4numnakjau2d"]
+
+[ext_resource type="Script" uid="uid://dqbxft75yjucu" path="res://Scripts/Other/Button_Script.gd" id="1_kw7wf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y7c70"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k7ie2"]
+bg_color = Color(0, 0, 0, 0)
+
+[node name="Button" type="Button"]
+offset_right = 150.0
+offset_bottom = 20.0
+scale = Vector2(2, 2)
+theme_override_styles/focus = SubResource("StyleBoxFlat_y7c70")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_k7ie2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_k7ie2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_k7ie2")
+theme_override_styles/normal = SubResource("StyleBoxFlat_k7ie2")
+text = "Text Goes Here"
+alignment = 0
+script = ExtResource("1_kw7wf")
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

@@ -9,12 +9,15 @@ var level_time :int = 0
 var formatted_time :Vector2i = Vector2i(0,0)
 var alerts :Array[Node] = []
 
+var red_fade :float = 0
+
 func _ready() -> void:
 	Playerstats.player = player
-	$Health_bar/Health_Bar.value = Playerstats.health
+	$Health_bar/Health_Bar.value = round_to_1_DP(Playerstats.health)
 	$Health_bar/HealthBarEnd.position.x = (3 * Playerstats.max_health) + 121.5
+	$Health_bar/Bar_End.position.x = 114 + 3 * round_to_1_DP(Playerstats.health)
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	reticle.modulate.g = 1
 	reticle.modulate.b = 1
 	reticle.modulate.a = 0.2
@@ -61,8 +64,15 @@ func _process(_delta: float) -> void:
 	$Health_bar/HealthBarEnd.position.x = (3 * Playerstats.max_health) + 121.5
 	$Health_bar/Hp.position.x = (Playerstats.max_health * 3) + 130
 	$Health_bar/Oxygen.text = str(int(ceil(Playerstats.oxygen))) + "%"
+	$Health_bar/Bar_End_O.position.x = 87 + round_to_1_DP((102 * Playerstats.oxygen) / 100)
+	
+	if Playerstats.oxygen < 3:
+		$Health_bar/Bar_End_O.visible = false
+	else:
+		$Health_bar/Bar_End_O.visible = true
 	
 	set_reticle_size()
+	set_red_border_opacity(delta)
 	
 	if Playerstats.object_held != null:
 		if Playerstats.object_properties.has(ItemData.properties.AIM) and Playerstats.player.movement_state == Playerstats.player.movement_states.AIMING and Playerstats.object_held.get_parent().attribute:
@@ -111,7 +121,8 @@ func health_bar_animation(before :float) -> void:
 	var tween :Tween = get_tree().create_tween()
 	var tween2 :Tween = get_tree().create_tween()
 	var texture :ColorRect = ColorRect.new()
-	tween.tween_property($Health_bar/Health_Bar, "value", Playerstats.health, abs($Health_bar/Health_Bar.value-Playerstats.health)/200).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property($Health_bar/Health_Bar, "value", round_to_1_DP(Playerstats.health), abs($Health_bar/Health_Bar.value-Playerstats.health)/200).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property($Health_bar/Bar_End, "position", Vector2(114 + 3 * round_to_1_DP(Playerstats.health),447), abs($Health_bar/Health_Bar.value-Playerstats.health)/200).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	texture.position = Vector2(117,447)
 	texture.color = Color(1,1,1,1)
 	texture.size = Vector2(floor(3*before),15)
@@ -119,16 +130,18 @@ func health_bar_animation(before :float) -> void:
 	$Health_bar.add_child(texture)
 	tween2.tween_property(texture, "modulate", Color(1,1,1,0), 0.75).set_trans(Tween.TRANS_LINEAR)
 	await tween.finished
-	$Health_bar/Health_Bar.value = Playerstats.health
+	$Health_bar/Health_Bar.value = round_to_1_DP(Playerstats.health)
+	$Health_bar/Bar_End.position.x = 114 + 3 * round_to_1_DP(Playerstats.health)
 	await tween2.finished
 	texture.queue_free()
 	
 func update_health_bar() -> void:
-	$Health_bar/Health_Bar.value = Playerstats.health
+	$Health_bar/Health_Bar.value = round_to_1_DP(Playerstats.health)
 	$Health_bar/BodyPartHead.modulate = Color.from_hsv(0,(Playerstats.max_health - Playerstats.head_hp)/Playerstats.max_health,1,1)
 	$Health_bar/BodyPartTorso.modulate = Color.from_hsv(0,(Playerstats.max_health - Playerstats.torso_hp)/Playerstats.max_health,1,1)
 	$Health_bar/BodyPartLegs.modulate = Color.from_hsv(0,(Playerstats.max_health - Playerstats.legs_hp)/Playerstats.max_health,1,1)
 	$Health_bar/BodyPartArms.modulate = Color.from_hsv(0,(Playerstats.max_health - Playerstats.arms_hp)/Playerstats.max_health,1,1)
+	$Health_bar/Bar_End.position.x = 114 + 3 * round_to_1_DP(Playerstats.health)
 	
 func format_time() -> void:
 	level_time = clamp(level_time + 1, 0, 3599)
@@ -244,3 +257,18 @@ func set_reticle_size() -> void:
 		reticle_gun.scale = scale_factor * Vector2(1,1)
 	else:
 		reticle_gun.visible = false
+
+func round_to_1_DP(number :float = 0) -> float:
+	return (round(10*number)/10)
+	
+func set_red_border_opacity(delta :float) -> void:
+	if abs(red_fade) > 0.005:
+		red_fade = min(red_fade,1)
+		red_fade -= 4 * red_fade * delta
+		$RedBorder.modulate.a = red_fade
+	else:
+		red_fade = 0.0
+		$RedBorder.modulate.a = 0
+		
+func set_red(num :float) -> void:
+	red_fade += num

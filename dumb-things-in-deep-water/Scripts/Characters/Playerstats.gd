@@ -14,13 +14,14 @@ var allow_water_effects :bool = true
 var allow_camera_jerk :bool = true
 var post_processing :bool = true
 var Add_world_environment :bool = true
+var FOV :float = 80
 
-var max_health :float = 25.0
+var max_health :float = 125.0
 var strength :float = 50.0
 var max_carry_weight :float = 50.0
 var max_inventory :float = 50.0
 
-var health :float = 25.0
+var health :float = 125.0
 var oxygen :float = 100.0
 var special :float = 100.0
 var inventory_mass :float = 0.0
@@ -34,10 +35,10 @@ var object_mass :float = 0.0
 var object_properties :Array = []
 var object_prompts :Array = []
 
-var head_hp :float = 125.0
-var torso_hp :float = 125.0
-var legs_hp :float = 125.0
-var arms_hp :float = 125.0
+var head_hp :float = 25.0
+var torso_hp :float = 25.0
+var legs_hp :float = 25.0
+var arms_hp :float = 25.0
 
 var invincibility :bool = false
 var regen :bool = true
@@ -53,6 +54,12 @@ var head_bobbing :bool = true
 
 var camera_hitbox :bool = true
 var no_clip :bool = true
+var show_collision_checks :bool = false
+var infinte_inventory :bool = false
+
+#For the pain in the ass that is using the same button to pause and resume.
+var escape_pressed :bool = false
+var pause_menu_open :bool = false
 
 var ammo :Dictionary = { 
 	"Pistol" = [0,28],
@@ -78,13 +85,11 @@ func _process(delta :float) -> void:
 	legs_hp = clamp(legs_hp,0,max_health)
 	arms_hp = clamp(arms_hp,0,max_health)
 	
-	if head_hp <= 0 or torso_hp <= 0:
-		health = 0
+	if head_hp <= 0 or torso_hp <= 0: health = 0
 		
-	if health <= 0:
-		get_tree().quit()
+	if health <= 0: get_tree().quit()
 		
-	time_since_last_damage = min(time_since_last_damage + delta, 60)
+	if get_tree().paused == false: time_since_last_damage = min(time_since_last_damage + delta, 60)
 	
 	can_regen = arms_hp < max_health or legs_hp < max_health or torso_hp < max_health or head_hp < max_health or health < max_health 
 	
