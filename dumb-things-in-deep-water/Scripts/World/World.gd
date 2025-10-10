@@ -7,6 +7,7 @@ var time_in_level :float = 0.0
 
 func _ready() -> void:
 	Playerstats.player = player
+	Playerstats.current_state = Playerstats.game_states.PLAYING
 	if Playerstats.Add_world_environment:
 		$SubViewportContainer/SubViewport/NavigationRegion3D/Environment/WorldEnvironment.environment = load("res://Scripts/World/Environment.tres")
 

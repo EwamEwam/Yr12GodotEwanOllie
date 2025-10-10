@@ -4,6 +4,7 @@ var time :float = 0
 @onready var shader :ShaderMaterial = $SubViewportContainer/SubViewport/ColorRect.material
 
 func _ready() -> void:
+	Playerstats.current_state = Playerstats.game_states.PAUSED
 	$"Main menu".visible = false
 	Playerstats.player = $SubViewportContainer/SubViewport/Camera
 	await get_tree().create_timer(6).timeout

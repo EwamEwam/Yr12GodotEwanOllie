@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://cie5fcfoubro0"]
+
+[ext_resource type="Script" uid="uid://ctxifb7hlffb" path="res://Scripts/World/portal.gd" id="1_8ow2e"]
+[ext_resource type="Texture2D" uid="uid://cr0wva32pxv7j" path="res://Assets/Textures/portal.png" id="2_fbkvo"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xw1q"]
+transparency = 1
+shading_mode = 0
+disable_ambient_light = true
+disable_fog = true
+albedo_texture = ExtResource("2_fbkvo")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_oy8g7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_k3v8m"]
+size = Vector3(1.8, 1.8, 1.8)
+
+[node name="Portal" type="Node3D"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+script = ExtResource("1_8ow2e")
+
+[node name="Texture" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_0xw1q")
+mesh = SubResource("PlaneMesh_oy8g7")
+
+[node name="Hitbox" type="Area3D" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+shape = SubResource("BoxShape3D_k3v8m")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(0.392474, 0.62966, 0.752029, 1)
+light_energy = 1000.0
+light_volumetric_fog_energy = 16.0
+shadow_enabled = true
+omni_range = 7.639
+
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]

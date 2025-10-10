@@ -16,12 +16,12 @@ var post_processing :bool = true
 var Add_world_environment :bool = true
 var FOV :float = 80
 
-var max_health :float = 125.0
-var strength :float = 50.0
+var max_health :float = 25.0
+var strength :float = 3.0
 var max_carry_weight :float = 50.0
 var max_inventory :float = 50.0
 
-var health :float = 125.0
+var health :float = 25.0
 var oxygen :float = 100.0
 var special :float = 100.0
 var inventory_mass :float = 0.0
@@ -35,10 +35,10 @@ var object_mass :float = 0.0
 var object_properties :Array = []
 var object_prompts :Array = []
 
-var head_hp :float = 25.0
-var torso_hp :float = 25.0
-var legs_hp :float = 25.0
-var arms_hp :float = 25.0
+var head_hp :float = 125.0
+var torso_hp :float = 125.0
+var legs_hp :float = 125.0
+var arms_hp :float = 125.0
 
 var invincibility :bool = false
 var regen :bool = true
@@ -72,7 +72,23 @@ var ammo :Dictionary = {
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	
+func clear_stat() -> void:
+	health = max_health
+	oxygen = 100
+	inventory = []
+	inventory_mass = 0
+	object_held = null
+	object_ID = 0
+	object_mass = 0
+	object_prompts = []
+	object_properties = []
 
+	head_hp = 125.0
+	torso_hp = 125.0
+	legs_hp = 125.0
+	arms_hp = 125.0
+	
 func _process(delta :float) -> void:
 	var screen_size :Vector2i = DisplayServer.window_get_size()
 	screen_factor = get_largest_4_3_viewport(screen_size).length()/2431.4
