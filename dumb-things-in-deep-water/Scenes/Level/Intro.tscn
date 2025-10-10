@@ -1,6 +1,6 @@
 [gd_scene load_steps=23 format=4 uid="uid://dvgnrr5dkb1gx"]
 
-[ext_resource type="Script" path="res://Scripts/World/intro.gd" id="1_te0c7"]
+[ext_resource type="Script" uid="uid://byp5ail5cjwh5" path="res://Scripts/World/intro.gd" id="1_te0c7"]
 [ext_resource type="PackedScene" uid="uid://1vdsxc2vo8e" path="res://Scenes/Props/Test_Gun(9).tscn" id="2_te0c7"]
 [ext_resource type="Texture2D" uid="uid://b46xu5eere5fj" path="res://Assets/Textures/tutorial map_stone.jpg" id="3_2q1dc"]
 [ext_resource type="PackedScene" uid="uid://culqao60nt1mv" path="res://Scenes/Props/Placeholder(1).tscn" id="3_7if0c"]
@@ -133,7 +133,7 @@ volumetric_fog_emission = Color(0.0391566, 2.40654e-08, 0.372947, 1)
 volumetric_fog_sky_affect = 0.65
 volumetric_fog_temporal_reprojection_amount = 0.5
 
-[node name="World" type="Node"]
+[node name="World2" type="Node"]
 script = ExtResource("1_te0c7")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
