@@ -45,3 +45,8 @@ func _on_leave_game_pressed() -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and not opened and get_tree().paused == false:
 		open_pause_menu()
+
+func _on_exit_stage_pressed() -> void:
+	Input.set_mouse_mode(Input.MouseMode.MOUSE_MODE_VISIBLE)
+	get_tree().change_scene_to_file("res://Scenes/Level/level_select.tscn")
+	Playerstats.current_state = Playerstats.game_states.PAUSED

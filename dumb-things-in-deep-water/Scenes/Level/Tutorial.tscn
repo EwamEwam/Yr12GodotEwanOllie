@@ -337,6 +337,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.8484, 3.6585, 35.8883)
 [node name="Box_Prop24" parent="SubViewportContainer/SubViewport/Props" instance=ExtResource("25_2xaf6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0500841, 12.8354, 0.0409044)
 
+[node name="Speaker_Carry_On3" parent="SubViewportContainer/SubViewport/Props" instance=ExtResource("13_b1p4s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -84.1662, 8.39208, -13.1273)
+
+[node name="Painting2" parent="SubViewportContainer/SubViewport/Props" instance=ExtResource("11_b1p4s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -71.6104, 7.53028, -0.632839)
+
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="SubViewportContainer/SubViewport"]
 navigation_mesh = SubResource("NavigationMesh_rdphb")
 
@@ -533,11 +539,5 @@ visible = false
 [node name="Timer" type="Timer" parent="."]
 autostart = true
 ignore_time_scale = true
-
-[node name="Speaker_Carry_On" parent="." instance=ExtResource("13_b1p4s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -84.1662, 8.39208, -13.1273)
-
-[node name="Painting" parent="." instance=ExtResource("11_b1p4s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -71.6104, 7.53028, -0.632839)
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cfwj0rrano42q"
-path.s3tc="res://.godot/imported/levelone_stone.jpg-0e960f7eb08580778cc8472c19ba191d.s3tc.ctex"
+uid="uid://mtxm5w3p7q0m"
+path.s3tc="res://.godot/imported/levelone_stone.jpg-e8e93fc0040a582382f38331afb67ada.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://Assets/Textures/levelone_stone.jpg"
-dest_files=["res://.godot/imported/levelone_stone.jpg-0e960f7eb08580778cc8472c19ba191d.s3tc.ctex"]
+source_file="res://Assets/Level_Models/levelone_stone.jpg"
+dest_files=["res://.godot/imported/levelone_stone.jpg-e8e93fc0040a582382f38331afb67ada.s3tc.ctex"]
 
 [params]
 

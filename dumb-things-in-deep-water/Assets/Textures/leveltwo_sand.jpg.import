@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cltd4wutnkvdk"
-path.s3tc="res://.godot/imported/leveltwo_sand.jpg-79f61c98d6bf49aacc142b2f25cc165f.s3tc.ctex"
+uid="uid://dy3v0oxgd4v36"
+path.s3tc="res://.godot/imported/leveltwo_sand.jpg-66d5b659de218e63c9bf8fb5bf6dd22c.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://Assets/Textures/leveltwo_sand.jpg"
-dest_files=["res://.godot/imported/leveltwo_sand.jpg-79f61c98d6bf49aacc142b2f25cc165f.s3tc.ctex"]
+source_file="res://Assets/Level_Models/leveltwo_sand.jpg"
+dest_files=["res://.godot/imported/leveltwo_sand.jpg-66d5b659de218e63c9bf8fb5bf6dd22c.s3tc.ctex"]
 
 [params]
 

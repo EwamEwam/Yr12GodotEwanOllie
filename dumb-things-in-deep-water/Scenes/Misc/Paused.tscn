@@ -69,4 +69,5 @@ offset_bottom = 256.0
 scale = Vector2(1.667, 1.667)
 
 [connection signal="pressed" from="Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Exit_Stage" to="." method="_on_exit_stage_pressed"]
 [connection signal="pressed" from="Leave_Game" to="." method="_on_leave_game_pressed"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=4 uid="uid://b286f53pvy2de"]
+[gd_scene load_steps=35 format=4 uid="uid://b286f53pvy2de"]
 
 [ext_resource type="Script" uid="uid://bkmwodo6s0oum" path="res://Scripts/World/World.gd" id="1_0mrmw"]
 [ext_resource type="PackedScene" uid="uid://1vdsxc2vo8e" path="res://Scenes/Props/Test_Gun(9).tscn" id="2_i3jyh"]
@@ -14,8 +14,11 @@
 [ext_resource type="PackedScene" uid="uid://be7i40ywapi16" path="res://Scenes/Misc/Circular_Rock.tscn" id="16_cm0uy"]
 [ext_resource type="PackedScene" uid="uid://c1b3508xrxbuh" path="res://Scenes/Misc/Small_Rock.tscn" id="17_ja4xh"]
 [ext_resource type="PackedScene" uid="uid://c6pye77owufbe" path="res://Scenes/Misc/Tall_Rock.tscn" id="18_27axl"]
+[ext_resource type="PackedScene" uid="uid://cie5fcfoubro0" path="res://Scenes/Level/portal.tscn" id="18_xnfoo"]
 [ext_resource type="Material" uid="uid://dlmex6cutmye0" path="res://Scripts/World/World_Material.tres" id="19_im6bh"]
 [ext_resource type="PackedScene" uid="uid://4elvwkl063ne" path="res://Scenes/Characters/enemy.tscn" id="20_sp4y7"]
+[ext_resource type="PackedScene" uid="uid://dq7an65rwyu3g" path="res://Scenes/Props/Package(20).tscn" id="20_w6w6k"]
+[ext_resource type="PackedScene" uid="uid://bep3cdsaa5o3c" path="res://Scenes/Misc/Paused.tscn" id="21_evrq2"]
 [ext_resource type="PackedScene" uid="uid://c4wqxs7funv7h" path="res://Scenes/Characters/player.tscn" id="21_xok1s"]
 [ext_resource type="PackedScene" uid="uid://baocn3lc445ff" path="res://Scenes/Misc/hud.tscn" id="22_3fvei"]
 
@@ -239,6 +242,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.1893, 22.0313, -50.3183)
 [node name="Painting2" parent="SubViewportContainer/SubViewport/Props" instance=ExtResource("9_i3jyh")]
 transform = Transform3D(0.894747, 0, -0.446573, 0, 1, 0, 0.446573, 0, 0.894747, -5.84227, 21.9751, -45.7405)
 
+[node name="Package" parent="SubViewportContainer/SubViewport/Props" instance=ExtResource("20_w6w6k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -134.566, 31.0722, -49.6653)
+
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="SubViewportContainer/SubViewport"]
 navigation_mesh = SubResource("NavigationMesh_rdphb")
 
@@ -343,6 +349,9 @@ transform = Transform3D(1.57412, 0.0398226, -0.0272887, -0.0393057, 1.57409, 0.0
 [node name="Test_Gun" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Rocks" instance=ExtResource("2_i3jyh")]
 transform = Transform3D(0.205156, 0.00519011, -0.00355656, -0.00512275, 0.205152, 0.00387858, 0.00365289, -0.00378799, 0.205186, -24.6586, 7.82731, -7.66918)
 
+[node name="Portal" parent="SubViewportContainer/SubViewport/NavigationRegion3D" instance=ExtResource("18_xnfoo")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -2.27817, 49.3569, 123.072)
+
 [node name="ColorRect" type="ColorRect" parent="SubViewportContainer/SubViewport"]
 material = ExtResource("19_im6bh")
 offset_right = 640.0
@@ -427,6 +436,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -125.162, 40.2721, -49.9836)
 
 [node name="HUD" parent="." instance=ExtResource("22_3fvei")]
 z_index = -1
+
+[node name="Pause" parent="." instance=ExtResource("21_evrq2")]
+visible = false
 
 [node name="Timer" type="Timer" parent="."]
 autostart = true
