@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://1vdsxc2vo8e"]
+[gd_scene format=3 uid="uid://1vdsxc2vo8e"]
 
 [ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/Basic_Props.gd" id="1_2j3sr"]
 [ext_resource type="ArrayMesh" uid="uid://d3qug6m6ae3ny" path="res://Assets/Props_Models_And_Collisions/9_Test_Gun.tres" id="2_0heuh"]
@@ -17,22 +17,22 @@ disable_receive_shadows = true
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_0heuh"]
 points = PackedVector3Array(-3.99159, -0.808882, 6.10445, 6.40657, 1.84562, 8.45252, 6.10974, 2.11555, 8.69501, -1.11357, 1.89883, -9.00768, 6.3551, -0.97438, 4.49758, -4.60371, 2.1185, 7.06131, -3.80511, -0.8307, -7.90987, 6.11412, -0.629858, 8.97747, -3.98965, 2.09931, -8.22776, -1.11357, -0.97438, -8.71964, 6.3551, 2.18658, 4.49758, -4.01019, -0.620667, 7.82072, -4.19768, -0.600348, -7.85442, -2.37494, 1.83302, 8.09688, -4.54875, -0.61887, 6.99262, -1.11357, 2.18658, -8.71964, 6.64313, -0.686935, 4.78561, -3.80511, -0.8307, 7.23981, -0.826661, -0.686935, -8.71964, 6.64313, 1.89883, 4.78561, -4.25968, 1.82694, -7.95231, -3.80698, 0.190994, -8.66836, 4.72561, 1.8369, 8.94289, 5.85881, -0.8307, 8.28557, -0.826661, 1.89883, -8.71964, -4.04811, 2.11717, 7.60433, -1.11357, -0.686935, -9.00768, 6.3551, 1.89883, 4.20954, 6.34413, -0.619664, 8.35888, 5.80887, 2.10734, 8.92235, 4.69281, -0.614451, 8.8679, -4.03702, 1.83928, 7.86246)
 
-[node name="Test_Gun" type="Node3D" groups=["Prop"]]
+[node name="Test_Gun" type="Node3D" unique_id=1080829825 groups=["Prop"]]
 script = ExtResource("1_2j3sr")
 ID = 9
 pick_up_position = Vector3(-0.05, 0.25, -0.3)
 attribute = true
 
-[node name="Damage_Timer" type="Timer" parent="."]
+[node name="Damage_Timer" type="Timer" parent="." unique_id=163185790]
 wait_time = 0.25
 one_shot = true
 autostart = true
 
-[node name="Shoot_Cooldown" type="Timer" parent="."]
+[node name="Shoot_Cooldown" type="Timer" parent="." unique_id=904983778]
 wait_time = 0.1
 one_shot = true
 
-[node name="Body" type="RigidBody3D" parent="." groups=["Prop"]]
+[node name="Body" type="RigidBody3D" parent="." unique_id=265053813 groups=["Prop"]]
 collision_layer = 19
 collision_mask = 146
 physics_material_override = SubResource("PhysicsMaterial_k831n")
@@ -40,25 +40,26 @@ continuous_cd = true
 contact_monitor = true
 max_contacts_reported = 5
 
-[node name="Model" type="MeshInstance3D" parent="Body"]
+[node name="Model" type="MeshInstance3D" parent="Body" unique_id=413596008]
 transform = Transform3D(-2.18557e-09, 0.05, 0, -0.05, -2.18557e-09, 0, 0, 0, 0.05, 0, 0, 0)
 mesh = ExtResource("2_0heuh")
 
-[node name="Outline" type="MeshInstance3D" parent="Body/Model"]
+[node name="Outline" type="MeshInstance3D" parent="Body/Model" unique_id=881110080]
 material_overlay = SubResource("StandardMaterial3D_5sy10")
 mesh = ExtResource("3_2j3sr")
 
-[node name="Collision" type="CollisionShape3D" parent="Body"]
+[node name="Collision" type="CollisionShape3D" parent="Body" unique_id=1647015489]
 transform = Transform3D(-2.62268e-09, 0.06, 0, -0.06, -2.62268e-09, 0, 0, 0, 0.06, 0, 0, 0)
 shape = SubResource("ConvexPolygonShape3D_0heuh")
 
-[node name="Onscreen" type="VisibleOnScreenNotifier3D" parent="Body"]
+[node name="Onscreen" type="VisibleOnScreenNotifier3D" parent="Body" unique_id=158328474]
 
-[node name="Spawner" type="Marker3D" parent="Body"]
+[node name="Spawner" type="Marker3D" parent="Body" unique_id=1838546717]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0219922, 0.158008, -0.488456)
 gizmo_extents = 0.7
 
-[node name="Obstacle" type="NavigationObstacle3D" parent="Body"]
+[node name="Obstacle" type="NavigationObstacle3D" parent="Body" unique_id=1600048618]
+visible = false
 radius = 0.6
 
 [connection signal="body_entered" from="Body" to="." method="_on_body_body_entered"]

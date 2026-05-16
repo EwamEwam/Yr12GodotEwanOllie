@@ -2,6 +2,7 @@ extends Node
 
 @onready var player :Object = $SubViewportContainer/SubViewport/Player
 @onready var shader :ShaderMaterial = $SubViewportContainer/SubViewport/ColorRect.material
+@onready var HUD :Control = $HUD
 
 var time_in_level :float = 0.0
 

@@ -1,4 +1,4 @@
-[gd_resource type="ArrayMesh" load_steps=4 format=4 uid="uid://d3qug6m6ae3ny"]
+[gd_resource type="ArrayMesh" format=4 uid="uid://d3qug6m6ae3ny"]
 
 [ext_resource type="Texture2D" uid="uid://h7orqpa1w0cf" path="res://Assets/Textures/Test_Gun_Plane-export.png" id="1_fed6c"]
 

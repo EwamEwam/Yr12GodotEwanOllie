@@ -77,8 +77,8 @@ func item_process() -> void:
 	var properties := ItemData.properties
 	
 	for property in object_properties:
-		if Playerstats.object_properties.has(properties.AIM):
-			if Input.is_action_pressed("Right_Click") or Input.is_action_pressed("Alt"):
+		if property == properties.AIM:
+			if (Input.is_action_pressed("Right_Click") or Input.is_action_pressed("Alt")) and Playerstats.object_held == body:
 				Playerstats.player.movement_state = Playerstats.player.movement_states.AIMING
 				
 		if property == properties.TV:
@@ -113,13 +113,6 @@ func item_process() -> void:
 					previous_position = global_position
 					
 					body.look_at(body.global_position + normal,Vector3.UP)
-					
-#					var up :Vector3 = Vector3.UP
-#					if abs(forward.dot(up)) > 0.99:
-#						up = Vector3.FORWARD
-#					var right :Vector3 = up.cross(forward).normalized()
-#					up = forward.cross(right).normalized()
-#					body.basis = Basis(right, up, forward)
 				
 			elif not raycast.is_colliding() and Playerstats.object_held != body:
 				attribute = false
@@ -140,27 +133,6 @@ func item_use():
 		if property == properties.HEAL:
 			var value :float = ItemData.itemdata[str(ID)]["Value"]
 			Playerstats.player.change_in_health(value,true)
-			Playerstats.player.body_part("Head",value)
-			Playerstats.player.body_part("Torso",value)
-			Playerstats.player.body_part("Legs",value)
-			Playerstats.player.body_part("Arms",value)
-	
-		if property == properties.DELETE:
-			Playerstats.object_held = null
-			Playerstats.object_mass = 0.0
-			Playerstats.object_ID = 0
-			queue_free()
-			
-		if property == properties.SHOOT:
-			if $Shoot_Cooldown.is_stopped() and Playerstats.player.movement_state != Playerstats.player.movement_states.NORMAL:
-				attribute = false
-				$Shoot_Cooldown.start(ItemData.itemdata[str(ID)]["Interval"] / (0.5 + (Playerstats.arms_hp/Playerstats.max_health)/2))
-				var target_position = Playerstats.player.find_raycast_hit_point()
-				if not target_position is Array:
-					target_position = [Vector3.ZERO,Vector3.ZERO]
-				Playerstats.player.shoot(target_position)
-				await $Shoot_Cooldown.timeout
-				attribute = true
 				
 		if property == properties.TV:
 			$VideoStreamPlayer.stream = load(ItemData.itemdata[str(ID)]["Video"])

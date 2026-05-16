@@ -2,6 +2,7 @@ extends Node
 
 enum game_states {PLAYING,PAUSED,MENU}
 enum camera_states {CLOSE,NORMAL,OUTWARDS,FIRST}
+enum Health_Changes {GENERAL_DAMAGE,GENERAL_HEALING}
 var current_state :game_states = game_states.PLAYING
 var current_camera :camera_states = camera_states.NORMAL
 
@@ -16,12 +17,12 @@ var post_processing :bool = true
 var Add_world_environment :bool = true
 var FOV :float = 80
 
-var max_health :float = 25.0
+var max_health :float = 300.0
 var strength :float = 3.0
 var max_carry_weight :float = 50.0
 var max_inventory :float = 50.0
 
-var health :float = 25.0
+var health :float = 300.0
 var oxygen :float = 100.0
 var special :float = 100.0
 var inventory_mass :float = 0.0
@@ -35,17 +36,17 @@ var object_mass :float = 0.0
 var object_properties :Array = []
 var object_prompts :Array = []
 
-var head_hp :float = 125.0
-var torso_hp :float = 125.0
-var legs_hp :float = 125.0
-var arms_hp :float = 125.0
+#var head_hp :float = 125.0
+#var torso_hp :float = 125.0
+#var legs_hp :float = 125.0
+#var arms_hp :float = 125.0
 
 var invincibility :bool = false
 var regen :bool = true
 var sprint_key :bool = false
 var time_since_last_damage :float = 0.0
 var next_health_regen :float = 0.0
-var oxygen_depletes :bool = true
+var oxygen_depletes :bool = false
 var can_regen :bool = false
 
 var time_played :int = 0
@@ -56,6 +57,7 @@ var camera_hitbox :bool = true
 var no_clip :bool = true
 var show_collision_checks :bool = false
 var infinte_inventory :bool = false
+var saved_inventory :Array[int] = [20]
 
 #For the pain in the ass that is using the same button to pause and resume.
 var escape_pressed :bool = false
@@ -76,18 +78,18 @@ func _ready() -> void:
 func clear_stat() -> void:
 	health = max_health
 	oxygen = 100
-	inventory = []
-	inventory_mass = 0
+	inventory = saved_inventory
+	inventory_mass = get_mass_of_inventory(saved_inventory)
 	object_held = null
 	object_ID = 0
 	object_mass = 0
 	object_prompts = []
 	object_properties = []
 
-	head_hp = 125.0
-	torso_hp = 125.0
-	legs_hp = 125.0
-	arms_hp = 125.0
+	#head_hp = 125.0
+	#torso_hp = 125.0
+	#legs_hp = 125.0
+	#arms_hp = 125.0
 	
 func _process(delta :float) -> void:
 	var screen_size :Vector2i = DisplayServer.window_get_size()
@@ -96,28 +98,28 @@ func _process(delta :float) -> void:
 	oxygen = clamp(oxygen,0,100)
 	health = clamp(health,0,max_health)
 	
-	head_hp = clamp(head_hp,0,max_health)
-	torso_hp = clamp(torso_hp,0,max_health)
-	legs_hp = clamp(legs_hp,0,max_health)
-	arms_hp = clamp(arms_hp,0,max_health)
-	
-	if head_hp <= 0 or torso_hp <= 0: health = 0
+	#head_hp = clamp(head_hp,0,max_health)
+	#torso_hp = clamp(torso_hp,0,max_health)
+	#legs_hp = clamp(legs_hp,0,max_health)
+	#arms_hp = clamp(arms_hp,0,max_health)
+	#
+	#if head_hp <= 0 or torso_hp <= 0: health = 0
 		
 	if health <= 0: get_tree().quit()
 		
 	if get_tree().paused == false: time_since_last_damage = min(time_since_last_damage + delta, 60)
 	
-	can_regen = arms_hp < max_health or legs_hp < max_health or torso_hp < max_health or head_hp < max_health or health < max_health 
+	can_regen = health < max_health 
 	
 	if regen and can_regen and current_state == game_states.PLAYING: 
 		next_health_regen += (time_since_last_damage/60)*(delta/2)
 		if next_health_regen >= 0.25:
 			player.change_in_health(0.25,false) 
 			health = clamp(health,0,max_health)
-			torso_hp = min(torso_hp + 0.25,max_health)
-			head_hp = min(head_hp + 0.25,max_health)
-			legs_hp = min(legs_hp + 0.25,max_health)
-			arms_hp = min(arms_hp + 0.25,max_health)
+			#torso_hp = min(torso_hp + 0.25,max_health)
+			#head_hp = min(head_hp + 0.25,max_health)
+			#legs_hp = min(legs_hp + 0.25,max_health)
+			#arms_hp = min(arms_hp + 0.25,max_health)
 			next_health_regen = 0.0
 			
 	if oxygen <= 0 and current_state == game_states.PLAYING:
@@ -134,6 +136,12 @@ func organise_inventory():
 		else:
 			organised_inventory.get_or_add(str(item))
 			organised_inventory[str(item)] = 1
+			
+func get_mass_of_inventory(input :Array[int]) -> float:
+	var mass: float = 0
+	for item in input:
+		mass += ItemData.itemdata[str(item)]["Mass"] 
+	return mass
 			
 func get_largest_4_3_viewport(window_size: Vector2i) -> Vector2i:
 	@warning_ignore("integer_division")

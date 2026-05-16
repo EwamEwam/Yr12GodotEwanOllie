@@ -1,6 +1,7 @@
 extends Node2D
 
 func _ready() -> void:
+	print("entre")
 	Playerstats.clear_stat()
 
 func _on__pressed() -> void:

@@ -1,4 +1,4 @@
-[gd_resource type="ArrayMesh" load_steps=4 format=4 uid="uid://b0il6h8atr4l0"]
+[gd_resource type="ArrayMesh" format=4 uid="uid://b0il6h8atr4l0"]
 
 [ext_resource type="Texture2D" uid="uid://7segf44xig6w" path="res://Assets/Textures/Cans_Beans_Empty_Empty_can_Bean.png" id="1_2amy8"]
 

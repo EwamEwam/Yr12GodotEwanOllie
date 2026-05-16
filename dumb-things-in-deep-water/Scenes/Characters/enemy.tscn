@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://4elvwkl063ne"]
+[gd_scene format=3 uid="uid://4elvwkl063ne"]
 
 [ext_resource type="Script" uid="uid://0nmnl5dxtpwx" path="res://Scripts/Characters/enemy.gd" id="1_lsx3x"]
 [ext_resource type="PackedScene" uid="uid://bnmdahypayfna" path="res://Scenes/Characters/healthbar.tscn" id="2_b1c4r"]
@@ -26,62 +26,62 @@ top_radius = 0.2
 bottom_radius = 0.1
 height = 1.3
 
-[node name="Test_Enemy" type="CharacterBody3D" groups=["Enemy"]]
+[node name="Test_Enemy" type="CharacterBody3D" unique_id=799487514 groups=["Enemy"]]
 script = ExtResource("1_lsx3x")
 
-[node name="Healthbar" parent="." instance=ExtResource("2_b1c4r")]
+[node name="Healthbar" parent="." unique_id=1697027680 instance=ExtResource("2_b1c4r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00860912, 1.62031, -0.00199196)
 
-[node name="Ragdoll" type="RigidBody3D" parent="."]
+[node name="Ragdoll" type="RigidBody3D" parent="." unique_id=28242856]
 collision_layer = 17
 collision_mask = 144
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ragdoll"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ragdoll" unique_id=1106365588]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("SphereShape3D_b1c4r")
 disabled = true
 
-[node name="Body" type="MeshInstance3D" parent="Ragdoll"]
+[node name="Body" type="MeshInstance3D" parent="Ragdoll" unique_id=881199792]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 mesh = SubResource("SphereMesh_lsx3x")
 skeleton = NodePath("../..")
 
-[node name="Hitbox" type="Area3D" parent="Ragdoll/Body"]
+[node name="Hitbox" type="Area3D" parent="Ragdoll/Body" unique_id=561996792]
 monitorable = false
 
-[node name="Collision" type="CollisionShape3D" parent="Ragdoll/Body/Hitbox"]
+[node name="Collision" type="CollisionShape3D" parent="Ragdoll/Body/Hitbox" unique_id=462489703]
 shape = SubResource("SphereShape3D_lsx3x")
 
-[node name="Collision2" type="CollisionShape3D" parent="Ragdoll/Body/Hitbox"]
+[node name="Collision2" type="CollisionShape3D" parent="Ragdoll/Body/Hitbox" unique_id=217086102]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.313816, -1.29183)
 shape = SubResource("SphereShape3D_ixshx")
 
-[node name="Club" type="MeshInstance3D" parent="Ragdoll/Body"]
+[node name="Club" type="MeshInstance3D" parent="Ragdoll/Body" unique_id=916486291]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.562621, 0.366269, -0.364734)
 mesh = SubResource("CylinderMesh_b1c4r")
 skeleton = NodePath("../../..")
 
-[node name="Raycast" type="RayCast3D" parent="."]
+[node name="Raycast" type="RayCast3D" parent="." unique_id=2147158271]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 target_position = Vector3(0, -1, -20)
 collision_mask = 130
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1321315380]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("SphereShape3D_b1c4r")
 
-[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=499641343]
 simplify_path = true
 avoidance_enabled = true
 time_horizon_obstacles = 0.4
 use_3d_avoidance = true
 debug_enabled = true
 
-[node name="Hit_Timer" type="Timer" parent="."]
+[node name="Hit_Timer" type="Timer" parent="." unique_id=1599835484]
 wait_time = 0.75
 one_shot = true
 
-[node name="Invinicibility" type="Timer" parent="."]
+[node name="Invinicibility" type="Timer" parent="." unique_id=533958088]
 wait_time = 0.2
 one_shot = true
 autostart = true

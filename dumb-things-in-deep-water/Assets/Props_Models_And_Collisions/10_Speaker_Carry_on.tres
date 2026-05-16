@@ -1,4 +1,4 @@
-[gd_resource type="ArrayMesh" load_steps=4 format=4 uid="uid://cbothcjhhp3oy"]
+[gd_resource type="ArrayMesh" format=4 uid="uid://cbothcjhhp3oy"]
 
 [ext_resource type="Texture2D" uid="uid://cwyb1wehdd7t8" path="res://Assets/Textures/Speaker_Speaker_texture.png" id="1_ekxr6"]
 

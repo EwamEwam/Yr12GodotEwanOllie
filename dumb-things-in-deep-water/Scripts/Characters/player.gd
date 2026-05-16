@@ -47,19 +47,17 @@ var movement_state :movement_states = movement_states.NORMAL
 @onready var ground_check :ShapeCast3D = $Ground_Check
 @onready var camera_raycast :RayCast3D = $Camera_Pivot/Yaw/Pitch/Camera_Spring/Camera3D/Camera_ray
 
+@onready var world :Node = get_tree().current_scene
+
 #The physics process function which essentially runs every frame. Handles most of the player's essential logic
 func _ready() -> void:
+	world = get_tree().current_scene
 	noise.seed = randi()
 
 func _physics_process(delta: float) -> void:
 	debug()
 	set_speed()
 	fall_damage_calculation()
-		
-	$Mesh/Body_Parts/Head.position = Vector3.ZERO
-	$Mesh/Body_Parts/Torso.position = Vector3.ZERO
-	$Mesh/Body_Parts/Legs.position = Vector3.ZERO
-	$Mesh/Body_Parts/Arms.position = Vector3.ZERO
 		
 	if ground_check.is_colliding():
 		var collider :Object
@@ -108,6 +106,10 @@ func _physics_process(delta: float) -> void:
 	if Playerstats.current_state == Playerstats.game_states.PLAYING and Playerstats.oxygen_depletes:
 		Playerstats.oxygen -= delta/2.5
 		
+	if Playerstats.object_properties.has(ItemData.properties.AIM):
+		var arm_factor = 0
+		camera_raycast.target_position = Vector3(randf_range(-5,5)*arm_factor,randf_range(-5,5)*arm_factor,-ItemData.itemdata[str(Playerstats.object_ID)]["Range"])
+		
 	position_last_frame = global_position
 	velocity = calculated_velocity
 	push_rigid_body()
@@ -148,7 +150,7 @@ func _input(event: InputEvent) -> void:
 				Playerstats.object_properties = []
 				Playerstats.object_prompts = []
 			else:
-				$"../../../HUD".alert("Too heavy for inventory!")
+				world.HUD.alert("Too heavy for inventory!")
 
 	if event.is_action_pressed("F"):
 		if Playerstats.object_held == null and not movement_state == movement_states.THROWING and Playerstats.inventory.size() > 0 and can_move:
@@ -172,7 +174,7 @@ func _input(event: InputEvent) -> void:
 					Playerstats.object_mass = Playerstats.object_held.mass
 					Input.action_release("Left_Click")
 				else:
-					$"../../../HUD".alert("Too heavy to lift! (" + str(round(Playerstats.object_detected.mass*10)/10)  +"kg)")
+					world.HUD.alert("Too heavy to lift! (" + str(round(Playerstats.object_detected.mass*10)/10)  +"kg)")
 		elif movement_state == movement_states.NORMAL or Playerstats.object_properties.has(ItemData.properties.CANT_DROP_THROW):
 			Playerstats.object_held.get_parent().item_use()
 		
@@ -181,7 +183,7 @@ func _input(event: InputEvent) -> void:
 			if check_if_in_wall(Playerstats.object_held) and not Playerstats.object_properties.has(ItemData.properties.CANT_DROP_THROW):
 				Playerstats.object_held.get_parent().drop()
 			elif not Playerstats.object_properties.has(ItemData.properties.CANT_DROP_THROW):
-				$"../../../HUD".alert("Can't place here, there's something in the way.")
+				world.HUD.alert("Can't place here, there's something in the way.")
 
 	if event.is_action_pressed("V"): set_camera_mode()
 		
@@ -257,7 +259,6 @@ func set_speed() -> void:
 		speed = 7.5
 				
 	speed /= (1 + (Playerstats.object_mass/(15 * Playerstats.strength)))
-	speed *= ((Playerstats.legs_hp/Playerstats.max_health)/1.25 + 0.2)
 
 func set_camera(delta: float) -> Basis:
 	var camera_offset: Basis
@@ -324,7 +325,7 @@ func throw_process(delta :float) -> void:
 			movement_state = movement_states.AIMING
 			throw_power = 1
 		else:
-			$"../../../HUD".alert("Can't throw here, there's something in the way.")
+			world.HUD.alert("Can't throw here, there's something in the way.")
 			movement_state = movement_states.AIMING
 			throw_power = 1
 
@@ -444,7 +445,7 @@ func push_rigid_body() -> void:
 				var push_direction = -col.get_normal().normalized()
 				col_collider.apply_impulse(push_direction * applied_force, col_position - col_collider.global_position)
 
-# Function to calculate friction based on connected bodies and their masses
+##Function to calculate friction based on connected bodies and their masses
 func calculate_friction(connected_bodies: Array) -> float:
 	var total_mass = 0.0
 	for body in connected_bodies:
@@ -459,7 +460,7 @@ func calculate_friction(connected_bodies: Array) -> float:
 	var friction = base_friction + (connected_bodies.size() * friction_per_body) + (total_mass * mass_friction_factor)
 	return clamp(friction, 0.0, 1.0)
 
-# Function to get all connected RigidBody3D objects
+## Function to get all connected RigidBody3D objects
 func get_all_connected_bodies(start_body: RigidBody3D, max_bodies: int = 6) -> Array:
 	var connected_bodies = []
 	var visited_bodies = {}
@@ -501,36 +502,32 @@ func fall_damage_calculation() -> void:
 	if is_on_floor(): 
 		if calculated_velocity.y < -20:
 			change_in_health(calculated_velocity.y/7 ,true)
-			Playerstats.legs_hp -= abs(calculated_velocity.y/6)
-			$"../../../HUD".shake_part("Legs")
 
 func change_in_health(amt :float, particles :bool) -> void:
 	var before :float = Playerstats.health
 	var previous_health :int = int(ceil(Playerstats.health))
 	Playerstats.health += amt
+	Playerstats.health = clamp(Playerstats.health,0,Playerstats.max_health)
 	if previous_health - int(ceil(Playerstats.health)) > 0:
 		Playerstats.time_since_last_damage = 0
 		Playerstats.next_health_regen = 0
 		if particles:
-			var number :PackedScene = load("res://Scenes/Characters/number.tscn")
-			var new_number :Label3D = number.instantiate()
-			new_number.create("Player_Damage",str(int(previous_health - int(ceil(Playerstats.health)))),global_position)
-			$"../NavigationRegion3D/Environment".add_child(new_number)
-			$"../../../HUD".health_bar_animation(before)
+			#var number :PackedScene = load("res://Scenes/Characters/number.tscn")
+			#var new_number :Label3D = number.instantiate()
+			#new_number.create("Player_Damage",str(int(previous_health - int(ceil(Playerstats.health)))),global_position)
+			#$"../NavigationRegion3D/Environment".add_child(new_number)
+			world.HUD.create_number("Damage",int(previous_health - int(ceil(Playerstats.health))))
+			world.HUD.health_bar_animation(before)
 			shake(max(0.1,-(25*amt)/Playerstats.max_health),0.3)
-			$"../../../HUD".set_red(-amt/(1.4*Playerstats.max_health)+0.2)
+			world.HUD.set_red(-amt/(1.4*Playerstats.max_health)+0.2)
 			jerk_velocity = min((20*amt)/Playerstats.max_health,-1)
 		else:
-			$"../../../HUD".update_health_bar()
+			world.HUD.update_health_bar()
 	elif particles and int(ceil(Playerstats.health)) - previous_health > 0:
-		var number :PackedScene = load("res://Scenes/Characters/number.tscn")
-		var new_number :Label3D = number.instantiate()
-		new_number.create("Heal",str(int(int(ceil(Playerstats.health))-previous_health)),global_position)
-		Playerstats.health = clamp(Playerstats.health,0,Playerstats.max_health)
-		$"../NavigationRegion3D/Environment".add_child(new_number)
-		$"../../../HUD".update_health_bar()
+		world.HUD.create_number("Heal",int(int(ceil(Playerstats.health))-previous_health))
+		world.HUD.update_health_bar()
 	else:
-		$"../../../HUD".update_health_bar()
+		world.HUD.update_health_bar()
 
 func check_velocity() -> void:
 	if abs(calculated_velocity.z - true_velocity.z) > 4:
@@ -540,13 +537,12 @@ func check_velocity() -> void:
 	if abs(calculated_velocity.y - true_velocity.y) > 20:
 		velocity.y = true_velocity.y
 		
-func damage_based_on_prop(body :Node, i1 :float, i2 :float, i3 :float, dot :float, Body_part :String) -> void:
+func damage_based_on_prop(body :Node, i1 :float, i2 :float, dot :float) -> void:
 	var prop_velocity :Vector3 = body.get_parent().previous_velocity
 	var distance_next_tick :float = ((prop_velocity/60 + body.global_position) - global_position).length()
 	var current_distance :float = (body.global_position - global_position).length()
 	if body.get_parent().timer.is_stopped() and dot > 0.15 and distance_next_tick < current_distance:
 		change_in_health(-prop_velocity.length()/i1 * body.mass/i2 * dot,true)
-		body_part(str(Body_part), -prop_velocity.length()/i1 * i3 * body.mass/i2 * dot)
 	body.get_parent().timer.start()
 
 func calculate_dot_product(body :Node) -> float:
@@ -555,38 +551,38 @@ func calculate_dot_product(body :Node) -> float:
 	var dot :float = velocity_dir.dot(to_player)
 	return abs(dot)
 
-func body_part(part :String, val: float) -> void:
-	if not Playerstats.invincibility:
-		match part:
-			"Head":
-				Playerstats.head_hp += val
-			"Legs":
-				Playerstats.legs_hp += val
-			"Torso":
-				Playerstats.torso_hp += val
-			"Arms":
-				Playerstats.arms_hp += val
-	Playerstats.head_hp = clamp(Playerstats.head_hp,0,Playerstats.max_health)
-	Playerstats.torso_hp = clamp(Playerstats.torso_hp,0,Playerstats.max_health)
-	Playerstats.legs_hp = clamp(Playerstats.legs_hp,0,Playerstats.max_health)
-	Playerstats.arms_hp = clamp(Playerstats.arms_hp,0,Playerstats.max_health)
-	$"../../../HUD".shake_part(str(part))
+#func body_part(part :String, val: float) -> void:
+	#if not Playerstats.invincibility:
+		#match part:
+			#"Head":
+				#Playerstats.head_hp += val
+			#"Legs":
+				#Playerstats.legs_hp += val
+			#"Torso":
+				#Playerstats.torso_hp += val
+			#"Arms":
+				#Playerstats.arms_hp += val
+	#Playerstats.head_hp = clamp(Playerstats.head_hp,0,Playerstats.max_health)
+	#Playerstats.torso_hp = clamp(Playerstats.torso_hp,0,Playerstats.max_health)
+	#Playerstats.legs_hp = clamp(Playerstats.legs_hp,0,Playerstats.max_health)
+	#Playerstats.arms_hp = clamp(Playerstats.arms_hp,0,Playerstats.max_health)
+	#$"../../../HUD".shake_part(str(part))
 
-func _on_head_body_entered(body: Node) -> void:
-	if body.is_in_group("Prop") and abs(body.get_parent().previous_velocity.length()) > 4 and body.get_parent().grabbable:
-		damage_based_on_prop(body,8,2,2,calculate_dot_product(body),"Head")
-
-func _on_torso_body_entered(body: Node) -> void:
-	if body.is_in_group("Prop") and abs(body.get_parent().previous_velocity.length()) > 4 and body.get_parent().grabbable:
-		damage_based_on_prop(body,16,2,1,calculate_dot_product(body),"Torso")
-
-func _on_legs_body_entered(body: Node) -> void:
-	if body.is_in_group("Prop") and abs(body.get_parent().previous_velocity.length()) > 4 and body.get_parent().grabbable:
-		damage_based_on_prop(body,18,2,1.25,calculate_dot_product(body),"Legs")
-
-func _on_arms_body_entered(body: Node) -> void:
-	if body.is_in_group("Prop") and abs(body.get_parent().previous_velocity.length()) > 4 and body.get_parent().grabbable:
-		damage_based_on_prop(body,20,2.75,0.75,calculate_dot_product(body),"Arms")
+#func _on_head_body_entered(body: Node) -> void:
+	#if body.is_in_group("Prop") and abs(body.get_parent().previous_velocity.length()) > 4 and body.get_parent().grabbable:
+		#damage_based_on_prop(body,8,2,2,calculate_dot_product(body),"Head")
+#
+#func _on_torso_body_entered(body: Node) -> void:
+	#if body.is_in_group("Prop") and abs(body.get_parent().previous_velocity.length()) > 4 and body.get_parent().grabbable:
+		#damage_based_on_prop(body,16,2,1,calculate_dot_product(body),"Torso")
+#
+#func _on_legs_body_entered(body: Node) -> void:
+	#if body.is_in_group("Prop") and abs(body.get_parent().previous_velocity.length()) > 4 and body.get_parent().grabbable:
+		#damage_based_on_prop(body,18,2,1.25,calculate_dot_product(body),"Legs")
+#
+#func _on_arms_body_entered(body: Node) -> void:
+	#if body.is_in_group("Prop") and abs(body.get_parent().previous_velocity.length()) > 4 and body.get_parent().grabbable:
+		#damage_based_on_prop(body,20,2.75,0.75,calculate_dot_product(body),"Arms")
 		
 func shake(strength: float, duration: float) -> void:
 	shake_strength = strength
@@ -618,12 +614,12 @@ func set_camera_mode() -> void:
 		zoom = 0.5
 		
 func check_if_in_wall(body: RigidBody3D) -> bool:
-	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
-	var collision_node: CollisionShape3D = body.get_node("Collision")
+	var space_state :PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
+	var collision_node :CollisionShape3D = body.get_node("Collision")
 	var model_position :Vector3 = body.get_node("Model").position
 	var parent_rotation :Basis = body.get_parent().basis
 	
-	var scaled_shape : = collision_node.shape.duplicate()
+	var scaled_shape := collision_node.shape.duplicate()
 	var verts = scaled_shape.points
 	for i in range(verts.size()):
 		verts[i] *= 0.9 * collision_node.scale.x
@@ -648,8 +644,6 @@ func check_if_in_wall(body: RigidBody3D) -> bool:
 
 func find_raycast_hit_point():
 	if camera_raycast.is_colliding():
-		var arm_factor :float = (Playerstats.max_health - Playerstats.arms_hp)/Playerstats.max_health
-		camera_raycast.target_position = Vector3(randf_range(-5,5)*arm_factor,randf_range(-5,5)*arm_factor,randf_range(-5,5) + -ItemData.itemdata[str(Playerstats.object_ID)]["Range"])
 		var results :Array = [camera_raycast.get_collision_point(),camera_raycast.get_collision_normal()]
 		return results
 	else:
@@ -676,7 +670,7 @@ func shoot(target_position :Array) -> void:
 	if Playerstats.object_properties.has(ItemData.properties.UZI):
 		ammo = Playerstats.ammo["UZI"]
 	if ammo[0] > 0:
-		$"../../../HUD".fire()
+		world.HUD.fire()
 		Playerstats.object_held.get_parent().create_bullet(target_position)
 		jerk_velocity = ItemData.itemdata[str(Playerstats.object_ID)]["Recoil"] / (0.1 + (Playerstats.arms_hp/Playerstats.max_health)/1.111111111111)
 		shake(ItemData.itemdata[str(Playerstats.object_ID)]["Recoil"]/(4*(0.1 + (Playerstats.arms_hp/Playerstats.max_health)/1.111111111111)),0.25)
@@ -701,7 +695,7 @@ func reload() -> void:
 		max_ammo = 30
 		
 	if ammo[1] == 0 and ammo[0] == 0:
-		$"../../../HUD".alert("No Ammo")
+		world.HUD.alert("No Ammo")
 		
 	elif ammo[0] != max_ammo:
 		if ammo[1] + ammo[0] > max_ammo:
@@ -735,9 +729,9 @@ func debug() -> void:
 	else:
 		camera_spring.collision_mask = 0
 		
-func debug_show_scaled_shape(body: RigidBody3D) -> void:
-	var collision_node: CollisionShape3D = body.get_node("Collision")
-	var orig_shape: ConvexPolygonShape3D = collision_node.shape
+func debug_show_scaled_shape(body :RigidBody3D) -> void:
+	var collision_node :CollisionShape3D = body.get_node("Collision")
+	var orig_shape :ConvexPolygonShape3D = collision_node.shape
 	var model_position :Vector3 = body.get_node("Model").position
 	var parent_rotation :Basis = body.get_parent().basis
 	
@@ -747,7 +741,7 @@ func debug_show_scaled_shape(body: RigidBody3D) -> void:
 		verts[i] *= 0.9 * collision_node.scale.x
 	scaled_shape.points = verts
 	
-	var st := SurfaceTool.new()
+	var st :SurfaceTool = SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	st.add_triangle_fan(verts)
 	var debug_mesh :ArrayMesh = st.commit()

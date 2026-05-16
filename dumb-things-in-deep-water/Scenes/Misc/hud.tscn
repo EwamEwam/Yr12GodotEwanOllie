@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://baocn3lc445ff"]
+[gd_scene format=3 uid="uid://baocn3lc445ff"]
 
 [ext_resource type="Script" uid="uid://noefglp8kk2" path="res://Scripts/Other/HUD.gd" id="1_7lq3g"]
 [ext_resource type="Texture2D" uid="uid://dedhoyvicgme3" path="res://Assets/Sprites/Reticule.png" id="1_8leah"]
@@ -10,18 +10,13 @@
 [ext_resource type="Texture2D" uid="uid://bcam1w041vvds" path="res://Assets/Sprites/Text_Ender.png" id="3_wd7fq"]
 [ext_resource type="Texture2D" uid="uid://vrfcr0syms2" path="res://Assets/Sprites/Health_bar_end.png" id="4_5nnh0"]
 [ext_resource type="Texture2D" uid="uid://hmaa60jromha" path="res://Assets/Sprites/Item_Icons/1.png" id="4_8pbef"]
+[ext_resource type="Texture2D" uid="uid://dikliwwbi05p0" path="res://Assets/Sprites/Health_Bar_Border.png" id="5_5a0no"]
 [ext_resource type="FontFile" uid="uid://bxi0rnauxne1i" path="res://Assets/Sprites/Red_Numbers.png" id="5_80pih"]
 [ext_resource type="Texture2D" uid="uid://8nfmrbsy38yi" path="res://Assets/Sprites/error.png" id="5_ifk6x"]
 [ext_resource type="LabelSettings" uid="uid://cab1wtwmy4in1" path="res://Scenes/Misc/Label_Settings.tres" id="6_aoah1"]
-[ext_resource type="Texture2D" uid="uid://c75wp5w1r4x07" path="res://Assets/Sprites/Body_part_head.png" id="6_irqgh"]
-[ext_resource type="Texture2D" uid="uid://ctmnup0l02mug" path="res://Assets/Sprites/Body_part_torso.png" id="7_aoah1"]
-[ext_resource type="Texture2D" uid="uid://ciapgkj8scrqg" path="res://Assets/Sprites/Body_part_legs.png" id="8_egel0"]
-[ext_resource type="Texture2D" uid="uid://jl5x13gprn5n" path="res://Assets/Sprites/Body_part_arms.png" id="9_wouu6"]
-[ext_resource type="FontFile" uid="uid://b6jcffkqcl0a2" path="res://Assets/Sprites/Blue_Numbers.png" id="13_hlxis"]
-[ext_resource type="Texture2D" uid="uid://cab7hm5n4u5aw" path="res://Assets/Sprites/Heart.png" id="15_5gnqf"]
+[ext_resource type="Texture2D" uid="uid://105dk1ylt3v" path="res://Assets/Sprites/Stamina_Background.png" id="8_u05gf"]
+[ext_resource type="Texture2D" uid="uid://clpfu617un4go" path="res://Assets/Sprites/Stamina.png" id="9_sms7y"]
 [ext_resource type="Texture2D" uid="uid://cshorioabc52v" path="res://Assets/Sprites/Item_Icons/2.png" id="17_5gnqf"]
-[ext_resource type="Texture2D" uid="uid://b0qk88veua1yx" path="res://Assets/Sprites/Oxygen_Tank.png" id="17_wouu6"]
-[ext_resource type="Texture2D" uid="uid://cd7oxagwgcig0" path="res://Assets/Sprites/Oxygen_bar.png" id="18_80pih"]
 [ext_resource type="Texture2D" uid="uid://c7dw1u4dhbrx" path="res://Assets/Sprites/Pick_up.png" id="18_g85nf"]
 [ext_resource type="Texture2D" uid="uid://ce3sqdbnuuliq" path="res://Assets/Sprites/Inventory_icon.png" id="19_juip4"]
 [ext_resource type="PackedScene" uid="uid://4gn54sy2xffq" path="res://Scenes/Misc/inventory.tscn" id="20_3kgmp"]
@@ -62,7 +57,7 @@ animations = [{
 "speed": 0.0
 }]
 
-[sub_resource type="Image" id="Image_uj57v"]
+[sub_resource type="Image" id="Image_0umbk"]
 data = {
 "data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 41, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 41, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 208, 200, 195, 255, 208, 200, 195, 255, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 41, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 208, 200, 195, 255, 194, 183, 176, 255, 194, 183, 176, 255, 208, 200, 195, 255, 208, 200, 195, 255, 0, 0, 0, 0, 0, 0, 0, 0, 43, 41, 41, 255, 151, 148, 143, 255, 151, 148, 143, 255, 151, 148, 143, 255, 43, 41, 41, 255, 151, 148, 143, 255, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 0, 0, 0, 0, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 80, 0, 0, 0, 92, 0, 0, 0, 92, 154, 137, 132, 255, 194, 183, 176, 255, 194, 183, 176, 255, 194, 183, 176, 255, 194, 183, 176, 255, 208, 200, 195, 255, 0, 0, 0, 73, 0, 0, 0, 73, 43, 41, 41, 255, 43, 41, 41, 255, 151, 148, 143, 255, 43, 41, 41, 255, 43, 41, 41, 255, 151, 148, 143, 255, 151, 148, 143, 255, 151, 148, 143, 255, 43, 41, 41, 255, 151, 148, 143, 255, 151, 148, 143, 255, 43, 41, 41, 255, 43, 41, 41, 255, 151, 148, 143, 255, 151, 148, 143, 255, 151, 148, 143, 255, 43, 41, 41, 255, 151, 148, 143, 255, 43, 41, 41, 255, 151, 148, 143, 255, 43, 41, 41, 255, 151, 148, 143, 255, 43, 41, 41, 255, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 41, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 80, 0, 0, 0, 92, 0, 0, 0, 92, 0, 0, 0, 92, 154, 137, 132, 255, 194, 183, 176, 255, 194, 183, 176, 255, 194, 183, 176, 255, 194, 183, 176, 255, 208, 200, 195, 255, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 80, 0, 0, 0, 92, 0, 0, 0, 92, 0, 0, 0, 92, 0, 0, 0, 92, 0, 0, 0, 92, 154, 137, 132, 255, 154, 137, 132, 255, 194, 183, 176, 255, 154, 137, 132, 255, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 126, 116, 109, 255, 126, 116, 109, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 126, 116, 109, 255, 32, 31, 31, 255, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 92, 0, 0, 0, 92, 0, 0, 0, 92, 0, 0, 0, 92, 75, 64, 61, 255, 0, 0, 0, 92, 0, 0, 0, 92, 0, 0, 0, 92, 154, 137, 132, 255, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 0, 0, 0, 73, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 0, 0, 0, 73, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 0, 0, 0, 73, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 92, 0, 0, 0, 92, 0, 0, 0, 92, 75, 64, 61, 255, 0, 0, 0, 92, 0, 0, 0, 92, 75, 64, 61, 255, 0, 0, 0, 92, 0, 0, 0, 92, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 73, 0, 0, 0, 73, 52, 44, 78, 255, 52, 44, 78, 255, 70, 67, 107, 255, 0, 0, 0, 92, 0, 0, 0, 92, 0, 0, 0, 92, 75, 64, 61, 255, 0, 0, 0, 92, 0, 0, 0, 92, 0, 0, 0, 92, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 50, 255, 50, 50, 50, 255, 50, 50, 50, 255, 50, 50, 50, 255, 50, 50, 50, 255, 50, 50, 50, 255, 50, 50, 50, 255, 0, 0, 0, 0, 50, 50, 50, 255, 50, 50, 50, 255, 50, 50, 50, 255, 50, 50, 50, 255, 50, 50, 50, 255, 50, 50, 50, 255, 50, 50, 50, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 0, 0, 0, 0, 0, 0, 0, 0, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 0, 0, 0, 0, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 73, 36, 25, 52, 255, 143, 143, 188, 255, 166, 163, 203, 255, 183, 185, 211, 255, 70, 67, 107, 255, 0, 0, 0, 92, 75, 64, 61, 255, 0, 0, 0, 92, 0, 0, 0, 92, 0, 0, 0, 92, 0, 0, 0, 80, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 50, 255, 151, 148, 143, 255, 151, 148, 143, 255, 151, 148, 143, 255, 50, 50, 50, 255, 151, 148, 143, 255, 151, 148, 143, 255, 50, 50, 50, 255, 151, 148, 143, 255, 151, 148, 143, 255, 50, 50, 50, 255, 151, 148, 143, 255, 151, 148, 143, 255, 151, 148, 143, 255, 50, 50, 50, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, 41, 41, 255, 43, 41, 41, 255, 43, 41, 41, 255, 0, 0, 0, 0, 0, 0, 0, 0, 43, 41, 41, 255, 151, 148, 143, 255, 43, 41, 41, 255, 0, 0, 0, 0, 0, 0, 0, 0, 43, 41, 41, 255, 151, 148, 143, 255, 151, 148, 143, 255, 43, 41, 41, 255, 151, 148, 143, 255, 151, 148, 143, 255, 43, 41, 41, 255, 151, 148, 143, 255, 151, 148, 143, 255, 151, 148, 143, 255, 43, 41, 41, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 41, 36, 25, 52, 255, 143, 143, 188, 255, 166, 163, 203, 255, 166, 163, 203, 255, 52, 44, 78, 255, 0, 0, 0, 92, 0, 0, 0, 92, 0, 0, 0, 92, 0, 0, 0, 92, 0, 0, 0, 80, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 50, 255, 50, 50, 50, 255, 50, 50, 50, 255, 50, 50, 50, 255, 50, 50, 50, 255, 0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 50, 255, 151, 148, 143, 255, 50, 50, 50, 255, 151, 148, 143, 255, 50, 50, 50, 255, 151, 148, 143, 255, 151, 148, 143, 255, 151, 148, 143, 255, 151, 148, 143, 255, 151, 148, 143, 255, 50, 50, 50, 255, 151, 148, 143, 255, 50, 50, 50, 255, 151, 148, 143, 255, 151, 148, 143, 255, 50, 50, 50, 255, 0, 0, 0, 0, 43, 41, 41, 255, 43, 41, 41, 255, 151, 148, 143, 255, 43, 41, 41, 255, 43, 41, 41, 255, 0, 0, 0, 0, 43, 41, 41, 255, 151, 148, 143, 255, 43, 41, 41, 255, 0, 0, 0, 0, 0, 0, 0, 0, 43, 41, 41, 255, 151, 148, 143, 255, 151, 148, 143, 255, 151, 148, 143, 255, 151, 148, 143, 255, 151, 148, 143, 255, 43, 41, 41, 255, 151, 148, 143, 255, 43, 41, 41, 255, 151, 148, 143, 255, 151, 148, 143, 255, 43, 41, 41, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 143, 143, 188, 255, 143, 143, 188, 255, 143, 143, 188, 255, 106, 106, 155, 255, 36, 25, 52, 255, 0, 0, 0, 92, 0, 0, 0, 92, 0, 0, 0, 92, 0, 0, 0, 80, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 31, 31, 255, 126, 116, 109, 255, 126, 116, 109, 255, 126, 116, 109, 255, 32, 31, 31, 255, 0, 0, 0, 0, 0, 0, 0, 0, 32, 31, 31, 255, 126, 116, 109, 255, 126, 116, 109, 255, 32, 31, 31, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 0, 0, 0, 0, 32, 31, 31, 255, 126, 116, 109, 255, 126, 116, 109, 255, 126, 116, 109, 255, 32, 31, 31, 255, 0, 0, 0, 0, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 143, 143, 188, 255, 143, 143, 188, 255, 106, 106, 155, 255, 36, 25, 52, 255, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 0, 0, 0, 0, 0, 0, 0, 0, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 126, 116, 109, 255, 126, 116, 109, 255, 126, 116, 109, 255, 32, 31, 31, 255, 0, 0, 0, 0, 32, 31, 31, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 32, 31, 31, 255, 0, 0, 0, 0, 32, 31, 31, 255, 126, 116, 109, 255, 126, 116, 109, 255, 126, 116, 109, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 32, 31, 31, 255, 126, 116, 109, 255, 126, 116, 109, 255, 126, 116, 109, 255, 126, 116, 109, 255, 32, 31, 31, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 106, 106, 155, 255, 36, 25, 52, 255, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 0, 0, 0, 0, 0, 0, 0, 0, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 0, 0, 0, 0, 0, 0, 0, 0, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 32, 31, 31, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 41, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 73, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 "format": "RGBA8",
@@ -72,9 +67,9 @@ data = {
 }
 
 [sub_resource type="ImageTexture" id="ImageTexture_5gnqf"]
-image = SubResource("Image_uj57v")
+image = SubResource("Image_0umbk")
 
-[sub_resource type="Image" id="Image_5a0no"]
+[sub_resource type="Image" id="Image_3doop"]
 data = {
 "data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 92, 142, 212, 123, 92, 142, 212, 205, 92, 142, 212, 245, 92, 142, 212, 245, 92, 142, 212, 205, 92, 142, 212, 123, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 92, 142, 212, 123, 92, 142, 212, 205, 92, 142, 212, 245, 9, 17, 65, 255, 9, 17, 65, 255, 9, 17, 65, 255, 9, 17, 65, 255, 92, 142, 212, 245, 92, 142, 212, 245, 92, 142, 212, 123, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 92, 142, 212, 123, 92, 142, 212, 205, 9, 17, 65, 255, 9, 17, 65, 255, 92, 142, 212, 245, 92, 142, 212, 245, 92, 142, 212, 245, 92, 142, 212, 245, 9, 17, 65, 255, 9, 17, 65, 255, 92, 142, 212, 205, 92, 142, 212, 123, 0, 0, 0, 0, 0, 0, 0, 0, 92, 142, 212, 245, 9, 17, 65, 255, 92, 142, 212, 245, 92, 142, 212, 205, 92, 142, 212, 123, 0, 0, 0, 0, 0, 0, 0, 0, 92, 142, 212, 123, 92, 142, 212, 205, 92, 142, 212, 245, 9, 17, 65, 255, 92, 142, 212, 245, 0, 0, 0, 0, 92, 142, 212, 123, 92, 142, 212, 245, 9, 17, 65, 255, 92, 142, 212, 205, 92, 142, 212, 123, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 92, 142, 212, 123, 92, 142, 212, 205, 9, 17, 65, 255, 92, 142, 212, 245, 92, 142, 212, 123, 92, 142, 212, 205, 9, 17, 65, 255, 92, 142, 212, 245, 92, 142, 212, 123, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 92, 142, 212, 123, 92, 142, 212, 245, 9, 17, 65, 255, 92, 142, 212, 205, 92, 142, 212, 245, 9, 17, 65, 255, 92, 142, 212, 245, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 92, 142, 212, 245, 9, 17, 65, 255, 92, 142, 212, 245, 92, 142, 212, 245, 9, 17, 65, 255, 92, 142, 212, 245, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 92, 142, 212, 245, 9, 17, 65, 255, 92, 142, 212, 245, 92, 142, 212, 205, 9, 17, 65, 255, 92, 142, 212, 245, 92, 142, 212, 123, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 92, 142, 212, 123, 92, 142, 212, 245, 9, 17, 65, 255, 92, 142, 212, 205, 92, 142, 212, 123, 92, 142, 212, 245, 9, 17, 65, 255, 92, 142, 212, 205, 92, 142, 212, 123, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 92, 142, 212, 123, 92, 142, 212, 205, 9, 17, 65, 255, 92, 142, 212, 245, 92, 142, 212, 123, 0, 0, 0, 0, 92, 142, 212, 245, 9, 17, 65, 255, 92, 142, 212, 245, 92, 142, 212, 205, 92, 142, 212, 123, 0, 0, 0, 0, 0, 0, 0, 0, 92, 142, 212, 123, 92, 142, 212, 205, 92, 142, 212, 245, 9, 17, 65, 255, 92, 142, 212, 245, 0, 0, 0, 0, 0, 0, 0, 0, 92, 142, 212, 123, 92, 142, 212, 205, 9, 17, 65, 255, 9, 17, 65, 255, 92, 142, 212, 245, 92, 142, 212, 245, 92, 142, 212, 245, 92, 142, 212, 245, 9, 17, 65, 255, 9, 17, 65, 255, 92, 142, 212, 205, 92, 142, 212, 123, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 92, 142, 212, 123, 92, 142, 212, 245, 92, 142, 212, 245, 9, 17, 65, 255, 9, 17, 65, 255, 9, 17, 65, 255, 9, 17, 65, 255, 92, 142, 212, 245, 92, 142, 212, 245, 92, 142, 212, 123, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 92, 142, 212, 123, 92, 142, 212, 205, 92, 142, 212, 245, 92, 142, 212, 245, 92, 142, 212, 205, 92, 142, 212, 123, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 "format": "RGBA8",
@@ -84,7 +79,7 @@ data = {
 }
 
 [sub_resource type="ImageTexture" id="ImageTexture_uj57v"]
-image = SubResource("Image_5a0no")
+image = SubResource("Image_3doop")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_u05gf"]
 atlas = ExtResource("26_wcv54")
@@ -127,129 +122,102 @@ animations = [{
 "speed": 24.0
 }]
 
-[node name="HUD" type="Node2D"]
+[node name="HUD" type="Control" unique_id=634050438]
 process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -640.0
+offset_bottom = -480.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_7lq3g")
 
-[node name="ScreenBorder" type="Sprite2D" parent="."]
+[node name="Health_bar" type="Node2D" parent="." unique_id=1340481639]
+
+[node name="HealthBarBackground" type="Sprite2D" parent="Health_bar" unique_id=1289834042]
+position = Vector2(69, 435.00003)
+scale = Vector2(3, 3)
+texture = ExtResource("2_w21a7")
+
+[node name="Health_Bar_Border" type="TextureProgressBar" parent="Health_bar" unique_id=1323737731]
+offset_left = 84.0
+offset_top = 429.00003
+offset_right = 253.0
+offset_bottom = 444.00003
+scale = Vector2(3, 3)
+max_value = 169.0
+value = 169.0
+texture_progress = ExtResource("5_5a0no")
+
+[node name="Health_Bar" type="TextureProgressBar" parent="Health_bar" unique_id=1824137617]
+offset_left = 141.0
+offset_top = 441.0
+offset_right = 291.0
+offset_bottom = 447.0
+scale = Vector2(3, 3)
+max_value = 300.0
+step = 0.01
+value = 300.0
+nine_patch_stretch = true
+stretch_margin_right = 1
+texture_progress = ExtResource("3_qlp7m")
+
+[node name="HealthBarEnd" type="Sprite2D" parent="Health_bar" unique_id=943189021]
+position = Vector2(591, 432)
+scale = Vector2(3, 3)
+texture = ExtResource("4_5nnh0")
+centered = false
+
+[node name="Hp" type="Label" parent="Health_bar" unique_id=1813624536]
+offset_left = 84.0
+offset_top = 399.00003
+offset_right = 129.33334
+offset_bottom = 408.00003
+scale = Vector2(3, 3)
+theme_override_fonts/font = ExtResource("5_80pih")
+text = "300/300"
+label_settings = ExtResource("6_aoah1")
+
+[node name="Bar_End" type="ColorRect" parent="Health_bar" unique_id=108853852]
+offset_left = 588.0
+offset_top = 441.0
+offset_right = 591.0
+offset_bottom = 459.0
+pivot_offset = Vector2(3, 0)
+color = Color(0.5294118, 0.019607844, 0.18039216, 1)
+
+[node name="StaminaBackground" type="Sprite2D" parent="Health_bar" unique_id=558505221]
+position = Vector2(45, 436.00003)
+scale = Vector2(3, 3)
+texture = ExtResource("8_u05gf")
+
+[node name="Stamina" type="TextureProgressBar" parent="Health_bar" unique_id=1171641008]
+offset_left = 18.0
+offset_top = 408.00003
+offset_right = 36.0
+offset_bottom = 426.00003
+scale = Vector2(3, 3)
+value = 100.0
+fill_mode = 5
+texture_progress = ExtResource("9_sms7y")
+
+[node name="ScreenBorder" type="Sprite2D" parent="." unique_id=1390815256]
 modulate = Color(1, 1, 1, 0.815686)
 z_index = -1
 texture = ExtResource("2_uj57v")
 centered = false
 
-[node name="RedBorder" type="Sprite2D" parent="."]
+[node name="RedBorder" type="Sprite2D" parent="." unique_id=443676905]
+visible = false
 z_index = -1
 position = Vector2(320, 240)
 texture = ExtResource("3_uj57v")
 
-[node name="Health_bar" type="Node2D" parent="."]
-
-[node name="Health_Bar_Background" type="TextureProgressBar" parent="Health_bar"]
-offset_left = 3.0
-offset_top = 393.0
-offset_right = 166.0
-offset_bottom = 421.0
-scale = Vector2(3, 3)
-max_value = 163.0
-value = 163.0
-texture_progress = ExtResource("2_w21a7")
-
-[node name="Health_Bar" type="TextureProgressBar" parent="Health_bar"]
-offset_left = 117.0
-offset_top = 447.0
-offset_right = 242.0
-offset_bottom = 452.0
-scale = Vector2(3, 3)
-max_value = 125.0
-step = 0.01
-value = 125.0
-nine_patch_stretch = true
-stretch_margin_right = 1
-texture_progress = ExtResource("3_qlp7m")
-
-[node name="HealthBarEnd" type="Sprite2D" parent="Health_bar"]
-position = Vector2(496.5, 456)
-scale = Vector2(3, 3)
-texture = ExtResource("4_5nnh0")
-
-[node name="Hp" type="Label" parent="Health_bar"]
-offset_left = 505.0
-offset_top = 441.0
-offset_right = 543.0
-offset_bottom = 450.0
-scale = Vector2(3, 3)
-theme_override_fonts/font = ExtResource("5_80pih")
-text = "125/125"
-label_settings = ExtResource("6_aoah1")
-
-[node name="BodyPartHead" type="Sprite2D" parent="Health_bar"]
-position = Vector2(40.5, 409.5)
-scale = Vector2(3, 3)
-texture = ExtResource("6_irqgh")
-
-[node name="BodyPartTorso" type="Sprite2D" parent="Health_bar"]
-position = Vector2(40.5, 435)
-scale = Vector2(3, 3)
-texture = ExtResource("7_aoah1")
-
-[node name="BodyPartLegs" type="Sprite2D" parent="Health_bar"]
-position = Vector2(40.5, 459)
-scale = Vector2(3, 3)
-texture = ExtResource("8_egel0")
-
-[node name="BodyPartArms" type="Sprite2D" parent="Health_bar"]
-position = Vector2(40.5, 429)
-scale = Vector2(3, 3)
-texture = ExtResource("9_wouu6")
-
-[node name="OxygenTank" type="Sprite2D" parent="Health_bar"]
-position = Vector2(141, 414)
-scale = Vector2(3, 3)
-texture = ExtResource("17_wouu6")
-
-[node name="Oxygen_Bar" type="TextureProgressBar" parent="Health_bar"]
-offset_left = 90.0
-offset_top = 405.0
-offset_right = 124.0
-offset_bottom = 410.0
-scale = Vector2(3, 3)
-step = 0.05
-value = 100.0
-nine_patch_stretch = true
-texture_progress = ExtResource("18_80pih")
-
-[node name="Oxygen" type="Label" parent="Health_bar"]
-offset_left = 204.0
-offset_top = 399.0
-offset_right = 230.0
-offset_bottom = 408.0
-scale = Vector2(3, 3)
-theme_override_fonts/font = ExtResource("13_hlxis")
-text = "100%"
-label_settings = ExtResource("6_aoah1")
-
-[node name="Bar_End" type="ColorRect" parent="Health_bar"]
-offset_left = 489.0
-offset_top = 447.0
-offset_right = 492.0
-offset_bottom = 462.0
-pivot_offset = Vector2(3, 0)
-color = Color(0.403922, 0.00392157, 0.176471, 1)
-
-[node name="Bar_End_O" type="ColorRect" parent="Health_bar"]
-offset_left = 189.0
-offset_top = 405.0
-offset_right = 192.0
-offset_bottom = 420.0
-pivot_offset = Vector2(3, 0)
-color = Color(0.109804, 0.364706, 0.639216, 1)
-
-[node name="Heart" type="Sprite2D" parent="Health_bar"]
-position = Vector2(103.5, 453)
-scale = Vector2(3, 3)
-texture = ExtResource("15_5gnqf")
-
-[node name="Throw_Bar" type="ProgressBar" parent="."]
+[node name="Throw_Bar" type="ProgressBar" parent="." unique_id=95584946]
+visible = false
+layout_mode = 0
 offset_left = 327.0
 offset_top = 227.0
 offset_right = 338.0
@@ -259,20 +227,21 @@ value = 2.0
 fill_mode = 3
 show_percentage = false
 
-[node name="Item_Description" type="Node2D" parent="."]
+[node name="Item_Description" type="Node2D" parent="." unique_id=1702810968]
+visible = false
 position = Vector2(321, 241)
 
-[node name="ItemBackground" type="Sprite2D" parent="Item_Description"]
+[node name="ItemBackground" type="Sprite2D" parent="Item_Description" unique_id=1913093827]
 position = Vector2(-293, -213)
 scale = Vector2(2, 2)
 texture = ExtResource("3_lwfba")
 
-[node name="TextEnder" type="Sprite2D" parent="Item_Description"]
+[node name="TextEnder" type="Sprite2D" parent="Item_Description" unique_id=1516022012]
 position = Vector2(-158, -213)
 scale = Vector2(2, 2)
 texture = ExtResource("3_wd7fq")
 
-[node name="Line" type="ColorRect" parent="Item_Description"]
+[node name="Line" type="ColorRect" parent="Item_Description" unique_id=119340106]
 offset_left = -268.0
 offset_top = -220.0
 offset_right = -217.0
@@ -280,7 +249,7 @@ offset_bottom = -213.0
 scale = Vector2(2, 2)
 color = Color(0, 0, 0, 0.286275)
 
-[node name="Weight" type="Label" parent="Item_Description"]
+[node name="Weight" type="Label" parent="Item_Description" unique_id=988380238]
 offset_left = -265.0
 offset_top = -209.0
 offset_right = -10.0
@@ -288,7 +257,7 @@ offset_bottom = -189.0
 text = "(0.5 Kg)"
 label_settings = ExtResource("6_aoah1")
 
-[node name="Holding" type="Label" parent="Item_Description"]
+[node name="Holding" type="Label" parent="Item_Description" unique_id=1812514176]
 offset_left = -265.0
 offset_top = -235.0
 offset_right = -264.0
@@ -297,83 +266,86 @@ scale = Vector2(1.5, 1.5)
 text = "Nothing"
 label_settings = ExtResource("6_aoah1")
 
-[node name="Object_Icons" type="AnimatedSprite2D" parent="Item_Description"]
+[node name="Object_Icons" type="AnimatedSprite2D" parent="Item_Description" unique_id=619348860]
 position = Vector2(-293, -213)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_w21a7")
 animation = &"2"
 autoplay = "error"
 
-[node name="Prompts" type="Sprite2D" parent="Item_Description"]
+[node name="Prompts" type="Sprite2D" parent="Item_Description" unique_id=609931641]
 
-[node name="PickUp" type="Sprite2D" parent="Item_Description/Prompts"]
+[node name="PickUp" type="Sprite2D" parent="Item_Description/Prompts" unique_id=138253525]
 position = Vector2(-318, -154)
 scale = Vector2(2, 2)
 texture = ExtResource("18_g85nf")
 centered = false
 
-[node name="InventoryIcon" type="Sprite2D" parent="Item_Description/Prompts"]
+[node name="InventoryIcon" type="Sprite2D" parent="Item_Description/Prompts" unique_id=1839442296]
 position = Vector2(-318, -186)
 scale = Vector2(2, 2)
 texture = ExtResource("19_juip4")
 centered = false
 
-[node name="Drop" type="Sprite2D" parent="Item_Description/Prompts"]
+[node name="Drop" type="Sprite2D" parent="Item_Description/Prompts" unique_id=1925931494]
 position = Vector2(-318, -154)
 scale = Vector2(2, 2)
 texture = ExtResource("20_daeb3")
 centered = false
 
-[node name="Open" type="Sprite2D" parent="Item_Description/Prompts"]
+[node name="Open" type="Sprite2D" parent="Item_Description/Prompts" unique_id=1139672933]
 position = Vector2(-318, -90)
 scale = Vector2(2, 2)
 texture = ExtResource("22_daeb3")
 centered = false
 
-[node name="Eat" type="Sprite2D" parent="Item_Description/Prompts"]
+[node name="Eat" type="Sprite2D" parent="Item_Description/Prompts" unique_id=2013617824]
 position = Vector2(-318, -90)
 scale = Vector2(2, 2)
 texture = ExtResource("23_7wd8o")
 centered = false
 
-[node name="Heal" type="Sprite2D" parent="Item_Description/Prompts"]
+[node name="Heal" type="Sprite2D" parent="Item_Description/Prompts" unique_id=902005418]
 position = Vector2(-318, -90)
 scale = Vector2(2, 2)
 texture = ExtResource("24_7wd8o")
 centered = false
 
-[node name="Throw" type="Sprite2D" parent="Item_Description/Prompts"]
+[node name="Throw" type="Sprite2D" parent="Item_Description/Prompts" unique_id=612951357]
 position = Vector2(-318, -122)
 scale = Vector2(2, 2)
 texture = SubResource("ImageTexture_5gnqf")
 centered = false
 
-[node name="Aim" type="Sprite2D" parent="Item_Description/Prompts"]
+[node name="Aim" type="Sprite2D" parent="Item_Description/Prompts" unique_id=1185725117]
 position = Vector2(-318, -154)
 scale = Vector2(2, 2)
 texture = ExtResource("25_3doop")
 centered = false
 
-[node name="Shoot" type="Sprite2D" parent="Item_Description/Prompts"]
+[node name="Shoot" type="Sprite2D" parent="Item_Description/Prompts" unique_id=28876375]
 position = Vector2(-318, -122)
 scale = Vector2(2, 2)
 texture = ExtResource("26_5gnqf")
 centered = false
 
-[node name="Toggle" type="Sprite2D" parent="Item_Description/Prompts"]
+[node name="Toggle" type="Sprite2D" parent="Item_Description/Prompts" unique_id=1452911988]
 position = Vector2(-318, -90)
 scale = Vector2(2, 2)
 texture = ExtResource("28_5gnqf")
 centered = false
 
-[node name="Reticule" type="Sprite2D" parent="."]
+[node name="ReticuleGun" type="Sprite2D" parent="." unique_id=2132330869]
+visible = false
+position = Vector2(320, 240)
+texture = SubResource("ImageTexture_uj57v")
+
+[node name="Reticule" type="Sprite2D" parent="." unique_id=1275498091]
 position = Vector2(320, 240)
 texture = ExtResource("1_8leah")
 
-[node name="ReticuleGun" type="Sprite2D" parent="Reticule"]
-texture = SubResource("ImageTexture_uj57v")
-
-[node name="FPS" type="Label" parent="."]
+[node name="FPS" type="Label" parent="." unique_id=1823430593]
+layout_mode = 0
 offset_left = 552.0
 offset_top = 27.0
 offset_right = 633.0
@@ -382,7 +354,8 @@ text = "FPS 60"
 label_settings = ExtResource("6_aoah1")
 horizontal_alignment = 2
 
-[node name="Timer" type="Label" parent="."]
+[node name="Timer" type="Label" parent="." unique_id=1072247257]
+layout_mode = 0
 offset_left = 542.0
 offset_top = 2.0
 offset_right = 602.0
@@ -392,10 +365,11 @@ text = "00:00"
 label_settings = ExtResource("6_aoah1")
 horizontal_alignment = 2
 
-[node name="Ammo" type="Node2D" parent="."]
+[node name="Ammo" type="Node2D" parent="." unique_id=645081040]
+visible = false
 position = Vector2(75.035, 372)
 
-[node name="Gun_HUD" type="AnimatedSprite2D" parent="Ammo"]
+[node name="Gun_HUD" type="AnimatedSprite2D" parent="Ammo" unique_id=399321373]
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_5gnqf")
 animation = &"9_Fire"
@@ -403,7 +377,7 @@ autoplay = "9"
 frame = 2
 frame_progress = 1.0
 
-[node name="Ammo" type="Label" parent="Ammo"]
+[node name="Ammo" type="Label" parent="Ammo" unique_id=566375471]
 offset_left = -21.035
 offset_top = -15.0
 offset_right = -5.035
@@ -413,7 +387,7 @@ theme_override_fonts/font = ExtResource("27_u05gf")
 text = "14"
 horizontal_alignment = 2
 
-[node name="Ammo2" type="Label" parent="Ammo"]
+[node name="Ammo2" type="Label" parent="Ammo" unique_id=2083287229]
 offset_left = 31.965
 offset_top = -7.0
 offset_right = 49.965
@@ -422,6 +396,7 @@ scale = Vector2(2, 2)
 theme_override_fonts/font = ExtResource("27_u05gf")
 text = "250"
 
-[node name="Inventory" parent="." instance=ExtResource("20_3kgmp")]
+[node name="Inventory" parent="." unique_id=1944062495 instance=ExtResource("20_3kgmp")]
 auto_translate_mode = 2
 visible = false
+layout_mode = 1

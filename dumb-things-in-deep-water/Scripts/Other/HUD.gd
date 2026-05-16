@@ -1,21 +1,26 @@
-extends Node2D
+extends Control
 
 @onready var reticle :Sprite2D = $Reticule
-@onready var reticle_gun :Sprite2D = $Reticule/ReticuleGun
+@onready var reticle_gun :Sprite2D = $ReticuleGun
 @onready var throw_bar :ProgressBar = $Throw_Bar
 @onready var player :CharacterBody3D = $"../SubViewportContainer/SubViewport/Player"
 
+var change_types = Playerstats.Health_Changes
 var level_time :int = 0
 var formatted_time :Vector2i = Vector2i(0,0)
 var alerts :Array[Node] = []
 
 var red_fade :float = 0
 
+var numbers :Array[Label] = []
+var number_velocity :Array[Vector2] = []
+
 func _ready() -> void:
 	Playerstats.player = player
 	$Health_bar/Health_Bar.value = round_to_1_DP(Playerstats.health)
-	$Health_bar/HealthBarEnd.position.x = (3 * Playerstats.max_health) + 121.5
-	$Health_bar/Bar_End.position.x = 114 + 3 * round_to_1_DP(Playerstats.health)
+	$Health_bar/HealthBarEnd.position.x = ((3.0/2.0) * Playerstats.max_health) + 141
+	$Health_bar/Health_Bar_Border.value = (Playerstats.max_health/2) + 19
+	$Health_bar/Bar_End.position.x = 138 + (3.0/2.0) * round_to_1_DP(Playerstats.health)
 
 func _process(delta: float) -> void:
 	reticle.modulate.g = 1
@@ -29,8 +34,7 @@ func _process(delta: float) -> void:
 		throw_bar.value = player.throw_power
 	else:
 		throw_bar.visible = false
-		
-	$Health_bar/Oxygen_Bar.value = Playerstats.oxygen
+	
 	
 	if Playerstats.object_held == null:
 		$Item_Description/Holding.text = "Nothing"
@@ -60,16 +64,10 @@ func _process(delta: float) -> void:
 		
 	$Health_bar/Hp.text = str(int(ceil(Playerstats.health))) + "/" + str(int(Playerstats.max_health))
 	
-	$Health_bar/Health_Bar_Background.value = Playerstats.max_health + 38
-	$Health_bar/HealthBarEnd.position.x = (3 * Playerstats.max_health) + 121.5
-	$Health_bar/Hp.position.x = (Playerstats.max_health * 3) + 130
-	$Health_bar/Oxygen.text = str(int(ceil(Playerstats.oxygen))) + "%"
-	$Health_bar/Bar_End_O.position.x = 87 + round_to_1_DP((102 * Playerstats.oxygen) / 100)
-	
-	if Playerstats.oxygen < 3:
-		$Health_bar/Bar_End_O.visible = false
-	else:
-		$Health_bar/Bar_End_O.visible = true
+	@warning_ignore("integer_division")
+	$Health_bar/Health_Bar_Border.value = (Playerstats.max_health/2) + 19
+	@warning_ignore("integer_division")
+	$Health_bar/HealthBarEnd.position.x = ((3.0/2.0) * Playerstats.max_health) + 141
 	
 	set_reticle_size()
 	set_red_border_opacity(delta)
@@ -80,6 +78,24 @@ func _process(delta: float) -> void:
 				reticle.modulate.g = 0
 				reticle.modulate.b = 0
 	
+	for i in range(numbers.size()):
+		if numbers.size() == number_velocity.size():
+			numbers[i].position += number_velocity[i] * (delta*60)
+			number_velocity[i].y += 0.2 * (delta*60)
+		else:
+			for item in numbers:
+				if is_instance_valid(item):
+					numbers.erase(item)
+					item.queue_free()
+			number_velocity.clear()
+			
+	for i in range(numbers.size()):
+		if numbers[i].position.y > 480:
+			numbers[i].queue_free()
+			numbers.remove_at(i)
+			number_velocity.remove_at(i)
+			break
+	
 	for text in alerts:
 		text.position.y = 82 + (25*alerts.find(text))
 		
@@ -88,6 +104,9 @@ func _process(delta: float) -> void:
 		
 	set_prompts()
 
+##UNUSED FUNCTION WILL CRASH WHEN RUN,
+##[br]Orginally used for player body parts GUI, but they do not exist anymore
+## @deprecated: For changes in health, use health_bar_animation() instead
 func shake_part(body_part :String) -> void:
 	var part :Sprite2D
 	var Body_part_hp :float
@@ -117,32 +136,34 @@ func shake_part(body_part :String) -> void:
 	var tween3 :Tween = get_tree().create_tween()
 	tween3.tween_property(part, "scale", Vector2(3,3) , 0.025).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 
+##Runs when the player's health bar is updated,
+##[br]Requires the health before the change as a parameter
 func health_bar_animation(before :float) -> void:
 	var tween :Tween = get_tree().create_tween()
 	var tween2 :Tween = get_tree().create_tween()
 	var texture :ColorRect = ColorRect.new()
 	tween.tween_property($Health_bar/Health_Bar, "value", round_to_1_DP(Playerstats.health), abs($Health_bar/Health_Bar.value-Playerstats.health)/200).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property($Health_bar/Bar_End, "position", Vector2(114 + 3 * round_to_1_DP(Playerstats.health),447), abs($Health_bar/Health_Bar.value-Playerstats.health)/200).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	texture.position = Vector2(117,447)
+	tween.parallel().tween_property($Health_bar/Bar_End, "position", Vector2(138 + (3.0/2.0) * round_to_1_DP(Playerstats.health),441), abs($Health_bar/Health_Bar.value-Playerstats.health)/200).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	texture.position = Vector2(141,441)
 	texture.color = Color(1,1,1,1)
-	texture.size = Vector2(floor(3*before),15)
+	texture.size = Vector2(ceil(3.0/2.0*before),18)
 	texture.z_index = -1
 	$Health_bar.add_child(texture)
 	tween2.tween_property(texture, "modulate", Color(1,1,1,0), 0.75).set_trans(Tween.TRANS_LINEAR)
 	await tween.finished
 	$Health_bar/Health_Bar.value = round_to_1_DP(Playerstats.health)
-	$Health_bar/Bar_End.position.x = 114 + 3 * round_to_1_DP(Playerstats.health)
+	$Health_bar/Bar_End.position.x = 138 + (3.0/2.0) * round_to_1_DP(Playerstats.health)
 	await tween2.finished
 	texture.queue_free()
 	
+##Instantly update the player's health bar
 func update_health_bar() -> void:
 	$Health_bar/Health_Bar.value = round_to_1_DP(Playerstats.health)
-	$Health_bar/BodyPartHead.modulate = Color.from_hsv(0,(Playerstats.max_health - Playerstats.head_hp)/Playerstats.max_health,1,1)
-	$Health_bar/BodyPartTorso.modulate = Color.from_hsv(0,(Playerstats.max_health - Playerstats.torso_hp)/Playerstats.max_health,1,1)
-	$Health_bar/BodyPartLegs.modulate = Color.from_hsv(0,(Playerstats.max_health - Playerstats.legs_hp)/Playerstats.max_health,1,1)
-	$Health_bar/BodyPartArms.modulate = Color.from_hsv(0,(Playerstats.max_health - Playerstats.arms_hp)/Playerstats.max_health,1,1)
-	$Health_bar/Bar_End.position.x = 114 + 3 * round_to_1_DP(Playerstats.health)
+	$Health_bar/Bar_End.position.x = 138 + (3.0/2.0) * round_to_1_DP(Playerstats.health)
+	print($Health_bar/Bar_End.position.x)
 	
+##Formats the time in the level_time variable into hours and seconds
+##[br]then displays it in the GUI
 func format_time() -> void:
 	level_time = clamp(level_time + 1, 0, 3599)
 	@warning_ignore("integer_division")
@@ -163,7 +184,9 @@ func format_time() -> void:
 		
 	$Timer.text = string2 + ":" + string1
 
-func alert(text: String) -> void:
+##Creates an alert on the GUI, requires a string has a parameter
+##Supports up to 9 max alerts before the oldest one gets deleted
+func alert(text :String = "Alert with no message", time :float = 1) -> void:
 	if alerts.size() > 9:
 		alerts[0].queue_free()
 		alerts.pop_front()
@@ -178,14 +201,14 @@ func alert(text: String) -> void:
 	add_child(text_box)
 	var tween1 :Tween = get_tree().create_tween()
 	tween1.tween_property(text_box,"position",Vector2(-6,57+(25*alerts.size())),0.15).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	await get_tree().create_timer(1).timeout
+	await get_tree().create_timer(time).timeout
 	if is_instance_valid(text_box):
 		var tween2 :Tween = get_tree().create_tween()
 		tween2.tween_property(text_box,"modulate",Color(1,1,1,0),2).set_trans(Tween.TRANS_LINEAR)
 		await tween2.finished
-	if is_instance_valid(text_box):
-		text_box.queue_free()
-		alerts.erase(text_box)
+		if is_instance_valid(text_box):
+			text_box.queue_free()
+			alerts.erase(text_box)
 
 func set_prompts() -> void:
 	$Item_Description/Prompts/InventoryIcon.visible = false
@@ -272,3 +295,24 @@ func set_red_border_opacity(delta :float) -> void:
 		
 func set_red(num :float) -> void:
 	red_fade += num
+
+func override_reticule(Screen_position :Vector2) -> void:
+	reticle_gun.position = Screen_position
+
+func create_number(type :String = "Damage", amt :int = 0):
+	var font
+	if type == "Damage":
+		font = load("res://Assets/Sprites/Red_Numbers.png")
+	if type == "Heal":
+		font = load("res://Assets/Sprites/Green_Numbers.png")
+	var new_number :Label = Label.new()
+	var label_setting :LabelSettings = LabelSettings.new()
+	label_setting.font = font
+	new_number.label_settings = label_setting
+	new_number.scale = Vector2(2,2)
+	new_number.text = str(amt)
+	new_number.position = Vector2($Health_bar/Bar_End.position.x-5, 430)
+	numbers.append(new_number)
+	number_velocity.append(Vector2(randf_range(-2,2),-5))
+	$Health_bar.add_child(new_number)
+	

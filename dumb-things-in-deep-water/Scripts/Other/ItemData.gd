@@ -5,18 +5,28 @@ extends Node
 #HEAL: Heals the player a specified amount
 #DELETE: Deletes itself after use
 #AIM: Right click puts the player into aiming stance instead of dropping the object
-#CAN'T_DROP_THROW: Disables the ability to throw or drop the object
+#CANT_DROP_THROW: Disables the ability to throw or drop the object
 #SHOOT: Creates a specified bullet when the player uses it while in aim stance. 
 #GUN_TYPE: Just specifies what type of gun the player has
 #TV: Plays and projects a video file onto a mesh within the model
+#ATTRIBUTE_UPDATE: Toggles the attribute paramter after all the other properties have played out
 #SPEAKER: Plays a audio file in the 3d environment
 #PAINTING: Prop has a raycast to align to the normal of a adjacent wall, then freezes.
-enum properties {ID_UPDATE,HEAL,DELETE,AIM,CANT_DROP_THROW,SHOOT,PISTOL,SHOTGUN,UZI,REVOLVER,TV,SPEAKER,PAINTING}
+enum properties {ID_UPDATE,HEAL,DELETE,AIM,CANT_DROP_THROW,SHOOT,PISTOL,SHOTGUN,UZI,REVOLVER,TV,ATTRIBUTE_UPDATE,SPEAKER,PAINTING}
 enum prompts {OPEN,HEAL,AIM,SHOOT,TOGGLE,EAT}
 enum materials {DEFAULT,WOOD,GLASS,PLASTIC,METAL}
 
+#the text display system (tooltip edition) in the game. Has 4 different types/commands. 
+#Text is to be written as an array with the [text_type,Color,String of text,Parameter1,Parameter2...]
+#Commands are to be written as [text_type,parameter1,parameter2...]
+#STANDARD: instantly displays the text in the colour described.
+#TYPE_OUT: Writes out the text by typing it out character by character. parameter one is the delay, parameter two is the amount of characters it should instantly type out, can be left out.
+#TIMER: Delays for a set amount of time, as set by parameter one.
+#RESET: Clears ALL text.
+enum text_type {STANDARD,TYPE_OUT,TIMER,RESET}
+
 #A dictionary used to store all the audio paths used depending on an object's material. Properly could of just directly
-#Add this into the item data dictionary for each object but oh well, at least this is more readable and easier to understand.
+#Added this into the item data dictionary for each object but oh well, at least this is more readable and easier to understand.
 const Audio_bank :Dictionary = {
 	materials.DEFAULT: ["res://Assets/Videos_and_Audio/Default_hit_1.mp3"],
 	materials.METAL: ["res://Assets/Videos_and_Audio/Metal_hit_1.mp3"],
@@ -36,7 +46,7 @@ const itemdata :Dictionary = {
 		"Properties" = [],
 		"Prompts" = [],
 		"Material" = materials.DEFAULT,
-		"Tooltip" = "You Should NOT have this in\nyour inventory."
+		"Tooltip" = [[text_type.STANDARD,Color(1.0, 0.26, 0.26, 1.0),"You Should NOT have this in\nyour inventory."]],
 	},
 	"1": {
 		"Name" = "Placeholder",
@@ -48,7 +58,10 @@ const itemdata :Dictionary = {
 		"Properties" = [],
 		"Prompts" = [],
 		"Material" = materials.DEFAULT,
-		"Tooltip" = "A basic blue cube, has a mass of\nexactly 1 kg to the atomic level."
+		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"A basic blue cube, has a mass of\nexactly 1 kg to the atomic level."]
+		,[text_type.TIMER,1],[text_type.TYPE_OUT,Color(1.0, 0.26, 0.26, 1.0),"\n\nOr is it",0.05],[text_type.TYPE_OUT,Color(1.0, 0.26, 0.26, 1.0),"\n\n      . . .",0.25,8],
+		[text_type.TIMER,5],[text_type.RESET],[text_type.STANDARD,Color(1,1,1),"Nah... it's nothing special."]],
+		"Select_sound" = [],
 	},
 	"2": {
 		"Name" = "White Cyclinder",
@@ -60,7 +73,7 @@ const itemdata :Dictionary = {
 		"Properties" = [], 
 		"Prompts" = [],
 		"Material" = materials.DEFAULT,
-		"Tooltip" = "Unbeknownst to the naked eye,\nthis is nothing more than a simple\nwhite cyclinder."
+		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"Unbeknownst to the naked eye,\nthis is nothing more than a simple\nwhite cyclinder."]],
 	},
 	"3": {
 		"Name" = "Can - Closed",
@@ -72,7 +85,7 @@ const itemdata :Dictionary = {
 		"Properties" = [properties.ID_UPDATE],
 		"Prompts" = [prompts.OPEN],
 		"Material" = materials.METAL,
-		"Tooltip" = "A basic can, press left click\nwhile holding to open."
+		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"A basic can, press left click\nwhile holding to open."]],
 	},
 	"4": {
 		"Name" = "Can - Opened",
@@ -86,7 +99,7 @@ const itemdata :Dictionary = {
 		"Properties" = [properties.HEAL,properties.ID_UPDATE],
 		"Prompts" = [prompts.EAT],
 		"Material" = materials.METAL,
-		"Tooltip" = "Press left click while holding\nto consume to heal 5 HP."
+		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"Press left click while holding\nto consume to heal 5 HP."]],
 	},
 	"5": {
 		"Name" = "Can - Half Full",
@@ -100,7 +113,7 @@ const itemdata :Dictionary = {
 		"Properties" = [properties.HEAL,properties.ID_UPDATE],
 		"Prompts" = [prompts.EAT],
 		"Material" = materials.METAL,
-		"Tooltip" = "Half full (or empty for you\npessimists), press left click to\nconsume to heal 5 HP."
+		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"Half full (or empty for you\npessimists), press left click to\nconsume to heal 5 HP."]],
 	},
 	"6": {
 		"Name" = "Can - Empty",
@@ -113,7 +126,7 @@ const itemdata :Dictionary = {
 		"Properties" = [],
 		"Prompts" = [],
 		"Material" = materials.METAL,
-		"Tooltip" = "It's empty..."
+		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"It's empty..."]],
 	},
 	"7": {
 		"Name" = "Healing Item",
@@ -126,7 +139,7 @@ const itemdata :Dictionary = {
 		"Properties" = [properties.HEAL,properties.DELETE],
 		"Prompts" = [prompts.HEAL],
 		"Material" = materials.DEFAULT,
-		"Tooltip" = "A basic healing item, interact\nwith it while holding it to heal\n10 HP"
+		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"A basic healing item, interact\nwith it while holding it to heal\n10 HP"]],
 	},
 	"8":{
 		"Name" = "TV - Barbeque Chicken Alert",
@@ -139,7 +152,7 @@ const itemdata :Dictionary = {
 		"Properties" = [properties.TV],
 		"Prompts" = [prompts.TOGGLE],
 		"Material" = materials.DEFAULT,
-		"Tooltip" = 'Lyrics: "Barbeque chicken\nalert. Barbeque chicken alert"'
+		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),'Lyrics: "Barbeque chicken\nalert. Barbeque chicken alert"']],
 	},
 	"9": {
 		"Name" = "Test Gun",
@@ -152,10 +165,10 @@ const itemdata :Dictionary = {
 		"Recoil" = 2,
 		"Properties" = [properties.AIM,properties.SHOOT,properties.CANT_DROP_THROW,properties.PISTOL],
 		"Bullet" = "res://Scenes/Misc/pistol_bullet.tscn",
-		"Range" = 75,
+		"Range" = 25,
 		"Prompts" = [prompts.AIM,prompts.SHOOT],
 		"Material" = materials.DEFAULT,
-		"Tooltip" = "Bang bang mother fluffa, this\nhandy dandy handgun can deal\ndecent damage... As long as it is\nin the hands of a worthy user."
+		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"Bang bang mother fluffa, this\nhandy dandy handgun can deal\ndecent damage... As long as it is\nin the hands of a worthy user."]],
 	},
 	"10":{
 		"Name" = "Speaker - Carry On",
@@ -168,7 +181,7 @@ const itemdata :Dictionary = {
 		"Properties" = [properties.SPEAKER],
 		"Prompts" = [prompts.TOGGLE],
 		"Material" = materials.DEFAULT,
-		"Tooltip" = "I love this song :)"
+		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"I love this song :)"]],
 	},
 	"11":{
 		"Name" = "Painting - My Love",
@@ -180,7 +193,7 @@ const itemdata :Dictionary = {
 		"Properties" = [properties.PAINTING],
 		"Prompts" = [],
 		"Material" = materials.DEFAULT,
-		"Tooltip" = "Joesph McFarland, c. 1767,\nArtist Unknown"
+		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"Joesph McFarland, c. 1767,\nArtist Unknown"]],
 	},
 	"12":{
 		"Name" = "TV - Intro",
@@ -189,11 +202,11 @@ const itemdata :Dictionary = {
 		"Outline" = "res://Assets/Props_Models_And_Collisions/8_TV_Outline.tres",
 		"Mass" = 12.6,
 		"Breakable" = false,
-		"Video" = "res://Assets/Videos_and_Audio/0001-0200.ogv",
+		"Video" = "res://Assets/Videos_and_Audio/videoplayback.ogv",
 		"Properties" = [properties.TV],
 		"Prompts" = [prompts.TOGGLE],
 		"Material" = materials.DEFAULT,
-		"Tooltip" = "Game by Bourbon and Coke,\nand roobuc, better known\nby his stage name Passionfruit\nman.",
+		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"Game by Bourbon and Coke,\nand roobuc, better known\nby his stage name Passionfruit\nman."]],
 	},
 	"14":{
 		"Name" = "Speaker - Radio",
@@ -206,7 +219,19 @@ const itemdata :Dictionary = {
 		"Properties" = [properties.SPEAKER],
 		"Prompts" = [prompts.TOGGLE],
 		"Material" = materials.DEFAULT,
-		"Tooltip" = "Simply Beautiful."
+		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"Simply Beautiful."]],
+	},
+	"19":{
+		"Name" = "dunetoris",
+		"Path" = "res://Scenes/Props/dunetoris(19).tscn",
+		"Model" = "res://Assets/Props_Models_And_Collisions/19_dunetoris.tres",
+		"Outline" = "res://Assets/Props_Models_And_Collisions/19_dunetoris_outline.tres",
+		"Mass" = 23.6,
+		"Breakable" = false,
+		"Properties" = [],
+		"Prompts" = [prompts.TOGGLE],
+		"Material" = materials.DEFAULT,
+		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"Put me down!"]],
 	},
 	"20": {
 		"Name" = "The Package",
@@ -218,6 +243,6 @@ const itemdata :Dictionary = {
 		"Properties" = [properties.CANT_DROP_THROW],
 		"Prompts" = [],
 		"Material" = materials.DEFAULT,
-		"Tooltip" = "The oh-so-important package.\nTake special care of this because\nyou HAVE to deliver this."
+		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"The oh-so-important package.\nTake special care of this because\nyou HAVE to deliver this."]],
 	},
 }
