@@ -11,8 +11,10 @@ extends Node3D
 @onready var timer :Timer = $Damage_Timer
 
 var object_properties :Array
+var state = ItemData.states
 
 @export var attribute :bool = false
+@export var states :Dictionary[ItemData.states,Variant] = {}
 @export var max_speed :float = 60.0
 
 var distance_to_player :float = 0.0
@@ -56,9 +58,10 @@ func _physics_process(delta: float) -> void:
 		body.can_sleep = true
 		model.visible = false
 	
+	
 	if object_properties.has(ItemData.properties.TV):
 		$VideoStreamPlayer.volume_db = -10 - distance_to_player/1.5
-		if attribute and not $VideoStreamPlayer.is_playing():
+		if states.get(false) and not $VideoStreamPlayer.is_playing():
 			$VideoStreamPlayer.play()
 			
 	if object_properties.has(ItemData.properties.SPEAKER):
@@ -131,11 +134,28 @@ func item_use():
 			set_props()
 		
 		if property == properties.HEAL:
-			var value :float = ItemData.itemdata[str(ID)]["Value"]
-			Playerstats.player.change_in_health(value,true)
+			var value :float = ItemData.itemdata[ID]["Value"]
+			ChangeInHealthManager.handle(Playerstats.player,ChangeInHealthManager.TYPES.GENERAL_HEAL,value)
+			
+		if property == properties.DELETE:
+			Playerstats.object_held = null
+			Playerstats.object_mass = 0.0
+			Playerstats.object_ID = 0
+			queue_free()
+			
+		if property == properties.SHOOT:
+			if $Shoot_Cooldown.is_stopped() and Playerstats.player.movement_state != Playerstats.player.movement_states.NORMAL:
+				attribute = false
+				$Shoot_Cooldown.start(ItemData.itemdata[ID]["Interval"])
+				var target_position = Playerstats.player.find_raycast_hit_point()
+				if not target_position is Array:
+					target_position = [Vector3.ZERO,Vector3.ZERO]
+				Playerstats.player.shoot(target_position)
+				await $Shoot_Cooldown.timeout
+				attribute = true
 				
 		if property == properties.TV:
-			$VideoStreamPlayer.stream = load(ItemData.itemdata[str(ID)]["Video"])
+			$VideoStreamPlayer.stream = load(ItemData.itemdata[ID]["Video"])
 			if attribute == false:
 				$Body/Model/Screen.visible = true
 				attribute = true
@@ -144,18 +164,19 @@ func item_use():
 				attribute = false
 		
 		if property == properties.SPEAKER:
-			$Body/Audio_Player.stream = load(ItemData.itemdata[str(ID)]["Audio"])
+			$Body/Audio_Player.stream = load(ItemData.itemdata[ID]["Audio"])
 			if attribute == false:
 				attribute = true
 				$Body/Light.light_color = Color(0.092, 0.553, 0.0)
 			else:
 				attribute = false
 				$Body/Light.light_color = Color(0.859, 0.0, 0.0)
+				
 			
 func hold() -> void:
 	if Playerstats.object_held == body:
-		Playerstats.object_properties = ItemData.itemdata[str(ID)]["Properties"]
-		Playerstats.object_prompts = ItemData.itemdata[str(ID)]["Prompts"]
+		Playerstats.object_properties = ItemData.itemdata[ID]["Properties"]
+		Playerstats.object_prompts = ItemData.itemdata[ID]["Prompts"]
 		global_position = Playerstats.player.hand.global_position
 		Playerstats.object_mass = body.mass
 		body.position = pick_up_position
@@ -205,24 +226,24 @@ func throw(power :float) -> void:
 		grabbable = true
 	
 func set_props() -> void:
-	var data :Dictionary = ItemData.itemdata[str(ID)]
-	object_properties = ItemData.itemdata[str(ID)]["Properties"]
+	var data :Dictionary = ItemData.itemdata[ID]
+	object_properties = ItemData.itemdata[ID]["Properties"]
 	body.mass = data["Mass"]
 	model.mesh = load(data["Model"])
 	outline.mesh = load(data["Outline"])
 	if data.has("Collision"):
 		collision.shape = load(data["Collision"])
 	if object_properties.has(ItemData.properties.TV):
-		$VideoStreamPlayer.stream = load(ItemData.itemdata[str(ID)]["Video"])
+		$VideoStreamPlayer.stream = load(ItemData.itemdata[ID]["Video"])
 	if object_properties.has(ItemData.properties.SPEAKER):
-		$Body/Audio_Player.stream = load(ItemData.itemdata[str(ID)]["Audio"])
+		$Body/Audio_Player.stream = load(ItemData.itemdata[ID]["Audio"])
 
 func limit_speed() -> void:
 	if body.linear_velocity.length() > max_speed:
 		body.linear_velocity = body.linear_velocity.normalized() * max_speed
 	
 func create_bullet(target_position :Array) -> void:
-	var bullet :PackedScene = load(ItemData.itemdata[str(ID)]["Bullet"])
+	var bullet :PackedScene = load(ItemData.itemdata[ID]["Bullet"])
 	var new_bullet :Node3D = bullet.instantiate()
 	$"../..".add_child(new_bullet)
 	new_bullet.global_position = $Body/Spawner.global_position
@@ -241,7 +262,7 @@ func _on_body_body_entered(object: Node) -> void:
 func play_sound(volume :float) -> void:
 	if can_play_audio:
 		can_play_audio = false
-		var material_type = ItemData.itemdata[str(ID)]["Material"]
+		var material_type = ItemData.itemdata[ID]["Material"]
 		var audios :Array = ItemData.Audio_bank[material_type]
 		var audio_file :StringName = audios[randi_range(0,audios.size() - 1)]
 		SoundManager.create_sound(audio_file,min(volume,0),min(randf_range(0.75,1.25) + (volume + 12)/60,1.5),2,body.global_position)

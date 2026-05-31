@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://4elvwkl063ne"]
 
-[ext_resource type="Script" uid="uid://0nmnl5dxtpwx" path="res://Scripts/Characters/enemy.gd" id="1_lsx3x"]
+[ext_resource type="Script" uid="uid://0nmnl5dxtpwx" path="res://Scripts/Characters/Enemy.gd" id="1_lsx3x"]
 [ext_resource type="PackedScene" uid="uid://bnmdahypayfna" path="res://Scenes/Characters/healthbar.tscn" id="2_b1c4r"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_b1c4r"]

@@ -1,15 +1,18 @@
-[gd_scene load_steps=21 format=4 uid="uid://doyn17enbd72w"]
+[gd_scene format=4 uid="uid://doyn17enbd72w"]
 
 [ext_resource type="Script" uid="uid://bkmwodo6s0oum" path="res://Scripts/World/World.gd" id="1_r3q6o"]
+[ext_resource type="PackedScene" uid="uid://cp15s3vsmperh" path="res://Scenes/Props/Basic_Healing(7).tscn" id="2_cnko6"]
 [ext_resource type="Texture2D" uid="uid://dsl14vsuheap0" path="res://Assets/Textures/Test_map2_photo-1495578942200-c5f5d2137def.jpg" id="3_e3b5g"]
 [ext_resource type="Texture2D" uid="uid://sebe47kissf6" path="res://Assets/Textures/Test_map2_Texturelabs_Wood_189S.jpg" id="4_i8geg"]
+[ext_resource type="PackedScene" uid="uid://1vdsxc2vo8e" path="res://Scenes/Props/Test_Gun(9).tscn" id="4_wv4i5"]
+[ext_resource type="PackedScene" uid="uid://dol0jj4qeowr2" path="res://Scenes/Characters/entity_basic.tscn" id="9_grmss"]
 [ext_resource type="PackedScene" uid="uid://culqao60nt1mv" path="res://Scenes/Props/Placeholder(1).tscn" id="10_i8geg"]
-[ext_resource type="Environment" uid="uid://certv4kxvewmf" path="res://Scripts/World/Environment.tres" id="15_64gpq"]
+[ext_resource type="Environment" uid="uid://certv4kxvewmf" path="res://Scripts/Base_Engine/Rendering/Environment.tres" id="15_64gpq"]
 [ext_resource type="PackedScene" uid="uid://cie5fcfoubro0" path="res://Scenes/Level/portal.tscn" id="22_avi1k"]
-[ext_resource type="Material" uid="uid://dlmex6cutmye0" path="res://Scripts/World/World_Material.tres" id="23_cqluo"]
+[ext_resource type="Material" uid="uid://dlmex6cutmye0" path="res://Scripts/Base_Engine/Rendering/World_Material.tres" id="23_cqluo"]
 [ext_resource type="PackedScene" uid="uid://c4wqxs7funv7h" path="res://Scenes/Characters/player.tscn" id="25_ca4sk"]
-[ext_resource type="PackedScene" uid="uid://baocn3lc445ff" path="res://Scenes/Misc/hud.tscn" id="26_mr2dm"]
-[ext_resource type="PackedScene" uid="uid://bep3cdsaa5o3c" path="res://Scenes/Misc/Paused.tscn" id="27_vvcwh"]
+[ext_resource type="PackedScene" uid="uid://baocn3lc445ff" path="res://Scenes/GUI/hud.tscn" id="26_mr2dm"]
+[ext_resource type="PackedScene" uid="uid://bep3cdsaa5o3c" path="res://Scenes/GUI/Paused.tscn" id="27_vvcwh"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_rdphb"]
 geometry_parsed_geometry_type = 0
@@ -131,46 +134,55 @@ shadow_mesh = SubResource("ArrayMesh_h4t01")
 [sub_resource type="BoxShape3D" id="BoxShape3D_na3uy"]
 size = Vector3(500, 1, 500)
 
-[node name="World" type="Node"]
+[node name="World" type="Node" unique_id=416958048]
 script = ExtResource("1_r3q6o")
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=959117908]
 z_index = -2
 offset_right = 640.0
 offset_bottom = 480.0
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=1197402158]
 handle_input_locally = false
 audio_listener_enable_3d = true
 size = Vector2i(640, 480)
 render_target_update_mode = 4
 
-[node name="Props" type="Node3D" parent="SubViewportContainer/SubViewport"]
+[node name="Props" type="Node3D" parent="SubViewportContainer/SubViewport" unique_id=906261690]
 
-[node name="NavigationRegion3D" type="NavigationRegion3D" parent="SubViewportContainer/SubViewport"]
+[node name="Healing_Item" parent="SubViewportContainer/SubViewport/Props" unique_id=5315446 instance=ExtResource("2_cnko6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7968009, 1.088953, -5.723435)
+
+[node name="Box_Prop" parent="SubViewportContainer/SubViewport/Props" unique_id=2043894668 instance=ExtResource("10_i8geg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6409335, 1.0889521, -3.854505)
+
+[node name="Test_Gun" parent="SubViewportContainer/SubViewport/Props" unique_id=1080829825 instance=ExtResource("4_wv4i5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3453798, 1.0889511, -1.277503)
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="SubViewportContainer/SubViewport" unique_id=1723016390]
 navigation_mesh = SubResource("NavigationMesh_rdphb")
 
-[node name="Environment" type="Node3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D"]
+[node name="Environment" type="Node3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D" unique_id=1868613030]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment" unique_id=489328496]
 environment = ExtResource("15_64gpq")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment" unique_id=1137972167]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -58.5251, 165.694, -17.6605)
 light_color = Color(0.6806, 0.70151, 0.82, 1)
 light_specular = 0.0
 shadow_enabled = true
 shadow_blur = 2.081
 
-[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment"]
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment" unique_id=1839681962]
 transform = Transform3D(-0.783176, 0.0965785, 0.614254, 0.577584, -0.252866, 0.77618, 0.230286, 0.962669, 0.142256, 7.89248, 51.5472, -1.49199)
 light_color = Color(0.442838, 0.559003, 0.715231, 1)
 light_energy = 1.973
 shadow_enabled = true
 shadow_blur = 4.243
 
-[node name="DirectionalLight3D3" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment"]
+[node name="DirectionalLight3D3" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment" unique_id=1891903715]
 transform = Transform3D(-0.506674, -0.639715, -0.577968, -0.5524, -0.273813, 0.787325, -0.661919, 0.718186, -0.214645, -73.8704, 51.5472, 1.24553)
 light_color = Color(0.304673, 0.520378, 0.826331, 1)
 light_energy = 0.892
@@ -178,60 +190,60 @@ shadow_enabled = true
 shadow_opacity = 0.5
 shadow_blur = 3.5
 
-[node name="Level_Geometry" type="StaticBody3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment"]
+[node name="Level_Geometry" type="StaticBody3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment" unique_id=2039195847]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 collision_layer = 129
 collision_mask = 129
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Level_Geometry"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Level_Geometry" unique_id=1061231038]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -0.4426384, 0, 0.19619036)
 shape = SubResource("ConcavePolygonShape3D_e3b5g")
 
-[node name="Cube_003" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Level_Geometry/CollisionShape3D"]
+[node name="Cube_003" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Level_Geometry/CollisionShape3D" unique_id=295285089]
 mesh = SubResource("ArrayMesh_ymk8s")
 skeleton = NodePath("")
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Level_Geometry"]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Level_Geometry" unique_id=1915490246]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -0.4426384, 0, 0.19619036)
 shape = SubResource("ConcavePolygonShape3D_i8geg")
 
-[node name="Cube_004" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Level_Geometry/CollisionShape3D2"]
+[node name="Cube_004" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Level_Geometry/CollisionShape3D2" unique_id=906962733]
 mesh = SubResource("ArrayMesh_54ov8")
 skeleton = NodePath("")
 
-[node name="Death_Barrier" type="Area3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment"]
+[node name="Death_Barrier" type="Area3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment" unique_id=1067689752]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Death_Barrier"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment/Death_Barrier" unique_id=625877160]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -14.5638, 0)
 shape = SubResource("BoxShape3D_na3uy")
 
-[node name="Rocks" type="Node3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment"]
+[node name="Rocks" type="Node3D" parent="SubViewportContainer/SubViewport/NavigationRegion3D/Environment" unique_id=329577806]
 transform = Transform3D(4.86975, -0.121598, 0.0867077, 0.123196, 4.86965, -0.0899144, -0.0844211, 0.0920647, 4.87043, 1.17906, -1.53328, -14.0494)
 
-[node name="Portal" parent="SubViewportContainer/SubViewport/NavigationRegion3D" instance=ExtResource("22_avi1k")]
+[node name="Portal" parent="SubViewportContainer/SubViewport/NavigationRegion3D" unique_id=367485176 instance=ExtResource("22_avi1k")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -178.184, 3.92311, 1.84713)
 
-[node name="ColorRect" type="ColorRect" parent="SubViewportContainer/SubViewport"]
+[node name="ColorRect" type="ColorRect" parent="SubViewportContainer/SubViewport" unique_id=1424961359]
 material = ExtResource("23_cqluo")
 offset_right = 640.0
 offset_bottom = 480.0
 
-[node name="NPC" type="Node3D" parent="SubViewportContainer/SubViewport"]
+[node name="NPC" type="Node3D" parent="SubViewportContainer/SubViewport" unique_id=110919556]
 
-[node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("25_ca4sk")]
+[node name="Entity_Basic" parent="SubViewportContainer/SubViewport/NPC" unique_id=873177625 instance=ExtResource("9_grmss")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.9014473, 0.08895159, -3.2126083)
+
+[node name="Player" parent="SubViewportContainer/SubViewport" unique_id=1107554199 instance=ExtResource("25_ca4sk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6744351, 0)
 
-[node name="HUD" parent="." instance=ExtResource("26_mr2dm")]
+[node name="HUD" parent="." unique_id=1944708652 instance=ExtResource("26_mr2dm")]
 z_index = -1
 
-[node name="Pause" parent="." instance=ExtResource("27_vvcwh")]
+[node name="Pause" parent="." unique_id=1019973977 instance=ExtResource("27_vvcwh")]
 visible = false
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="." unique_id=291623780]
 autostart = true
 ignore_time_scale = true
-
-[node name="Box_Prop" parent="." instance=ExtResource("10_i8geg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6409335, 1.0889521, -3.854505)
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

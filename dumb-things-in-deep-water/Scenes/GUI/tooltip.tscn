@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dej5qwnxb1b3a"]
+[gd_scene format=3 uid="uid://dej5qwnxb1b3a"]
 
 [ext_resource type="Texture2D" uid="uid://cbosaky8rxksb" path="res://Assets/Sprites/Tootltip.png" id="1_l3se7"]
-[ext_resource type="Script" uid="uid://tqe5ryu6ehvi" path="res://Scripts/Other/tooltip.gd" id="2_okwl6"]
+[ext_resource type="Script" uid="uid://tqe5ryu6ehvi" path="res://Scripts/Base_Engine/GUI/Tooltip.gd" id="2_okwl6"]
 
-[node name="Tooltip" type="NinePatchRect"]
+[node name="Tooltip" type="NinePatchRect" unique_id=1884805937]
 offset_right = 17.0
 offset_bottom = 17.0
 scale = Vector2(2, 2)
@@ -14,7 +14,7 @@ patch_margin_right = 3
 patch_margin_bottom = 3
 script = ExtResource("2_okwl6")
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=962312695]
 visible = false
 layout_mode = 0
 offset_left = 4.0
@@ -24,6 +24,6 @@ offset_bottom = 24.0
 scale = Vector2(0.5, 0.5)
 text = ":P"
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="." unique_id=381586748]
 one_shot = true
 ignore_time_scale = true

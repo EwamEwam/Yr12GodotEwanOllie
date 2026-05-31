@@ -58,7 +58,7 @@ func collide(body: Node) -> void:
 			body.get_parent().play_sound(randf_range(-7,-5))
 
 	if body.is_in_group("Enemy"):
-		body.take_damage(damage)
+		ChangeInHealthManager.handle(body, ChangeInHealthManager.TYPES.GENERAL_DAMAGE, -damage)
 
 	if body is StaticBody3D:
 		var hole_scene: PackedScene = preload("res://Scenes/Level/bullet_hole.tscn")

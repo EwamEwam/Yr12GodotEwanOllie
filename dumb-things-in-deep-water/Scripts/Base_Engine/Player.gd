@@ -57,7 +57,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	debug()
 	set_speed()
-	fall_damage_calculation()
+	fall_damage_check()
 		
 	if ground_check.is_colliding():
 		var collider :Object
@@ -108,7 +108,7 @@ func _physics_process(delta: float) -> void:
 		
 	if Playerstats.object_properties.has(ItemData.properties.AIM):
 		var arm_factor = 0
-		camera_raycast.target_position = Vector3(randf_range(-5,5)*arm_factor,randf_range(-5,5)*arm_factor,-ItemData.itemdata[str(Playerstats.object_ID)]["Range"])
+		camera_raycast.target_position = Vector3(randf_range(-5,5)*arm_factor,randf_range(-5,5)*arm_factor,-ItemData.itemdata[Playerstats.object_ID]["Range"])
 		
 	position_last_frame = global_position
 	velocity = calculated_velocity
@@ -155,13 +155,13 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("F"):
 		if Playerstats.object_held == null and not movement_state == movement_states.THROWING and Playerstats.inventory.size() > 0 and can_move:
 			var new_prop_ID: int = Playerstats.inventory.pop_back()
-			var prop :PackedScene = load(ItemData.itemdata[str(new_prop_ID)]["Path"])
+			var prop :PackedScene = load(ItemData.itemdata[new_prop_ID]["Path"])
 			var new_prop :Node3D = prop.instantiate()
 			Playerstats.object_ID = new_prop_ID
-			Playerstats.object_mass = ItemData.itemdata[str(new_prop_ID)]["Mass"]
+			Playerstats.object_mass = ItemData.itemdata[new_prop_ID]["Mass"]
 			$"../Props".add_child(new_prop)
 			Playerstats.object_held = new_prop.body
-			Playerstats.inventory_mass -= ItemData.itemdata[str(new_prop_ID)]["Mass"]
+			Playerstats.inventory_mass -= ItemData.itemdata[new_prop_ID]["Mass"]
 			item_check()
 		
 	if event.is_action_pressed("Left_Click"):
@@ -211,7 +211,7 @@ func item_check() -> Object:
 	
 func load_item_from_inventory(ID :int) -> void:
 	Playerstats.object_ID = ID
-	var object = load(ItemData.itemdata[str(ID)]["Path"])
+	var object = load(ItemData.itemdata[ID]["Path"])
 	var new_object = object.instantiate()
 	new_object.ID = ID
 	$"../Props".add_child(new_object)
@@ -498,10 +498,9 @@ func get_all_connected_bodies(start_body: RigidBody3D, max_bodies: int = 6) -> A
 
 	return connected_bodies
 	
-func fall_damage_calculation() -> void:
-	if is_on_floor(): 
-		if calculated_velocity.y < -20:
-			change_in_health(calculated_velocity.y/7 ,true)
+func fall_damage_check() -> void:
+	if is_on_floor() and abs(calculated_velocity.y) > 0: 
+		ChangeInHealthManager.handle(self, ChangeInHealthManager.TYPES.FALL_DAMAGE, 0, calculated_velocity.y)
 
 func change_in_health(amt :float, particles :bool) -> void:
 	var before :float = Playerstats.health
@@ -542,7 +541,7 @@ func damage_based_on_prop(body :Node, i1 :float, i2 :float, dot :float) -> void:
 	var distance_next_tick :float = ((prop_velocity/60 + body.global_position) - global_position).length()
 	var current_distance :float = (body.global_position - global_position).length()
 	if body.get_parent().timer.is_stopped() and dot > 0.15 and distance_next_tick < current_distance:
-		change_in_health(-prop_velocity.length()/i1 * body.mass/i2 * dot,true)
+		ChangeInHealthManager.handle(self,ChangeInHealthManager.TYPES.GENERAL_DAMAGE,-prop_velocity.length()/i1 * body.mass/i2 * dot)
 	body.get_parent().timer.start()
 
 func calculate_dot_product(body :Node) -> float:
@@ -650,7 +649,7 @@ func find_raycast_hit_point():
 		return false
 	
 func check_raycast_collider() -> bool:
-	$Camera_Pivot/Yaw/Pitch/Camera_Spring/Camera3D/Object_detection_ray.target_position = Vector3(0,0,-ItemData.itemdata[str(Playerstats.object_ID)]["Range"])
+	$Camera_Pivot/Yaw/Pitch/Camera_Spring/Camera3D/Object_detection_ray.target_position = Vector3(0,0,-ItemData.itemdata[Playerstats.object_ID]["Range"])
 	if $Camera_Pivot/Yaw/Pitch/Camera_Spring/Camera3D/Object_detection_ray.is_colliding():
 		var collider = $Camera_Pivot/Yaw/Pitch/Camera_Spring/Camera3D/Object_detection_ray.get_collider()
 		if collider is CharacterBody3D:
@@ -672,8 +671,8 @@ func shoot(target_position :Array) -> void:
 	if ammo[0] > 0:
 		world.HUD.fire()
 		Playerstats.object_held.get_parent().create_bullet(target_position)
-		jerk_velocity = ItemData.itemdata[str(Playerstats.object_ID)]["Recoil"] / (0.1 + (Playerstats.arms_hp/Playerstats.max_health)/1.111111111111)
-		shake(ItemData.itemdata[str(Playerstats.object_ID)]["Recoil"]/(4*(0.1 + (Playerstats.arms_hp/Playerstats.max_health)/1.111111111111)),0.25)
+		jerk_velocity = ItemData.itemdata[Playerstats.object_ID]["Recoil"]
+		shake(ItemData.itemdata[Playerstats.object_ID]["Recoil"],0.25)
 		ammo[0] -= 1
 	else:
 		reload()

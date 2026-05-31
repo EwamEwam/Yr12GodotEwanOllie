@@ -92,7 +92,7 @@ func check_hitbox() -> void:
 	var bodies :Array[Node3D] = $Ragdoll/Body/Hitbox.get_overlapping_bodies()
 	for body in bodies:
 		if body.is_in_group("Player"):
-			body.change_in_health(-dmg,true)
+			ChangeInHealthManager.handle(body, ChangeInHealthManager.TYPES.GENERAL_DAMAGE, -dmg)
 
 func _on_hit_timer_timeout() -> void:
 	ATTACK_READY = true

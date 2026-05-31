@@ -1,8 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://b5erkpywyax4"]
+[gd_scene format=3 uid="uid://b5erkpywyax4"]
 
-[ext_resource type="Script" uid="uid://7teuwce43v7y" path="res://Scripts/Other/confirmation_box.gd" id="1_hxbx0"]
+[ext_resource type="Script" uid="uid://7teuwce43v7y" path="res://Scripts/Base_Engine/GUI/Confirmation_box.gd" id="1_hxbx0"]
 [ext_resource type="Texture2D" uid="uid://cbosaky8rxksb" path="res://Assets/Sprites/Tootltip.png" id="1_qsdit"]
-[ext_resource type="PackedScene" uid="uid://d4numnakjau2d" path="res://Scenes/Misc/Menu_Button.tscn" id="2_hxbx0"]
+[ext_resource type="PackedScene" uid="uid://d4numnakjau2d" path="res://Scenes/GUI/Menu_Button.tscn" id="2_hxbx0"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_hxbx0"]
 shadow_size = 2

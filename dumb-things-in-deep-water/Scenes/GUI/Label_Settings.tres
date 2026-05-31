@@ -2,5 +2,5 @@
 
 [resource]
 shadow_size = 2
-shadow_color = Color(0, 0, 0, 0.254902)
+shadow_color = Color(0, 0, 0, 0.25490198)
 shadow_offset = Vector2(0, 1)

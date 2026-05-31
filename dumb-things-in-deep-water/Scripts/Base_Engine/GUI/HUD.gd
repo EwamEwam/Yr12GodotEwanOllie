@@ -5,15 +5,17 @@ extends Control
 @onready var throw_bar :ProgressBar = $Throw_Bar
 @onready var player :CharacterBody3D = $"../SubViewportContainer/SubViewport/Player"
 
-var change_types = Playerstats.Health_Changes
 var level_time :int = 0
 var formatted_time :Vector2i = Vector2i(0,0)
 var alerts :Array[Node] = []
 
 var red_fade :float = 0
 
-var numbers :Array[Label] = []
-var number_velocity :Array[Vector2] = []
+var damage_numbers :Array[Label] = []
+var damage_number_velocity :Array[Vector2] = []
+
+var heal_numbers :Array[Label] = []
+var heal_number_velocity :Array[Vector2] = []
 
 func _ready() -> void:
 	Playerstats.player = player
@@ -23,6 +25,7 @@ func _ready() -> void:
 	$Health_bar/Bar_End.position.x = 138 + (3.0/2.0) * round_to_1_DP(Playerstats.health)
 
 func _process(delta: float) -> void:
+	$Health_bar/Flux_metre.frame = Playerstats.stamina
 	reticle.modulate.g = 1
 	reticle.modulate.b = 1
 	reticle.modulate.a = 0.2
@@ -45,7 +48,7 @@ func _process(delta: float) -> void:
 		$Item_Description/Object_Icons.play("error")
 		$Item_Description/Object_Icons.visible = false
 	else:
-		$Item_Description/Holding.text = str(ItemData.itemdata[str(Playerstats.object_ID)]["Name"])
+		$Item_Description/Holding.text = str(ItemData.itemdata[Playerstats.object_ID]["Name"])
 		$Item_Description/Holding.position = Vector2(-265,-235)
 		$Item_Description/Weight.visible = true
 		$Item_Description/Holding.size = Vector2(1,1)
@@ -71,31 +74,14 @@ func _process(delta: float) -> void:
 	
 	set_reticle_size()
 	set_red_border_opacity(delta)
+	process_damage_and_healing_numbers(delta)
 	
 	if Playerstats.object_held != null:
 		if Playerstats.object_properties.has(ItemData.properties.AIM) and Playerstats.player.movement_state == Playerstats.player.movement_states.AIMING and Playerstats.object_held.get_parent().attribute:
 			if Playerstats.player.check_raycast_collider():
 				reticle.modulate.g = 0
 				reticle.modulate.b = 0
-	
-	for i in range(numbers.size()):
-		if numbers.size() == number_velocity.size():
-			numbers[i].position += number_velocity[i] * (delta*60)
-			number_velocity[i].y += 0.2 * (delta*60)
-		else:
-			for item in numbers:
-				if is_instance_valid(item):
-					numbers.erase(item)
-					item.queue_free()
-			number_velocity.clear()
 			
-	for i in range(numbers.size()):
-		if numbers[i].position.y > 480:
-			numbers[i].queue_free()
-			numbers.remove_at(i)
-			number_velocity.remove_at(i)
-			break
-	
 	for text in alerts:
 		text.position.y = 82 + (25*alerts.find(text))
 		
@@ -139,18 +125,18 @@ func shake_part(body_part :String) -> void:
 ##Runs when the player's health bar is updated,
 ##[br]Requires the health before the change as a parameter
 func health_bar_animation(before :float) -> void:
-	var tween :Tween = get_tree().create_tween()
+	#var tween :Tween = get_tree().create_tween()
 	var tween2 :Tween = get_tree().create_tween()
 	var texture :ColorRect = ColorRect.new()
-	tween.tween_property($Health_bar/Health_Bar, "value", round_to_1_DP(Playerstats.health), abs($Health_bar/Health_Bar.value-Playerstats.health)/200).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property($Health_bar/Bar_End, "position", Vector2(138 + (3.0/2.0) * round_to_1_DP(Playerstats.health),441), abs($Health_bar/Health_Bar.value-Playerstats.health)/200).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	#tween.tween_property($Health_bar/Health_Bar, "value", round_to_1_DP(Playerstats.health), abs($Health_bar/Health_Bar.value-Playerstats.health)/200).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	#tween.parallel().tween_property($Health_bar/Bar_End, "position", Vector2(138 + (3.0/2.0) * round_to_1_DP(Playerstats.health),441), abs($Health_bar/Health_Bar.value-Playerstats.health)/200).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	texture.position = Vector2(141,441)
 	texture.color = Color(1,1,1,1)
 	texture.size = Vector2(ceil(3.0/2.0*before),18)
 	texture.z_index = -1
 	$Health_bar.add_child(texture)
 	tween2.tween_property(texture, "modulate", Color(1,1,1,0), 0.75).set_trans(Tween.TRANS_LINEAR)
-	await tween.finished
+	#await tween.finished
 	$Health_bar/Health_Bar.value = round_to_1_DP(Playerstats.health)
 	$Health_bar/Bar_End.position.x = 138 + (3.0/2.0) * round_to_1_DP(Playerstats.health)
 	await tween2.finished
@@ -263,7 +249,7 @@ func set_ammo() -> void:
 func fire() -> void:
 	var animation_name :String = str(Playerstats.object_ID)+"_Fire"
 	$Ammo/Gun_HUD.play(animation_name)
-	var bullet :PackedScene = load("res://Scenes/Misc/white_bullet.tscn")
+	var bullet :PackedScene = load("res://Scenes/GUI/white_bullet.tscn")
 	var new_bullet :Sprite2D = bullet.instantiate()
 	new_bullet.position = Vector2(-50,-15)
 	$Ammo.add_child(new_bullet)
@@ -300,19 +286,58 @@ func override_reticule(Screen_position :Vector2) -> void:
 	reticle_gun.position = Screen_position
 
 func create_number(type :String = "Damage", amt :int = 0):
-	var font
-	if type == "Damage":
-		font = load("res://Assets/Sprites/Red_Numbers.png")
-	if type == "Heal":
-		font = load("res://Assets/Sprites/Green_Numbers.png")
 	var new_number :Label = Label.new()
 	var label_setting :LabelSettings = LabelSettings.new()
-	label_setting.font = font
 	new_number.label_settings = label_setting
 	new_number.scale = Vector2(2,2)
 	new_number.text = str(amt)
 	new_number.position = Vector2($Health_bar/Bar_End.position.x-5, 430)
-	numbers.append(new_number)
-	number_velocity.append(Vector2(randf_range(-2,2),-5))
+	var font
+	if type == "Damage":
+		font = load("res://Assets/Sprites/Red_Numbers.png")
+		damage_number_velocity.append(Vector2(randf_range(0,2),-5))
+		damage_numbers.append(new_number)
+	if type == "Heal":
+		font = load("res://Assets/Sprites/Green_Numbers.png")
+		heal_number_velocity.append(Vector2(0,-5))
+		heal_numbers.append(new_number)
+	label_setting.font = font
 	$Health_bar.add_child(new_number)
 	
+func process_damage_and_healing_numbers(delta :float) -> void:
+	for i in range(damage_numbers.size()):
+		if damage_numbers.size() == damage_number_velocity.size():
+			damage_numbers[i].position += damage_number_velocity[i] * (delta*60)
+			damage_number_velocity[i].y += 0.2 * (delta*60)
+		else:
+			for item in damage_numbers:
+				if is_instance_valid(item):
+					damage_numbers.erase(item)
+					item.queue_free()
+			damage_number_velocity.clear()
+			
+	for i in range(heal_numbers.size()):
+		if heal_numbers.size() == heal_number_velocity.size():
+			heal_numbers[i].position += heal_number_velocity[i] * (delta*60)
+			heal_number_velocity[i].y /= 1.15 * (delta*60)
+			heal_numbers[i].modulate.a -= 0.02 * (delta*60)
+		else:
+			for item in heal_numbers:
+				if is_instance_valid(item):
+					heal_numbers.erase(item)
+					item.queue_free()
+			heal_number_velocity.clear()
+			
+	for i in range(damage_numbers.size()):
+		if damage_numbers[i].position.y > 480:
+			damage_numbers[i].queue_free()
+			damage_numbers.remove_at(i)
+			damage_number_velocity.remove_at(i)
+			break
+
+	for i in range(heal_numbers.size()):
+		if heal_numbers[i].modulate.a <= 0:
+			heal_numbers[i].queue_free()
+			heal_numbers.remove_at(i)
+			heal_number_velocity.remove_at(i)
+			break

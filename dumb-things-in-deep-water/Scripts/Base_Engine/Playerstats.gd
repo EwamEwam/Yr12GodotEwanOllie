@@ -1,10 +1,14 @@
+##the script with all VITAL variables and settings for the player
+##[br]It's an autoloaded and global script that anything can access
+##[br]It's vital that this script is used for anything concerning the player entity
 extends Node
 
 enum game_states {PLAYING,PAUSED,MENU}
 enum camera_states {CLOSE,NORMAL,OUTWARDS,FIRST}
-enum Health_Changes {GENERAL_DAMAGE,GENERAL_HEALING}
+
 var current_state :game_states = game_states.PLAYING
 var current_camera :camera_states = camera_states.NORMAL
+var lock_mouse :bool = true
 
 var sensitivity :float = 0.4
 var aiming_sensitivity :float = 0.25
@@ -21,10 +25,16 @@ var max_health :float = 300.0
 var strength :float = 3.0
 var max_carry_weight :float = 50.0
 var max_inventory :float = 50.0
+var safe_falling_speed :float = -30.0
+var defense :float = 5.0
+var incoming_damage_modifier :float = 1.0
+var incoming_heal_modifier :float = 1.0
+var fall_damage_modifier :float = 0.75
 
 var health :float = 300.0
+var max_stamina :float = 8.0
 var oxygen :float = 100.0
-var special :float = 100.0
+var stamina :float = 8.0
 var inventory_mass :float = 0.0
 var inventory :Array[int] = []
 var organised_inventory :Dictionary = {}
@@ -57,7 +67,7 @@ var camera_hitbox :bool = true
 var no_clip :bool = true
 var show_collision_checks :bool = false
 var infinte_inventory :bool = false
-var saved_inventory :Array[int] = [20]
+var saved_inventory :Array[int] = []
 
 #For the pain in the ass that is using the same button to pause and resume.
 var escape_pressed :bool = false
@@ -71,6 +81,7 @@ var ammo :Dictionary = {
 }
 
 @onready var player = get_tree().get_first_node_in_group("Player")
+@onready var world = get_node('/root/World')
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -78,6 +89,7 @@ func _ready() -> void:
 func clear_stat() -> void:
 	health = max_health
 	oxygen = 100
+	stamina = max_stamina
 	inventory = saved_inventory
 	inventory_mass = get_mass_of_inventory(saved_inventory)
 	object_held = null
@@ -97,6 +109,7 @@ func _process(delta :float) -> void:
 	
 	oxygen = clamp(oxygen,0,100)
 	health = clamp(health,0,max_health)
+	stamina = clamp(stamina,0,max_stamina)
 	
 	#head_hp = clamp(head_hp,0,max_health)
 	#torso_hp = clamp(torso_hp,0,max_health)
@@ -114,7 +127,7 @@ func _process(delta :float) -> void:
 	if regen and can_regen and current_state == game_states.PLAYING: 
 		next_health_regen += (time_since_last_damage/60)*(delta/2)
 		if next_health_regen >= 0.25:
-			player.change_in_health(0.25,false) 
+			ChangeInHealthManager.handle(player, ChangeInHealthManager.TYPES.INCREMENTAL_PIERCE, 0.25)
 			health = clamp(health,0,max_health)
 			#torso_hp = min(torso_hp + 0.25,max_health)
 			#head_hp = min(head_hp + 0.25,max_health)
@@ -123,7 +136,7 @@ func _process(delta :float) -> void:
 			next_health_regen = 0.0
 			
 	if oxygen <= 0 and current_state == game_states.PLAYING:
-		player.change_in_health(-delta*6,false)
+		ChangeInHealthManager.handle(player, ChangeInHealthManager.TYPES.INCREMENTAL_PIERCE, 10 * delta)
 		
 	organise_inventory()
 		
@@ -145,10 +158,10 @@ func get_mass_of_inventory(input :Array[int]) -> float:
 			
 func get_largest_4_3_viewport(window_size: Vector2i) -> Vector2i:
 	@warning_ignore("integer_division")
-	var width_based_height :int = int(window_size.x * 3 / 4)
+	var width_based_height :int = int(window_size.x * 3/4)
 	if width_based_height <= window_size.y:
 		return Vector2i(window_size.x, width_based_height)
 
 	@warning_ignore("integer_division")
-	var height_based_width = int(window_size.y * 4 / 3)
+	var height_based_width :int = int(window_size.y * 4/3)
 	return Vector2i(height_based_width, window_size.y)

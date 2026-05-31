@@ -1,28 +1,30 @@
 extends Node
 
-#Each prop in the game can be assigned a property, each one changing how the prop interacts with the environment and player
-#ID_UPDATE: When used, increases the ID of the object by 1 and reloads it
-#HEAL: Heals the player a specified amount
-#DELETE: Deletes itself after use
-#AIM: Right click puts the player into aiming stance instead of dropping the object
-#CANT_DROP_THROW: Disables the ability to throw or drop the object
-#SHOOT: Creates a specified bullet when the player uses it while in aim stance. 
-#GUN_TYPE: Just specifies what type of gun the player has
-#TV: Plays and projects a video file onto a mesh within the model
-#ATTRIBUTE_UPDATE: Toggles the attribute paramter after all the other properties have played out
-#SPEAKER: Plays a audio file in the 3d environment
-#PAINTING: Prop has a raycast to align to the normal of a adjacent wall, then freezes.
+##Each prop in the game can be assigned a property, each one changing how the prop interacts with the environment and player
+##[br]ID_UPDATE: When used, increases the ID of the object by 1 and reloads it
+##[br]HEAL: Heals the player a specified amount
+##[br]DELETE: Deletes itself after use
+##[br]AIM: Right click puts the player into aiming stance instead of dropping the object
+##[br]CANT_DROP_THROW: Disables the ability to throw or drop the object
+##[br]SHOOT: Creates a specified bullet when the player uses it while in aim stance. 
+##[br]GUN_TYPE: Just specifies what type of gun the player has
+##[br]TV: Plays and projects a video file onto a mesh within the model
+##[br]ATTRIBUTE_UPDATE: Toggles the attribute paramter after all the other properties have played out
+##[br]SPEAKER: Plays a audio file in the 3d environment
+##[br]PAINTING: Prop has a raycast to align to the normal of a adjacent wall, then freezes.
 enum properties {ID_UPDATE,HEAL,DELETE,AIM,CANT_DROP_THROW,SHOOT,PISTOL,SHOTGUN,UZI,REVOLVER,TV,ATTRIBUTE_UPDATE,SPEAKER,PAINTING}
 enum prompts {OPEN,HEAL,AIM,SHOOT,TOGGLE,EAT}
 enum materials {DEFAULT,WOOD,GLASS,PLASTIC,METAL}
 
-#the text display system (tooltip edition) in the game. Has 4 different types/commands. 
-#Text is to be written as an array with the [text_type,Color,String of text,Parameter1,Parameter2...]
-#Commands are to be written as [text_type,parameter1,parameter2...]
-#STANDARD: instantly displays the text in the colour described.
-#TYPE_OUT: Writes out the text by typing it out character by character. parameter one is the delay, parameter two is the amount of characters it should instantly type out, can be left out.
-#TIMER: Delays for a set amount of time, as set by parameter one.
-#RESET: Clears ALL text.
+enum states {DURABILITY, AMMO, PROP_HEALTH, FIRE_TIME, TOGGLE}
+
+##the text display system (tooltip edition) in the game. Has 4 different types/commands. 
+##[br]Text is to be written as an array with the [text_type,Color,String of text,Parameter1,Parameter2...]
+##[br]Commands are to be written as [text_type,parameter1,parameter2...]
+##[br]STANDARD: instantly displays the text in the colour described.
+##[br]TYPE_OUT: Writes out the text by typing it out character by character. parameter one is the delay, parameter two is the amount of characters it should instantly type out, can be left out.
+##[br]TIMER: Delays for a set amount of time, as set by parameter one.
+##[br]RESET: Clears ALL text.
 enum text_type {STANDARD,TYPE_OUT,TIMER,RESET}
 
 #A dictionary used to store all the audio paths used depending on an object's material. Properly could of just directly
@@ -36,7 +38,7 @@ const Audio_bank :Dictionary = {
 #If object is breakable, any special properties, the object's prompts on the HUD, the material and the tooltip in the inventory.
 #It works on an ID system where each prop is given an integer, it reads off here and then it's off to the races.
 const itemdata :Dictionary = {
-	"0": {
+	0: {
 		"Name" = "Error",
 		"Path" = "res://Scenes/Props/Placeholder(1).tscn",
 		"Model" = "res://Assets/Props_Models_And_Collisions/1_Placeholder_Model.tres",
@@ -48,7 +50,7 @@ const itemdata :Dictionary = {
 		"Material" = materials.DEFAULT,
 		"Tooltip" = [[text_type.STANDARD,Color(1.0, 0.26, 0.26, 1.0),"You Should NOT have this in\nyour inventory."]],
 	},
-	"1": {
+	1: {
 		"Name" = "Placeholder",
 		"Path" = "res://Scenes/Props/Placeholder(1).tscn",
 		"Model" = "res://Assets/Props_Models_And_Collisions/1_Placeholder_Model.tres",
@@ -63,7 +65,7 @@ const itemdata :Dictionary = {
 		[text_type.TIMER,5],[text_type.RESET],[text_type.STANDARD,Color(1,1,1),"Nah... it's nothing special."]],
 		"Select_sound" = [],
 	},
-	"2": {
+	2: {
 		"Name" = "White Cyclinder",
 		"Path" = "res://Scenes/Props/White_Cyclinder(2).tscn",
 		"Model" = "res://Assets/Props_Models_And_Collisions/2_White_Cyclinder.tres",
@@ -75,7 +77,7 @@ const itemdata :Dictionary = {
 		"Material" = materials.DEFAULT,
 		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"Unbeknownst to the naked eye,\nthis is nothing more than a simple\nwhite cyclinder."]],
 	},
-	"3": {
+	3: {
 		"Name" = "Can - Closed",
 		"Path" = "res://Scenes/Props/Can_Closed(3).tscn",
 		"Model" = "res://Assets/Props_Models_And_Collisions/3_Can_Closed.tres",
@@ -87,7 +89,7 @@ const itemdata :Dictionary = {
 		"Material" = materials.METAL,
 		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"A basic can, press left click\nwhile holding to open."]],
 	},
-	"4": {
+	4: {
 		"Name" = "Can - Opened",
 		"Path" = "res://Scenes/Props/Can_Opened(4).tscn",
 		"Model" = "res://Assets/Props_Models_And_Collisions/4_Can_Opened.tres",
@@ -101,7 +103,7 @@ const itemdata :Dictionary = {
 		"Material" = materials.METAL,
 		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"Press left click while holding\nto consume to heal 5 HP."]],
 	},
-	"5": {
+	5: {
 		"Name" = "Can - Half Full",
 		"Path" = "res://Scenes/Props/Can_Half_Full(5).tscn",
 		"Model" = "res://Assets/Props_Models_And_Collisions/5_Can_Half_Full.tres",
@@ -115,7 +117,7 @@ const itemdata :Dictionary = {
 		"Material" = materials.METAL,
 		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"Half full (or empty for you\npessimists), press left click to\nconsume to heal 5 HP."]],
 	},
-	"6": {
+	6: {
 		"Name" = "Can - Empty",
 		"Path" = "res://Scenes/Props/Can_Empty(6).tscn",
 		"Model" = "res://Assets/Props_Models_And_Collisions/6_Can_Empty.tres",
@@ -128,7 +130,7 @@ const itemdata :Dictionary = {
 		"Material" = materials.METAL,
 		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"It's empty..."]],
 	},
-	"7": {
+	7: {
 		"Name" = "Healing Item",
 		"Path" = "res://Scenes/Props/Basic_Healing(7).tscn",
 		"Model" = "res://Assets/Props_Models_And_Collisions/2_White_Cyclinder.tres",
@@ -141,7 +143,7 @@ const itemdata :Dictionary = {
 		"Material" = materials.DEFAULT,
 		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"A basic healing item, interact\nwith it while holding it to heal\n10 HP"]],
 	},
-	"8":{
+	8:{
 		"Name" = "TV - Barbeque Chicken Alert",
 		"Path" = "res://Scenes/Props/TV_Barbeque_Chicken(8).tscn",
 		"Model" = "res://Assets/Props_Models_And_Collisions/8_TV.tres",
@@ -154,7 +156,7 @@ const itemdata :Dictionary = {
 		"Material" = materials.DEFAULT,
 		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),'Lyrics: "Barbeque chicken\nalert. Barbeque chicken alert"']],
 	},
-	"9": {
+	9: {
 		"Name" = "Test Gun",
 		"Path" = "res://Scenes/Props/Test_Gun(9).tscn",
 		"Model" = "res://Assets/Props_Models_And_Collisions/9_Test_Gun.tres",
@@ -170,7 +172,7 @@ const itemdata :Dictionary = {
 		"Material" = materials.DEFAULT,
 		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"Bang bang mother fluffa, this\nhandy dandy handgun can deal\ndecent damage... As long as it is\nin the hands of a worthy user."]],
 	},
-	"10":{
+	10:{
 		"Name" = "Speaker - Carry On",
 		"Path" = "res://Scenes/Props/Speaker_Carry_on(10).tscn",
 		"Model" = "res://Assets/Props_Models_And_Collisions/10_Speaker_Carry_on.tres",
@@ -183,7 +185,7 @@ const itemdata :Dictionary = {
 		"Material" = materials.DEFAULT,
 		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"I love this song :)"]],
 	},
-	"11":{
+	11:{
 		"Name" = "Painting - My Love",
 		"Path" = "res://Scenes/Props/Painting(11).tscn",
 		"Model" = "res://Assets/Props_Models_And_Collisions/11_Painting.tres",
@@ -195,7 +197,7 @@ const itemdata :Dictionary = {
 		"Material" = materials.DEFAULT,
 		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"Joesph McFarland, c. 1767,\nArtist Unknown"]],
 	},
-	"12":{
+	12:{
 		"Name" = "TV - Intro",
 		"Path" = "res://Scenes/Props/TV_intro(12).tscn",
 		"Model" = "res://Assets/Props_Models_And_Collisions/8_TV.tres",
@@ -208,7 +210,7 @@ const itemdata :Dictionary = {
 		"Material" = materials.DEFAULT,
 		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"Game by Bourbon and Coke,\nand roobuc, better known\nby his stage name Passionfruit\nman."]],
 	},
-	"14":{
+	14:{
 		"Name" = "Speaker - Radio",
 		"Path" = "res://Scenes/Props/Speaker_Radio(14).tscn",
 		"Model" = "res://Assets/Props_Models_And_Collisions/10_Speaker_Carry_on.tres",
@@ -221,7 +223,7 @@ const itemdata :Dictionary = {
 		"Material" = materials.DEFAULT,
 		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"Simply Beautiful."]],
 	},
-	"19":{
+	19:{
 		"Name" = "dunetoris",
 		"Path" = "res://Scenes/Props/dunetoris(19).tscn",
 		"Model" = "res://Assets/Props_Models_And_Collisions/19_dunetoris.tres",
@@ -233,7 +235,7 @@ const itemdata :Dictionary = {
 		"Material" = materials.DEFAULT,
 		"Tooltip" = [[text_type.STANDARD,Color(1,1,1),"Put me down!"]],
 	},
-	"20": {
+	20: {
 		"Name" = "The Package",
 		"Path" = "res://Scenes/Props/Package(20).tscn",
 		"Model" = "res://Assets/Props_Models_And_Collisions/20_The_Package.tres",

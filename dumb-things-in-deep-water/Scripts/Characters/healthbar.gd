@@ -12,7 +12,7 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 	look_at(Playerstats.player.camera.global_position,Vector3.UP)
 	health = parent.health
-	if health == max_health:
+	if health == max_health or (Playerstats.player.global_position - global_position).length() > 30:
 		visible = false
 	elif health > 0:
 		$Bar.scale.x = health/max_health

@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://8ko6wiadhmoh"]
+
+[ext_resource type="Script" uid="uid://bbwbivboa6u6x" path="res://Scripts/Base_Engine/output_console.gd" id="1_16bhy"]
+[ext_resource type="Texture2D" uid="uid://cbosaky8rxksb" path="res://Assets/Sprites/Tootltip.png" id="2_fmay8"]
+
+[node name="Output_Console" type="Control" unique_id=1399244346]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_16bhy")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=1501352380]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 7.0000005
+offset_right = 220.66667
+offset_bottom = 162.66667
+scale = Vector2(3, 3)
+texture = ExtResource("2_fmay8")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="Label" type="Label" parent="NinePatchRect" unique_id=56661953]
+layout_mode = 0
+offset_left = 3.9999998
+offset_top = 3.6666665
+offset_right = 62.0
+offset_bottom = 23.666666
+scale = Vector2(0.5, 0.5)
+text = "Output"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="NinePatchRect" unique_id=535514627]
+z_index = 2
+z_as_relative = false
+layout_mode = 0
+offset_left = 5.0000005
+offset_top = 13.666666
+offset_right = 596.5916
+offset_bottom = 424.07706
+scale = Vector2(0.333, 0.333)
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NinePatchRect/ScrollContainer" unique_id=1179040487]
+layout_mode = 2

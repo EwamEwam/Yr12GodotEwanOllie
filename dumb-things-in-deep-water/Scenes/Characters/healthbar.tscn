@@ -1,6 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://bnmdahypayfna"]
+[gd_scene format=3 uid="uid://bnmdahypayfna"]
 
-[ext_resource type="Script" uid="uid://bth7vlqjnop6r" path="res://Scripts/Characters/healthbar.gd" id="1_evd5b"]
+[ext_resource type="Script" uid="uid://bth7vlqjnop6r" path="res://Scripts/Characters/Healthbar.gd" id="1_evd5b"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ul7si"]
 transparency = 1

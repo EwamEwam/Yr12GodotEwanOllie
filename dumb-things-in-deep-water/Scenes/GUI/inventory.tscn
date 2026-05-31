@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://4gn54sy2xffq"]
+[gd_scene format=3 uid="uid://4gn54sy2xffq"]
 
 [ext_resource type="Texture2D" uid="uid://0kg1fk54alpo" path="res://Assets/Sprites/Inventory.png" id="1_bfbsr"]
-[ext_resource type="Script" uid="uid://ds5ulesvr3xtl" path="res://Scripts/Other/inventory.gd" id="1_jg3nd"]
+[ext_resource type="Script" uid="uid://ds5ulesvr3xtl" path="res://Scripts/Base_Engine/GUI/Inventory_GUI.gd" id="1_jg3nd"]
 
 [node name="Inventory" type="Control"]
 layout_mode = 3

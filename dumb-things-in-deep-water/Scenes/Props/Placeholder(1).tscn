@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://culqao60nt1mv"]
+[gd_scene format=3 uid="uid://culqao60nt1mv"]
 
 [ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/Basic_Props.gd" id="1_k831n"]
 [ext_resource type="ArrayMesh" uid="uid://bskdml7jwhjr5" path="res://Assets/Props_Models_And_Collisions/1_Placeholder_Model.tres" id="1_w7fn4"]
@@ -17,17 +17,17 @@ disable_receive_shadows = true
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_k831n"]
 points = PackedVector3Array(1, 1, 1, 1, 1, -1, -1, 1, 1, 1, -1, 1, 1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, -1)
 
-[node name="Box_Prop" type="Node3D" groups=["Prop"]]
+[node name="Box_Prop" type="Node3D" unique_id=1725321482 groups=["Prop"]]
 script = ExtResource("1_k831n")
 pick_up_position = Vector3(0, 0, -0.6)
 pick_up_rotation = Vector3(8, 2, 3)
 
-[node name="Damage_Timer" type="Timer" parent="."]
+[node name="Damage_Timer" type="Timer" parent="." unique_id=26426106]
 wait_time = 0.25
 one_shot = true
 autostart = true
 
-[node name="Body" type="RigidBody3D" parent="." groups=["Prop"]]
+[node name="Body" type="RigidBody3D" parent="." unique_id=1402851076 groups=["Prop"]]
 collision_layer = 19
 collision_mask = 146
 physics_material_override = SubResource("PhysicsMaterial_k831n")
@@ -35,21 +35,21 @@ continuous_cd = true
 contact_monitor = true
 max_contacts_reported = 5
 
-[node name="Model" type="MeshInstance3D" parent="Body"]
+[node name="Model" type="MeshInstance3D" parent="Body" unique_id=1137167348]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 mesh = ExtResource("1_w7fn4")
 
-[node name="Outline" type="MeshInstance3D" parent="Body/Model"]
+[node name="Outline" type="MeshInstance3D" parent="Body/Model" unique_id=1498439141]
 material_overlay = SubResource("StandardMaterial3D_5sy10")
 mesh = ExtResource("3_l3b44")
 
-[node name="Collision" type="CollisionShape3D" parent="Body"]
+[node name="Collision" type="CollisionShape3D" parent="Body" unique_id=617382138]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 shape = SubResource("ConvexPolygonShape3D_k831n")
 
-[node name="Onscreen" type="VisibleOnScreenNotifier3D" parent="Body"]
+[node name="Onscreen" type="VisibleOnScreenNotifier3D" parent="Body" unique_id=661817784]
 
-[node name="Obstacle" type="NavigationObstacle3D" parent="Body"]
+[node name="Obstacle" type="NavigationObstacle3D" parent="Body" unique_id=814770942]
 radius = 1.3
 
 [connection signal="body_entered" from="Body" to="." method="_on_body_body_entered"]

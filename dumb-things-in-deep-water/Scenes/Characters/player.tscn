@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://c4wqxs7funv7h"]
 
-[ext_resource type="Script" uid="uid://dwx7hesu8s04w" path="res://Scripts/Characters/player.gd" id="1_3etf2"]
-[ext_resource type="Shader" uid="uid://dctjrv7hu65fe" path="res://Scripts/World/Outline.gdshader" id="2_40svl"]
+[ext_resource type="Script" uid="uid://dwx7hesu8s04w" path="res://Scripts/Base_Engine/Player.gd" id="1_3etf2"]
+[ext_resource type="Shader" uid="uid://dctjrv7hu65fe" path="res://Scripts/Base_Engine/Rendering/Outline.gdshader" id="2_40svl"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_3etf2"]
 height = 2.0957

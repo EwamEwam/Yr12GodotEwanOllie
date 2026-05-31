@@ -1,17 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://cwiithgb7v4ma"]
+[gd_scene format=3 uid="uid://cwiithgb7v4ma"]
 
 [ext_resource type="Script" uid="uid://b46g6wvoyhoef" path="res://Scripts/Other/main_menu.gd" id="1_h4vnr"]
 
-[node name="Main menu" type="Node2D"]
+[node name="Main menu" type="Node2D" unique_id=1063696614]
 script = ExtResource("1_h4vnr")
 
-[node name="Button manager" type="Control" parent="."]
+[node name="Button manager" type="Control" parent="." unique_id=622265556]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Start" type="Button" parent="Button manager"]
+[node name="Start" type="Button" parent="Button manager" unique_id=1528188708]
 layout_mode = 0
 offset_left = 25.0
 offset_top = 242.0
@@ -19,7 +19,7 @@ offset_right = 245.0
 offset_bottom = 300.0
 text = "Start"
 
-[node name="Options" type="Button" parent="Button manager"]
+[node name="Options" type="Button" parent="Button manager" unique_id=1609395020]
 layout_mode = 0
 offset_left = 26.0
 offset_top = 319.0
@@ -27,7 +27,7 @@ offset_right = 244.0
 offset_bottom = 377.0
 text = "Options"
 
-[node name="Quit" type="Button" parent="Button manager"]
+[node name="Quit" type="Button" parent="Button manager" unique_id=1141168454]
 layout_mode = 0
 offset_left = 25.0
 offset_top = 397.0
@@ -35,7 +35,7 @@ offset_right = 247.0
 offset_bottom = 460.0
 text = "Quit"
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=239212808]
 offset_left = 15.0
 offset_top = 11.0
 offset_right = 273.0
@@ -43,14 +43,14 @@ offset_bottom = 31.0
 scale = Vector2(2, 2)
 text = "Dumb Things In Deep Water"
 
-[node name="Game By" type="Label" parent="."]
+[node name="Game By" type="Label" parent="." unique_id=208131680]
 offset_left = 16.0
 offset_top = 55.0
 offset_right = 386.0
 offset_bottom = 75.0
 text = "Game by Ollie Davis and Ewan Diggle"
 
-[node name="Build" type="Label" parent="."]
+[node name="Build" type="Label" parent="." unique_id=171337324]
 offset_left = 17.0
 offset_top = 77.0
 offset_right = 387.0

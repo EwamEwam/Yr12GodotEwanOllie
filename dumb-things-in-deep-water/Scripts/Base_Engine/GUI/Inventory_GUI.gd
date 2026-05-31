@@ -54,10 +54,10 @@ func make_buttons() -> void:
 		for item in Playerstats.organised_inventory:
 			var button_node = button.instantiate()
 			button_node.ID = item
-			if Playerstats.organised_inventory[str(item)] > 1:
-				button_node.text = str(ItemData.itemdata[str(item)]["Name"]) + " X" + str(Playerstats.organised_inventory[str(item)]) + "\n" +  str(Playerstats.organised_inventory[str(item)] * ItemData.itemdata[item]["Mass"]) + "Kg (" + str(Playerstats.organised_inventory[str(item)]) + " X " + str(ItemData.itemdata[item]["Mass"]) + "Kg)"    
-			else:
-				button_node.text = str(ItemData.itemdata[str(item)]["Name"]) + " X" + str(Playerstats.organised_inventory[str(item)]) + "\n" +  str(Playerstats.organised_inventory[str(item)] * ItemData.itemdata[item]["Mass"]) + "Kg"    
+#			if Playerstats.organised_inventory[str(item)] > 1:
+#				button_node.text = str(ItemData.itemdata[item]["Name"]) + " X" + str(Playerstats.organised_inventory[item]) + "\n" +  str(Playerstats.organised_inventory[item] * ItemData.itemdata[item]["Mass"]) + "Kg (" + str(Playerstats.organised_inventory[item]) + " X " + str(ItemData.itemdata[item]["Mass"]) + "Kg)"    
+#			else:
+#				button_node.text = str(ItemData.itemdata[item]["Name"]) + " X" + str(Playerstats.organised_inventory[item]) + "\n" +  str(Playerstats.organised_inventory[item] * ItemData.itemdata[item]["Mass"]) + "Kg"    
 			var path = "res://Assets/Sprites/Item_Icons/" + str(item) + ".png"
 			button_node.icon = load(path)
 			$Inventory_panel/ScrollContainer/VBoxContainer.add_child(button_node)
@@ -65,7 +65,7 @@ func make_buttons() -> void:
 		for item in ItemData.itemdata:
 			var button_node = button.instantiate()
 			button_node.ID = item
-			button_node.text = str(ItemData.itemdata[str(item)]["Name"]) + "\n" +  str(ItemData.itemdata[item]["Mass"]) + "Kg"    
+			button_node.text = str(ItemData.itemdata[item]["Name"]) + "\n" +  str(ItemData.itemdata[item]["Mass"]) + "Kg"    
 			var path = "res://Assets/Sprites/Item_Icons/" + str(item) + ".png"
 			button_node.icon = load(path)
 			$Inventory_panel/ScrollContainer/VBoxContainer.add_child(button_node)

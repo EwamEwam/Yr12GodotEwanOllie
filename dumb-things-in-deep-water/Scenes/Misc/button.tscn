@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://b61sdvq64adxi"]
+[gd_scene format=3 uid="uid://b61sdvq64adxi"]
 
-[ext_resource type="Script" uid="uid://b3qxmevttwiw6" path="res://Scripts/Other/button.gd" id="1_mwfov"]
+[ext_resource type="Script" uid="uid://b3qxmevttwiw6" path="res://Scripts/Base_Engine/GUI/Inventory_Button.gd" id="1_mwfov"]
 
 [node name="Button" type="Button"]
 offset_right = 8.0

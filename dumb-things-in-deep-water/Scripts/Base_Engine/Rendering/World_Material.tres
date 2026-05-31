@@ -1,6 +1,6 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dlmex6cutmye0"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dlmex6cutmye0"]
 
-[ext_resource type="Shader" uid="uid://xvrcalxrf4db" path="res://Scripts/World/Filter.gdshader" id="1_75aba"]
+[ext_resource type="Shader" uid="uid://xvrcalxrf4db" path="res://Scripts/Base_Engine/Rendering/Filter.gdshader" id="1_75aba"]
 
 [resource]
 shader = ExtResource("1_75aba")
