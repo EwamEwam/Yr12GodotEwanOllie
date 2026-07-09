@@ -1,6 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://cboonb5vreyst"]
+[gd_scene format=3 uid="uid://cboonb5vreyst"]
 
-[ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/Basic_Props.gd" id="1_81buw"]
+[ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/OLD_PROPS_SCRIPT(DO NOT USE).gd" id="1_81buw"]
 [ext_resource type="CylinderMesh" uid="uid://1adipgv1ooi4" path="res://Assets/Props_Models_And_Collisions/2_White_Cyclinder.tres" id="2_81buw"]
 [ext_resource type="ArrayMesh" uid="uid://cr8rrh3b22hbc" path="res://Assets/Props_Models_And_Collisions/2_White_Cyclinder_Outline.tres" id="3_godeo"]
 

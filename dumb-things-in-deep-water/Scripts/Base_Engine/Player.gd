@@ -1,5 +1,7 @@
 extends CharacterBody3D
 #The main player's script, holds a lot of the game's and player's basic logic, kind of a mess though.
+var entity_type :EntityData.BaseEntites = EntityData.BaseEntites.PLAYER
+
 var speed :float = 7.5
 var acceleration :float = 45.0
 var gravity :float = 20.0
@@ -106,9 +108,9 @@ func _physics_process(delta: float) -> void:
 	if Playerstats.current_state == Playerstats.game_states.PLAYING and Playerstats.oxygen_depletes:
 		Playerstats.oxygen -= delta/2.5
 		
-	if Playerstats.object_properties.has(ItemData.properties.AIM):
-		var arm_factor = 0
-		camera_raycast.target_position = Vector3(randf_range(-5,5)*arm_factor,randf_range(-5,5)*arm_factor,-ItemData.itemdata[Playerstats.object_ID]["Range"])
+	#if Playerstats.object_properties.has(ItemData.Properties.AIM):
+	#	var arm_factor = 0
+	#	camera_raycast.target_position = Vector3(randf_range(-5,5)*arm_factor,randf_range(-5,5)*arm_factor,-ItemData.itemdata[Playerstats.object_ID]["Range"])
 		
 	position_last_frame = global_position
 	velocity = calculated_velocity
@@ -140,55 +142,61 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("E"):
 		if Playerstats.object_held != null and not movement_state == movement_states.THROWING and can_move:
 			if (roundf(Playerstats.inventory_mass * 10) / 10 + roundf(Playerstats.object_mass * 10) / 10 <= roundf(Playerstats.max_inventory)) or Playerstats.infinte_inventory:
-				if !Playerstats.infinte_inventory:
-					Playerstats.inventory.append(Playerstats.object_ID)
-					Playerstats.inventory_mass += Playerstats.object_mass
-				Playerstats.object_held.get_parent().queue_free()
-				Playerstats.object_held = null
-				Playerstats.object_ID = 0
-				Playerstats.object_mass = 0
-				Playerstats.object_properties = []
-				Playerstats.object_prompts = []
-			else:
-				world.HUD.alert("Too heavy for inventory!")
-
+				Playerstats.object_held.get_parent().store()
+				#if !Playerstats.infinte_inventory:
+					#Playerstats.inventory.append(
+					#Playerstats.inventory_mass += Playerstats.object_mass
+				#Playerstats.object_held.get_parent().queue_free()
+				#Playerstats.object_held = null
+				#Playerstats.object_ID = 0
+				#Playerstats.object_mass = 0
+				#Playerstats.object_properties = []
+				#Playerstats.object_prompts = []
+			#else:
+				#world.HUD.alert("Too heavy for inventory!")
+				
 	if event.is_action_pressed("F"):
 		if Playerstats.object_held == null and not movement_state == movement_states.THROWING and Playerstats.inventory.size() > 0 and can_move:
-			var new_prop_ID: int = Playerstats.inventory.pop_back()
-			var prop :PackedScene = load(ItemData.itemdata[new_prop_ID]["Path"])
-			var new_prop :Node3D = prop.instantiate()
-			Playerstats.object_ID = new_prop_ID
-			Playerstats.object_mass = ItemData.itemdata[new_prop_ID]["Mass"]
-			$"../Props".add_child(new_prop)
-			Playerstats.object_held = new_prop.body
-			Playerstats.inventory_mass -= ItemData.itemdata[new_prop_ID]["Mass"]
-			item_check()
+			#var new_prop_ID: int = Playerstats.inventory.pop_back()
+			#var prop :PackedScene = load(ItemData.itemdata[new_prop_ID]["Path"])
+			#var new_prop :Node3D = prop.instantiate()
+			#Playerstats.object_ID = new_prop_ID
+			#Playerstats.object_mass = ItemData.itemdata[new_prop_ID]["Mass"]
+			#$"../Props".add_child(new_prop)
+			#Playerstats.object_held = new_prop.body
+			#Playerstats.inventory_mass -= ItemData.itemdata[new_prop_ID]["Mass"]
+			#item_check()
+			Inventory.load_item(0)
 		
 	if event.is_action_pressed("Left_Click"):
 		if Playerstats.object_held == null:
 			if Playerstats.object_detected != null and Playerstats.object_detected.get_parent().grabbable and can_move:
 				if Playerstats.object_detected.mass <= Playerstats.max_carry_weight:
+					Input.action_release("Left_Click")
 					Playerstats.object_held = Playerstats.object_detected
+					Playerstats.object_held.get_parent().can_use = false
 					Playerstats.object_detected.get_parent().hold()
 					Playerstats.object_ID = Playerstats.object_held.get_parent().ID
 					Playerstats.object_mass = Playerstats.object_held.mass
-					Input.action_release("Left_Click")
+					await get_tree().create_timer(0.1,false,false,true).timeout
+					if Playerstats.object_held != null:
+						Playerstats.object_held.get_parent().can_use = true
 				else:
 					world.HUD.alert("Too heavy to lift! (" + str(round(Playerstats.object_detected.mass*10)/10)  +"kg)")
-		elif movement_state == movement_states.NORMAL or Playerstats.object_properties.has(ItemData.properties.CANT_DROP_THROW):
-			Playerstats.object_held.get_parent().item_use()
+		#elif movement_state == movement_states.NORMAL or Playerstats.object_properties.has(ItemData.Properties.CANT_DROP_THROW):
+		#	Playerstats.object_held.get_parent().item_use()
 		
 	if event.is_action_pressed("Q"):
 		if Playerstats.object_held != null and movement_state != movement_states.THROWING:
-			if check_if_in_wall(Playerstats.object_held) and not Playerstats.object_properties.has(ItemData.properties.CANT_DROP_THROW):
+			if check_if_in_wall(Playerstats.object_held): #and not Playerstats.object_properties.has(ItemData.Properties.CANT_DROP_THROW):
 				Playerstats.object_held.get_parent().drop()
-			elif not Playerstats.object_properties.has(ItemData.properties.CANT_DROP_THROW):
+			else: #elif not Playerstats.object_properties.has(ItemData.Properties.CANT_DROP_THROW):
 				world.HUD.alert("Can't place here, there's something in the way.")
 
 	if event.is_action_pressed("V"): set_camera_mode()
 		
-	if event.is_action_pressed("R"):
-		if Playerstats.object_properties.has(ItemData.properties.SHOOT): reload()
+	#if event.is_action_pressed("R"):
+		#if Playerstats.object_properties.has(ItemData.Properties.SHOOT): reload()
 
 	if event.is_action_pressed("B"):
 		if Playerstats.no_clip: debug_movement = !debug_movement
@@ -316,7 +324,7 @@ func set_movement_mode(delta :float) -> void:
 		throw_power = 1
 
 func throw_process(delta :float) -> void:
-	if Input.is_action_pressed("Left_Click") and not Playerstats.object_properties.has(ItemData.properties.CANT_DROP_THROW):
+	if Input.is_action_pressed("Left_Click"): # and not Playerstats.object_properties.has(ItemData.Properties.CANT_DROP_THROW):
 		movement_state = movement_states.THROWING
 		throw_power = clamp(throw_power + delta * 5,1,6)
 	elif throw_power > 1 and (Input.is_action_pressed("Right_Click") or Input.is_action_pressed("Alt")):
@@ -522,6 +530,8 @@ func change_in_health(amt :float, particles :bool) -> void:
 			jerk_velocity = min((20*amt)/Playerstats.max_health,-1)
 		else:
 			world.HUD.update_health_bar()
+		if Playerstats.health <= 0:
+			death()
 	elif particles and int(ceil(Playerstats.health)) - previous_health > 0:
 		world.HUD.create_number("Heal",int(int(ceil(Playerstats.health))-previous_health))
 		world.HUD.update_health_bar()
@@ -658,51 +668,51 @@ func check_raycast_collider() -> bool:
 		return false
 	return false
 
-func shoot(target_position :Array) -> void:
-	var ammo :Array
-	if Playerstats.object_properties.has(ItemData.properties.PISTOL):
-		ammo = Playerstats.ammo["Pistol"]
-	if Playerstats.object_properties.has(ItemData.properties.SHOTGUN):
-		ammo = Playerstats.ammo["Shotgun"]
-	if Playerstats.object_properties.has(ItemData.properties.REVOLVER):
-		ammo = Playerstats.ammo["Revolver"]
-	if Playerstats.object_properties.has(ItemData.properties.UZI):
-		ammo = Playerstats.ammo["UZI"]
-	if ammo[0] > 0:
-		world.HUD.fire()
-		Playerstats.object_held.get_parent().create_bullet(target_position)
-		jerk_velocity = ItemData.itemdata[Playerstats.object_ID]["Recoil"]
-		shake(ItemData.itemdata[Playerstats.object_ID]["Recoil"],0.25)
-		ammo[0] -= 1
-	else:
-		reload()
-		
-func reload() -> void:
-	var ammo :Array
-	var max_ammo :int
-	if Playerstats.object_properties.has(ItemData.properties.PISTOL):
-		ammo = Playerstats.ammo["Pistol"]
-		max_ammo = 14
-	if Playerstats.object_properties.has(ItemData.properties.SHOTGUN):
-		ammo = Playerstats.ammo["Shotgun"]
-		max_ammo = 8
-	if Playerstats.object_properties.has(ItemData.properties.REVOLVER):
-		ammo = Playerstats.ammo["Revolver"]
-		max_ammo = 6
-	if Playerstats.object_properties.has(ItemData.properties.UZI):
-		ammo = Playerstats.ammo["UZI"]
-		max_ammo = 30
-		
-	if ammo[1] == 0 and ammo[0] == 0:
-		world.HUD.alert("No Ammo")
-		
-	elif ammo[0] != max_ammo:
-		if ammo[1] + ammo[0] > max_ammo:
-			ammo[1] -= max_ammo - ammo[0]
-			ammo[0] = max_ammo
-		else:
-			ammo[0] += ammo[1]
-			ammo[1] = 0
+#func shoot(target_position :Array) -> void:
+	#var ammo :Array
+	#if Playerstats.object_properties.has(ItemData.Properties.PISTOL):
+		#ammo = Playerstats.ammo["Pistol"]
+	#if Playerstats.object_properties.has(ItemData.Properties.SHOTGUN):
+		#ammo = Playerstats.ammo["Shotgun"]
+	#if Playerstats.object_properties.has(ItemData.Properties.REVOLVER):
+		#ammo = Playerstats.ammo["Revolver"]
+	#if Playerstats.object_properties.has(ItemData.Properties.UZI):
+		#ammo = Playerstats.ammo["UZI"]
+	#if ammo[0] > 0:
+		#world.HUD.fire()
+		#Playerstats.object_held.get_parent().create_bullet(target_position)
+		#jerk_velocity = ItemData.itemdata[Playerstats.object_ID]["Recoil"]
+		#shake(ItemData.itemdata[Playerstats.object_ID]["Recoil"],0.25)
+		#ammo[0] -= 1
+	#else:
+		#reload()
+		#
+#func reload() -> void:
+	#var ammo :Array
+	#var max_ammo :int
+	#if Playerstats.object_properties.has(ItemData.Properties.PISTOL):
+		#ammo = Playerstats.ammo["Pistol"]
+		#max_ammo = 14
+	#if Playerstats.object_properties.has(ItemData.Properties.SHOTGUN):
+		#ammo = Playerstats.ammo["Shotgun"]
+		#max_ammo = 8
+	#if Playerstats.object_properties.has(ItemData.Properties.REVOLVER):
+		#ammo = Playerstats.ammo["Revolver"]
+		#max_ammo = 6
+	#if Playerstats.object_properties.has(ItemData.Properties.UZI):
+		#ammo = Playerstats.ammo["UZI"]
+		#max_ammo = 30
+		#
+	#if ammo[1] == 0 and ammo[0] == 0:
+		#world.HUD.alert("No Ammo")
+		#
+	#elif ammo[0] != max_ammo:
+		#if ammo[1] + ammo[0] > max_ammo:
+			#ammo[1] -= max_ammo - ammo[0]
+			#ammo[0] = max_ammo
+		#else:
+			#ammo[0] += ammo[1]
+			#ammo[1] = 0
 
 func control_shake(delta :float) -> void:
 	if shake_duration > 0:
@@ -752,3 +762,6 @@ func debug_show_scaled_shape(body :RigidBody3D) -> void:
 	mesh_instance.name = "DebugScaledShape"
 
 	$"..".add_child(mesh_instance)
+	
+func death() -> void:
+	DeveloperSettings.add_log("Player had died, no code is currently in place to handle this",DeveloperSettings.Log_Types.ERROR)

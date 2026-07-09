@@ -7,6 +7,7 @@ class_name entity
 
 enum AI_type {NONE, FOLLOW, WANDER, CUSTOM}
 
+@export var entity_type :EntityData.BaseEntites = EntityData.BaseEntites.BASIC
 @export var health :float = 25
 @export var max_health :float = 25
 

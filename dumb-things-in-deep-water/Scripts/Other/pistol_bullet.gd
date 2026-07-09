@@ -61,7 +61,7 @@ func collide(body: Node) -> void:
 		ChangeInHealthManager.handle(body, ChangeInHealthManager.TYPES.GENERAL_DAMAGE, -damage)
 
 	if body is StaticBody3D:
-		var hole_scene: PackedScene = preload("res://Scenes/Level/bullet_hole.tscn")
+		var hole_scene: PackedScene = preload("res://Scenes/Objects/bullet_hole.tscn")
 		var new_hole :Node3D = hole_scene.instantiate()
 		var world :SubViewport = get_node('/root/World/SubViewportContainer/SubViewport')
 		if not world:

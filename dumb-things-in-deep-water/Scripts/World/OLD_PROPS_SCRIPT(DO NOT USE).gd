@@ -1,3 +1,7 @@
+##Unused Script for the original prop class. Now it's old, and mostly unusable.
+##@deprecated: Use the new prop class, it supports the new component, trigger system :)
+class_name Classic_Props
+
 extends Node3D
 
 @export var ID :int = 1
@@ -11,10 +15,8 @@ extends Node3D
 @onready var timer :Timer = $Damage_Timer
 
 var object_properties :Array
-var state = ItemData.states
 
 @export var attribute :bool = false
-@export var states :Dictionary[ItemData.states,Variant] = {}
 @export var max_speed :float = 60.0
 
 var distance_to_player :float = 0.0
@@ -22,6 +24,7 @@ var previous_velocity :Vector3 = Vector3.ZERO
 var previous_position :Vector3 = Vector3.ZERO
 var true_velocity :Vector3 = Vector3.ZERO 
 
+var can_use :bool = false
 var grabbable :bool = true
 var can_play_audio :bool = true
 var velocity_check :bool = true
@@ -36,7 +39,7 @@ func _physics_process(delta: float) -> void:
 	if onscreen.is_on_screen():
 		distance_to_player = (body.global_position - Playerstats.player.global_position).length()
 		if distance_to_player < 50:
-			item_process()
+			#item_process()
 			limit_speed()
 			previous_velocity = body.linear_velocity
 			body.can_sleep = false
@@ -59,12 +62,12 @@ func _physics_process(delta: float) -> void:
 		model.visible = false
 	
 	
-	if object_properties.has(ItemData.properties.TV):
+	if object_properties.has(ItemData.Properties.TV):
 		$VideoStreamPlayer.volume_db = -10 - distance_to_player/1.5
-		if states.get(false) and not $VideoStreamPlayer.is_playing():
+		if attribute and not $VideoStreamPlayer.is_playing():
 			$VideoStreamPlayer.play()
 			
-	if object_properties.has(ItemData.properties.SPEAKER):
+	if object_properties.has(ItemData.Properties.SPEAKER):
 		if attribute and not $Body/Audio_Player.playing:
 			$Body/Audio_Player.play()
 	
@@ -76,102 +79,102 @@ func _physics_process(delta: float) -> void:
 	#	print("linear: " + str(body.linear_velocity))
 	#	print("true " + str(true_velocity))
 	
-func item_process() -> void:
-	var properties := ItemData.properties
-	
-	for property in object_properties:
-		if property == properties.AIM:
-			if (Input.is_action_pressed("Right_Click") or Input.is_action_pressed("Alt")) and Playerstats.object_held == body:
-				Playerstats.player.movement_state = Playerstats.player.movement_states.AIMING
-				
-		if property == properties.TV:
-			if attribute:
-				$Body/Model/Screen.visible = true
-				var video_texture :Texture2D = $VideoStreamPlayer.get_video_texture()
-				var new_texture = StandardMaterial3D.new()
-				new_texture.albedo_texture = video_texture
-				$Body/Model/Screen.material_override = new_texture
-			else:
-				$Body/Model/Screen.visible = false
-				
-		if property == properties.SPEAKER:
-			if attribute:
-				$Body/Light.light_color = Color(0.092, 0.553, 0.0)
-			else:
-				$Body/Light.light_color = Color(0.859, 0.0, 0.0)
-				
-		if property == properties.PAINTING:
-			var raycast :RayCast3D = $Body/Wall_Check
-
-			if raycast.is_colliding() and Playerstats.object_held != body and not attribute:
-				var normal :Vector3 = raycast.get_collision_normal()
-				var is_vertical :bool = abs(normal.dot(Vector3.UP)) > 0.99
-#				var forward :Vector3 = -normal.normalized()
-				
-				if not is_vertical:
-					attribute = true
-					body.freeze = true
-					true_velocity = Vector3.ZERO
-					body.linear_velocity = Vector3.ZERO
-					previous_position = global_position
-					
-					body.look_at(body.global_position + normal,Vector3.UP)
-				
-			elif not raycast.is_colliding() and Playerstats.object_held != body:
-				attribute = false
-				body.freeze = false
-			
-			body.scale = Vector3.ONE
-			
-func item_use():
-	var held_properties :Array = Playerstats.object_properties
-	var properties := ItemData.properties
-	
-	for property in held_properties:
-		if property == properties.ID_UPDATE:
-			ID += 1
-			Playerstats.object_ID += 1
-			set_props()
-		
-		if property == properties.HEAL:
-			var value :float = ItemData.itemdata[ID]["Value"]
-			ChangeInHealthManager.handle(Playerstats.player,ChangeInHealthManager.TYPES.GENERAL_HEAL,value)
-			
-		if property == properties.DELETE:
-			Playerstats.object_held = null
-			Playerstats.object_mass = 0.0
-			Playerstats.object_ID = 0
-			queue_free()
-			
-		if property == properties.SHOOT:
-			if $Shoot_Cooldown.is_stopped() and Playerstats.player.movement_state != Playerstats.player.movement_states.NORMAL:
-				attribute = false
-				$Shoot_Cooldown.start(ItemData.itemdata[ID]["Interval"])
-				var target_position = Playerstats.player.find_raycast_hit_point()
-				if not target_position is Array:
-					target_position = [Vector3.ZERO,Vector3.ZERO]
-				Playerstats.player.shoot(target_position)
-				await $Shoot_Cooldown.timeout
-				attribute = true
-				
-		if property == properties.TV:
-			$VideoStreamPlayer.stream = load(ItemData.itemdata[ID]["Video"])
-			if attribute == false:
-				$Body/Model/Screen.visible = true
-				attribute = true
-			else:
-				$Body/Model/Screen.visible = false
-				attribute = false
-		
-		if property == properties.SPEAKER:
-			$Body/Audio_Player.stream = load(ItemData.itemdata[ID]["Audio"])
-			if attribute == false:
-				attribute = true
-				$Body/Light.light_color = Color(0.092, 0.553, 0.0)
-			else:
-				attribute = false
-				$Body/Light.light_color = Color(0.859, 0.0, 0.0)
-				
+#func item_process() -> void:
+	#var properties := ItemData.Properties
+	#
+	#for property in object_properties:
+		##if property == properties.AIM:
+			##if (Input.is_action_pressed("Right_Click") or Input.is_action_pressed("Alt")) and Playerstats.object_held == body:
+				##Playerstats.player.movement_state = Playerstats.player.movement_states.AIMING
+				#
+		#if property == properties.TV:
+			#if attribute:
+				#$Body/Model/Screen.visible = true
+				#var video_texture :Texture2D = $VideoStreamPlayer.get_video_texture()
+				#var new_texture = StandardMaterial3D.new()
+				#new_texture.albedo_texture = video_texture
+				#$Body/Model/Screen.material_override = new_texture
+			#else:
+				#$Body/Model/Screen.visible = false
+				#
+		#if property == properties.SPEAKER:
+			#if attribute:
+				#$Body/Light.light_color = Color(0.092, 0.553, 0.0)
+			#else:
+				#$Body/Light.light_color = Color(0.859, 0.0, 0.0)
+				#
+		#if property == properties.PAINTING:
+			#var raycast :RayCast3D = $Body/Wall_Check
+#
+			#if raycast.is_colliding() and Playerstats.object_held != body and not attribute:
+				#var normal :Vector3 = raycast.get_collision_normal()
+				#var is_vertical :bool = abs(normal.dot(Vector3.UP)) > 0.99
+##				var forward :Vector3 = -normal.normalized()
+				#
+				#if not is_vertical:
+					#attribute = true
+					#body.freeze = true
+					#true_velocity = Vector3.ZERO
+					#body.linear_velocity = Vector3.ZERO
+					#previous_position = global_position
+					#
+					#body.look_at(body.global_position + normal,Vector3.UP)
+				#
+			#elif not raycast.is_colliding() and Playerstats.object_held != body:
+				#attribute = false
+				#body.freeze = false
+			#
+			#body.scale = Vector3.ONE
+			#
+#func item_use():
+	#var held_properties :Array = Playerstats.object_properties
+	#var properties := ItemData.Properties
+	#
+	#for property in held_properties:
+		#if property == properties.ID_UPDATE:
+			#ID += 1
+			#Playerstats.object_ID += 1
+			#set_props()
+		#
+		#if property == properties.HEAL:
+			#var value :float = ItemData.itemdata[ID]["Value"]
+			#ChangeInHealthManager.handle(Playerstats.player,ChangeInHealthManager.TYPES.GENERAL_HEAL,value)
+			#
+		#if property == properties.DELETE:
+			#Playerstats.object_held = null
+			#Playerstats.object_mass = 0.0
+			#Playerstats.object_ID = 0
+			#queue_free()
+			#
+		#if property == properties.SHOOT:
+			#if $Shoot_Cooldown.is_stopped() and Playerstats.player.movement_state != Playerstats.player.movement_states.NORMAL:
+				#attribute = false
+				#$Shoot_Cooldown.start(ItemData.itemdata[ID]["Interval"])
+				#var target_position = Playerstats.player.find_raycast_hit_point()
+				#if not target_position is Array:
+					#target_position = [Vector3.ZERO,Vector3.ZERO]
+				#Playerstats.player.shoot(target_position)
+				#await $Shoot_Cooldown.timeout
+				#attribute = true
+				#
+		#if property == properties.TV:
+			#$VideoStreamPlayer.stream = load(ItemData.itemdata[ID]["Video"])
+			#if attribute == false:
+				#$Body/Model/Screen.visible = true
+				#attribute = true
+			#else:
+				#$Body/Model/Screen.visible = false
+				#attribute = false
+		#
+		#if property == properties.SPEAKER:
+			#$Body/Audio_Player.stream = load(ItemData.itemdata[ID]["Audio"])
+			#if attribute == false:
+				#attribute = true
+				#$Body/Light.light_color = Color(0.092, 0.553, 0.0)
+			#else:
+				#attribute = false
+				#$Body/Light.light_color = Color(0.859, 0.0, 0.0)
+				#
 			
 func hold() -> void:
 	if Playerstats.object_held == body:
@@ -233,9 +236,9 @@ func set_props() -> void:
 	outline.mesh = load(data["Outline"])
 	if data.has("Collision"):
 		collision.shape = load(data["Collision"])
-	if object_properties.has(ItemData.properties.TV):
+	if object_properties.has(ItemData.Properties.TV):
 		$VideoStreamPlayer.stream = load(ItemData.itemdata[ID]["Video"])
-	if object_properties.has(ItemData.properties.SPEAKER):
+	if object_properties.has(ItemData.Properties.SPEAKER):
 		$Body/Audio_Player.stream = load(ItemData.itemdata[ID]["Audio"])
 
 func limit_speed() -> void:
@@ -263,7 +266,7 @@ func play_sound(volume :float) -> void:
 	if can_play_audio:
 		can_play_audio = false
 		var material_type = ItemData.itemdata[ID]["Material"]
-		var audios :Array = ItemData.Audio_bank[material_type]
+		var audios :Array = ItemData.Audio_Bank[material_type]
 		var audio_file :StringName = audios[randi_range(0,audios.size() - 1)]
 		SoundManager.create_sound(audio_file,min(volume,0),min(randf_range(0.75,1.25) + (volume + 12)/60,1.5),2,body.global_position)
 		await get_tree().create_timer(0.1,false,true,false).timeout

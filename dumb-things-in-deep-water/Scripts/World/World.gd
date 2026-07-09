@@ -4,6 +4,9 @@ extends Node
 @onready var shader :ShaderMaterial = $SubViewportContainer/SubViewport/ColorRect.material
 @onready var HUD :Control = $HUD
 
+@onready var props :Node3D = $SubViewportContainer/SubViewport/Props
+var item_resource :Array[ItemResource] = []
+
 var time_in_level :float = 0.0
 
 func _ready() -> void:
@@ -16,8 +19,8 @@ func _physics_process(delta: float) -> void:
 	get_tree().call_group("Enemy", "update_target_location", player.global_position)
 	check_below_map()
 	time_in_level += delta
-	shader.set_shader_parameter("time",time_in_level)
 	if Playerstats.allow_water_effects:
+		shader.set_shader_parameter("time",time_in_level)
 		shader.set_shader_parameter("wave_amplitude",0.003)
 	else:
 		shader.set_shader_parameter("wave_amplitude",0)
@@ -39,6 +42,7 @@ func check_below_map() -> void:
 			object.linear_velocity = Vector3.ZERO
 			object.get_parent().true_velocity = Vector3.ZERO
 			object.get_parent().previous_position = object.global_position
+			
 
 func _on_timer_timeout() -> void:
 	$HUD.format_time()

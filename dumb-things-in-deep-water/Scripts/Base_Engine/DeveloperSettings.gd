@@ -27,14 +27,14 @@ func _ready() -> void:
 ##[br]Important to note that the types are Log_Types.INFO, Log_Types.WARNING, 
 ##[br]Log_Types.ERROR, and Log_Types.CUSTOM, these are purely for visual colour coding
 ##[br]and the custom type means that you can manually define a colour using the third parameter.
-func add_log(text: String = "Input", type :Log_Types = Log_Types.INFO, colour :Color = Color(1,1,1,1)) -> void:
+func add_log(text :Variant = "Text Output", type :Log_Types = Log_Types.INFO, colour :Color = Color(1,1,1,1)) -> void:
 	if type == Log_Types.INFO:
 		colour = Color(1,1,1,1)
 	if type == Log_Types.WARNING:
 		colour = Color(0.847, 0.635, 0.0, 1.0)
 	if type == Log_Types.ERROR:
 		colour = Color(0.868, 0.0, 0.0, 1.0)
-	logs.append([Time.get_time_string_from_system() ,text ,type ,colour])
+	logs.append([Time.get_time_string_from_system() ,str(text) ,type ,colour])
 	if logs.size() > max_logs:
 		logs.pop_front()
 	emit_signal("log_updated", [Time.get_time_string_from_system() ,text ,type ,colour])

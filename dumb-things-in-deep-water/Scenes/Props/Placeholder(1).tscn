@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://culqao60nt1mv"]
 
-[ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/Basic_Props.gd" id="1_k831n"]
+[ext_resource type="Script" uid="uid://cjpuuqvy08hr2" path="res://Scripts/World/Props.gd" id="1_k831n"]
 [ext_resource type="ArrayMesh" uid="uid://bskdml7jwhjr5" path="res://Assets/Props_Models_And_Collisions/1_Placeholder_Model.tres" id="1_w7fn4"]
 [ext_resource type="ArrayMesh" uid="uid://bv6eohy1lbs1e" path="res://Assets/Props_Models_And_Collisions/1_Placeholder_Outline.tres" id="3_l3b44"]
 
@@ -19,8 +19,9 @@ points = PackedVector3Array(1, 1, 1, 1, 1, -1, -1, 1, 1, 1, -1, 1, 1, -1, -1, -1
 
 [node name="Box_Prop" type="Node3D" unique_id=1725321482 groups=["Prop"]]
 script = ExtResource("1_k831n")
-pick_up_position = Vector3(0, 0, -0.6)
-pick_up_rotation = Vector3(8, 2, 3)
+pick_up_position = Vector3(0, 0, -0.5)
+should_query = true
+should_tick = true
 
 [node name="Damage_Timer" type="Timer" parent="." unique_id=26426106]
 wait_time = 0.25

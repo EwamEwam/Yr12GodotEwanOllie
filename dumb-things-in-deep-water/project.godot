@@ -15,17 +15,24 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Dumb Things In Deep Water"
+config/description="Build Number 81"
+config/version="0.0.9"
 run/main_scene="uid://dvgnrr5dkb1gx"
-config/features=PackedStringArray("4.6", "Forward Plus")
+config/use_custom_user_dir=true
+config/custom_user_dir_name="Game_Test_Name"
+config/features=PackedStringArray("4.7", "Forward Plus")
 
 [autoload]
 
 Playerstats="*res://Scripts/Base_Engine/Playerstats.gd"
-ItemData="*res://Scripts/Base_Engine/ItemData.gd"
+ItemData="*res://Scripts/Object_Data/ItemData.gd"
 SoundManager="*res://Scripts/Base_Engine/Sound_Manager.gd"
 ChangeInHealthManager="*uid://difk68clilm31"
 SceneLoader="*uid://dmi86c3kx5mju"
 DeveloperSettings="*uid://drykepl2v443x"
+Inventory="*uid://b7edxnv36wb6q"
+EntityData="*uid://dp322jtf0mvip"
+SaveManager="*uid://d03i8sg3n0q57"
 
 [display]
 

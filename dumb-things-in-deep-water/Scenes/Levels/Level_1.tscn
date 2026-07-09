@@ -14,7 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://be7i40ywapi16" path="res://Scenes/Misc/Circular_Rock.tscn" id="16_cm0uy"]
 [ext_resource type="PackedScene" uid="uid://c1b3508xrxbuh" path="res://Scenes/Misc/Small_Rock.tscn" id="17_ja4xh"]
 [ext_resource type="PackedScene" uid="uid://c6pye77owufbe" path="res://Scenes/Misc/Tall_Rock.tscn" id="18_27axl"]
-[ext_resource type="PackedScene" uid="uid://cie5fcfoubro0" path="res://Scenes/Level/portal.tscn" id="18_xnfoo"]
+[ext_resource type="PackedScene" uid="uid://cie5fcfoubro0" path="res://Scenes/Objects/portal.tscn" id="18_xnfoo"]
 [ext_resource type="Material" uid="uid://dlmex6cutmye0" path="res://Scripts/Base_Engine/Rendering/World_Material.tres" id="19_im6bh"]
 [ext_resource type="PackedScene" uid="uid://4elvwkl063ne" path="res://Scenes/Characters/enemy.tscn" id="20_sp4y7"]
 [ext_resource type="PackedScene" uid="uid://dq7an65rwyu3g" path="res://Scenes/Props/Package(20).tscn" id="20_w6w6k"]

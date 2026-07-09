@@ -1,6 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://e70gei4dw00j"]
+[gd_scene format=3 uid="uid://e70gei4dw00j"]
 
-[ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/Basic_Props.gd" id="1_vwtti"]
+[ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/OLD_PROPS_SCRIPT(DO NOT USE).gd" id="1_vwtti"]
 [ext_resource type="ArrayMesh" uid="uid://cbothcjhhp3oy" path="res://Assets/Props_Models_And_Collisions/10_Speaker_Carry_on.tres" id="2_vwtti"]
 [ext_resource type="ArrayMesh" uid="uid://6we7qo2yo4jd" path="res://Assets/Props_Models_And_Collisions/10_Speaker_Carry_on_Outline.tres" id="3_fipsq"]
 

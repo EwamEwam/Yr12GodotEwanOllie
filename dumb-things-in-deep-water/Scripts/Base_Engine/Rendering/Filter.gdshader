@@ -1,4 +1,5 @@
-shader_type canvas_item;uniform float num_colors : hint_range(2.0, 64.0) = 16.0;
+shader_type canvas_item;
+uniform float num_colors : hint_range(2.0, 64.0) = 16.0;
 uniform float dither_strength : hint_range(0.0, 1.0) = 0.5;
 uniform float time; // Time for wave animation
 uniform float wave_amplitude : hint_range(0.0, 0.1) = 0.02; // Strength of the wave distortion

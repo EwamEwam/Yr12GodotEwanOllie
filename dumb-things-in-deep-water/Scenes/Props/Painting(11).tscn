@@ -1,6 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://cik8qbnt34to7"]
+[gd_scene format=3 uid="uid://cik8qbnt34to7"]
 
-[ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/Basic_Props.gd" id="1_0jc0x"]
+[ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/OLD_PROPS_SCRIPT(DO NOT USE).gd" id="1_0jc0x"]
 [ext_resource type="ArrayMesh" uid="uid://df15ej8w18oro" path="res://Assets/Props_Models_And_Collisions/11_Painting.tres" id="2_48ad4"]
 [ext_resource type="ArrayMesh" uid="uid://birrfkg0cxqnt" path="res://Assets/Props_Models_And_Collisions/11_Painting_Outline.tres" id="3_ho72s"]
 

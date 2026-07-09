@@ -2,8 +2,9 @@ extends NinePatchRect
 
 @onready var timer :Timer = $Timer
 var tool_text :Array
-var types = ItemData.text_type
+var types = ItemData.Text_Type
 var position_of_text :Vector2 = Vector2(4,4)
+var text_boxes :Array[Object] = []
 
 func set_text(data :Array) -> void:
 	tool_text = data
@@ -36,6 +37,7 @@ func decode() -> void:
 				new_label.modulate = item[1]
 				new_label.text = item[2]
 				add_child(new_label)
+				text_boxes.append(new_label)
 				position_of_text.x = max(new_label.size.x,position_of_text.x)
 				position_of_text.y = max(new_label.size.y,position_of_text.y)
 			types.TIMER:
@@ -51,6 +53,7 @@ func decode() -> void:
 				new_label.modulate = item[1]
 				var text_buffer :String = ""
 				add_child(new_label)
+				text_boxes.append(new_label)
 				for character in item[2]:
 					text_buffer += character
 					new_label.text = text_buffer
@@ -64,3 +67,20 @@ func decode() -> void:
 				for child in get_children():
 					child.queue_free()
 				position_of_text = Vector2(4,4)
+				text_boxes.clear()
+			types.EDIT:
+				if typeof(item[3]) == TYPE_INT:
+					if item[3]-1 <= text_boxes.size():
+						text_boxes[item[3]].text = item[2]
+						text_boxes[item[3]].modulate = item[1]
+					else:DeveloperSettings.add_log("Invalid index accessed for text_boxes, max index is {index}".format({"index": text_boxes.size()-1}),DeveloperSettings.Log_Types.ERROR)	
+				else:
+					DeveloperSettings.add_log("Invalid type used for index, use an Integer", DeveloperSettings.Log_Types.ERROR)
+				var Highest_size :Vector2 = Vector2(4,4)
+				for text :Label in text_boxes:
+					if text.size.x > Highest_size.x:
+						Highest_size.x = text.size.x
+					if text.size.y > Highest_size.y:
+						Highest_size.y = text.size.y
+				position_of_text = Highest_size
+				DeveloperSettings.add_log(str(Highest_size))

@@ -1,6 +1,6 @@
-[gd_scene load_steps=10 format=4 uid="uid://byqcnhtnfj3ff"]
+[gd_scene format=4 uid="uid://byqcnhtnfj3ff"]
 
-[ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/Basic_Props.gd" id="1_exoen"]
+[ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/OLD_PROPS_SCRIPT(DO NOT USE).gd" id="1_exoen"]
 [ext_resource type="Texture2D" uid="uid://l3ctgmaqa2ih" path="res://Assets/Textures/Cans_Beans_Half_Half_Full_can_Bean.png" id="2_tyjbg"]
 [ext_resource type="ArrayMesh" uid="uid://d37j2l5rjkbef" path="res://Assets/Props_Models_And_Collisions/5_Can_Half_Full_Outline.tres" id="3_u7rtw"]
 [ext_resource type="Shape3D" uid="uid://c6bs6nkaip2oc" path="res://Assets/Props_Models_And_Collisions/4_Can_Full_Collision.tres" id="4_q3woe"]

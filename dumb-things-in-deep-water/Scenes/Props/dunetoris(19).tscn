@@ -1,6 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://bo4knc7skkwdo"]
+[gd_scene format=3 uid="uid://bo4knc7skkwdo"]
 
-[ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/Basic_Props.gd" id="1_7uk7y"]
+[ext_resource type="Script" uid="uid://cg6omn6x5mynt" path="res://Scripts/World/OLD_PROPS_SCRIPT(DO NOT USE).gd" id="1_7uk7y"]
 [ext_resource type="ArrayMesh" uid="uid://1xwcctc2h07w" path="res://Assets/Props_Models_And_Collisions/19_dunetoris.tres" id="2_7uk7y"]
 [ext_resource type="ArrayMesh" uid="uid://dgklj86ftomok" path="res://Assets/Props_Models_And_Collisions/19_dunetoris_outline.tres" id="3_2nfdv"]
 

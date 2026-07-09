@@ -43,7 +43,7 @@ func _on_leave_game_pressed() -> void:
 		$Confirmation_Box.visible = false
 		
 func _notification(what: int) -> void:
-	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and not opened and get_tree().paused == false:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and not opened and get_tree().paused == false and Playerstats.pause_game_when_out_of_focus:
 		open_pause_menu()
 
 func _on_exit_stage_pressed() -> void:

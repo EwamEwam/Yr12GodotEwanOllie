@@ -5,6 +5,11 @@ extends Control
 @onready var throw_bar :ProgressBar = $Throw_Bar
 @onready var player :CharacterBody3D = $"../SubViewportContainer/SubViewport/Player"
 
+@onready var health_bar :TextureProgressBar = $CornerHUD/Health_Bar_Border/Health_Bar
+@onready var health_bar_border :TextureProgressBar = $CornerHUD/Health_Bar_Border
+@onready var health_bar_end :ColorRect = $CornerHUD/Bar_End
+@onready var health_bar_border_end :Sprite2D = $CornerHUD/Health_Bar_Border/Health_Bar_Border_End
+
 var level_time :int = 0
 var formatted_time :Vector2i = Vector2i(0,0)
 var alerts :Array[Node] = []
@@ -19,13 +24,20 @@ var heal_number_velocity :Array[Vector2] = []
 
 func _ready() -> void:
 	Playerstats.player = player
-	$Health_bar/Health_Bar.value = round_to_1_DP(Playerstats.health)
-	$Health_bar/HealthBarEnd.position.x = ((3.0/2.0) * Playerstats.max_health) + 141
-	$Health_bar/Health_Bar_Border.value = (Playerstats.max_health/2) + 19
-	$Health_bar/Bar_End.position.x = 138 + (3.0/2.0) * round_to_1_DP(Playerstats.health)
+	if Playerstats.max_health <= 300:
+		health_bar.value = round_to_1_DP(Playerstats.health)
+		health_bar_border_end.position.x = ((1.0/2.0) * Playerstats.max_health) + 19
+		health_bar_border.value = (Playerstats.max_health/2) + 19
+		health_bar_end.position.x = 138 + (3.0/2.0) * round_to_1_DP(Playerstats.health)
+	else:
+		health_bar.max_value = Playerstats.max_health
+		health_bar.value = Playerstats.health
+		health_bar_border.value = 169
+		health_bar_end.position.x = 588
 
 func _process(delta: float) -> void:
-	$Health_bar/Flux_metre.frame = Playerstats.stamina
+	health_bar.value = round_to_1_DP(Playerstats.health)
+	$CornerHUD/Flux_metre.frame = Playerstats.stamina
 	reticle.modulate.g = 1
 	reticle.modulate.b = 1
 	reticle.modulate.a = 0.2
@@ -65,88 +77,96 @@ func _process(delta: float) -> void:
 	$Item_Description/Line.size.x = round($Item_Description/Holding.size.x /(4.0/3.0)) + 3
 	$Item_Description/TextEnder.position.x = -260 + ($Item_Description/Line.size.x * 2)
 		
-	$Health_bar/Hp.text = str(int(ceil(Playerstats.health))) + "/" + str(int(Playerstats.max_health))
+	$CornerHUD/Hp.text = str(int(ceil(Playerstats.health))) + "/" + str(int(Playerstats.max_health))
 	
-	@warning_ignore("integer_division")
-	$Health_bar/Health_Bar_Border.value = (Playerstats.max_health/2) + 19
-	@warning_ignore("integer_division")
-	$Health_bar/HealthBarEnd.position.x = ((3.0/2.0) * Playerstats.max_health) + 141
+	if Playerstats.max_health <= 300:
+		@warning_ignore("integer_division")
+		health_bar_border.value = (Playerstats.max_health/2) + 19
+		@warning_ignore("integer_division")
+		health_bar_border_end.position.x = (Playerstats.max_health/2) + 19
+		health_bar_end.position.x = 138 + (3.0/2.0) * round_to_1_DP(Playerstats.health)
+	else:
+		@warning_ignore("integer_division")
+		health_bar_border.value = 169
+		@warning_ignore("integer_division")
+		health_bar_border_end.position.x = 169
+		health_bar_end.position.x = 138 + 450 * (Playerstats.health/Playerstats.max_health)
 	
-	set_reticle_size()
+	#set_reticle_size()
 	set_red_border_opacity(delta)
 	process_damage_and_healing_numbers(delta)
 	
-	if Playerstats.object_held != null:
-		if Playerstats.object_properties.has(ItemData.properties.AIM) and Playerstats.player.movement_state == Playerstats.player.movement_states.AIMING and Playerstats.object_held.get_parent().attribute:
-			if Playerstats.player.check_raycast_collider():
-				reticle.modulate.g = 0
-				reticle.modulate.b = 0
+	#if Playerstats.object_held != null:
+	#	if Playerstats.object_properties.has(ItemData.Properties.AIM) and Playerstats.player.movement_state == Playerstats.player.movement_states.AIMING and Playerstats.object_held.get_parent().attribute:
+	#		if Playerstats.player.check_raycast_collider():
+	#			reticle.modulate.g = 0
+	#			reticle.modulate.b = 0
 			
 	for text in alerts:
 		text.position.y = 82 + (25*alerts.find(text))
 		
-	$Ammo.visible = false
-	set_ammo()
+	#$Ammo.visible = false
+	#set_ammo()
 		
 	set_prompts()
 
-##UNUSED FUNCTION WILL CRASH WHEN RUN,
-##[br]Orginally used for player body parts GUI, but they do not exist anymore
-## @deprecated: For changes in health, use health_bar_animation() instead
-func shake_part(body_part :String) -> void:
-	var part :Sprite2D
-	var Body_part_hp :float
-	Body_part_hp = clamp(Body_part_hp,0,Playerstats.max_health)
-	match body_part:
-		"Head":
-			part = $Health_bar/BodyPartHead
-			Body_part_hp = Playerstats.head_hp
-		"Torso":
-			part = $Health_bar/BodyPartTorso
-			Body_part_hp = Playerstats.torso_hp
-		"Legs":
-			part = $Health_bar/BodyPartLegs
-			Body_part_hp = Playerstats.legs_hp
-		"Arms":
-			part = $Health_bar/BodyPartArms
-			Body_part_hp = Playerstats.arms_hp
-			
-	var tween :Tween = get_tree().create_tween()
-	var color: float = (Playerstats.max_health - Body_part_hp)/Playerstats.max_health
-	part.modulate = Color.from_hsv(0,color,1,1)
-	tween.tween_property(part, "scale", Vector2(1.75,3.5) , 0.025).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	await tween.finished
-	var tween2 :Tween = get_tree().create_tween()
-	tween2.tween_property(part, "scale", Vector2(3.5,1.75) , 0.04).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
-	await tween2.finished
-	var tween3 :Tween = get_tree().create_tween()
-	tween3.tween_property(part, "scale", Vector2(3,3) , 0.025).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+#UNUSED FUNCTION WILL CRASH WHEN RUN,
+#Orginally used for player body parts GUI, but they do not exist anymore
+#func shake_part(body_part :String) -> void:
+	#var part :Sprite2D
+	#var Body_part_hp :float
+	#Body_part_hp = clamp(Body_part_hp,0,Playerstats.max_health)
+	#match body_part:
+		#"Head":
+			#part = $Health_bar/BodyPartHead
+			#Body_part_hp = Playerstats.head_hp
+		#"Torso":
+			#part = $Health_bar/BodyPartTorso
+			#Body_part_hp = Playerstats.torso_hp
+		#"Legs":
+			#part = $Health_bar/BodyPartLegs
+			#Body_part_hp = Playerstats.legs_hp
+		#"Arms":
+			#part = $Health_bar/BodyPartArms
+			#Body_part_hp = Playerstats.arms_hp
+			#
+	#var tween :Tween = get_tree().create_tween()
+	#var color: float = (Playerstats.max_health - Body_part_hp)/Playerstats.max_health
+	#part.modulate = Color.from_hsv(0,color,1,1)
+	#tween.tween_property(part, "scale", Vector2(1.75,3.5) , 0.025).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	#await tween.finished
+	#var tween2 :Tween = get_tree().create_tween()
+	#tween2.tween_property(part, "scale", Vector2(3.5,1.75) , 0.04).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	#await tween2.finished
+	#var tween3 :Tween = get_tree().create_tween()
+	#tween3.tween_property(part, "scale", Vector2(3,3) , 0.025).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 
 ##Runs when the player's health bar is updated,
 ##[br]Requires the health before the change as a parameter
 func health_bar_animation(before :float) -> void:
-	#var tween :Tween = get_tree().create_tween()
-	var tween2 :Tween = get_tree().create_tween()
-	var texture :ColorRect = ColorRect.new()
-	#tween.tween_property($Health_bar/Health_Bar, "value", round_to_1_DP(Playerstats.health), abs($Health_bar/Health_Bar.value-Playerstats.health)/200).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	#tween.parallel().tween_property($Health_bar/Bar_End, "position", Vector2(138 + (3.0/2.0) * round_to_1_DP(Playerstats.health),441), abs($Health_bar/Health_Bar.value-Playerstats.health)/200).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	texture.position = Vector2(141,441)
-	texture.color = Color(1,1,1,1)
-	texture.size = Vector2(ceil(3.0/2.0*before),18)
-	texture.z_index = -1
-	$Health_bar.add_child(texture)
-	tween2.tween_property(texture, "modulate", Color(1,1,1,0), 0.75).set_trans(Tween.TRANS_LINEAR)
-	#await tween.finished
-	$Health_bar/Health_Bar.value = round_to_1_DP(Playerstats.health)
-	$Health_bar/Bar_End.position.x = 138 + (3.0/2.0) * round_to_1_DP(Playerstats.health)
-	await tween2.finished
-	texture.queue_free()
+	if Playerstats.max_health <= 300:
+		#var tween :Tween = get_tree().create_tween()
+		var tween2 :Tween = get_tree().create_tween()
+		var texture :ColorRect = ColorRect.new()
+		#tween.tween_property($Health_bar/Health_Bar, "value", round_to_1_DP(Playerstats.health), abs($Health_bar/Health_Bar.value-Playerstats.health)/200).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		#tween.parallel().tween_property($Health_bar/Bar_End, "position", Vector2(138 + (3.0/2.0) * round_to_1_DP(Playerstats.health),441), abs($Health_bar/Health_Bar.value-Playerstats.health)/200).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		texture.position = Vector2(141,441)
+		texture.color = Color(0.831, 0.613, 0.613, 1.0)
+		texture.size = Vector2(round((3.0/2.0)*before),18)
+		texture.z_index = -1
+		$CornerHUD.add_child(texture)
+		tween2.tween_property(texture, "modulate", Color(1,1,1,0), 0.75).set_trans(Tween.TRANS_LINEAR)
+		#await tween.finished
+		health_bar.value = round_to_1_DP(Playerstats.health)
+		health_bar_end.position.x = 138 + (3.0/2.0) * round_to_1_DP(Playerstats.health)
+		await tween2.finished
+		texture.queue_free()
 	
 ##Instantly update the player's health bar
 func update_health_bar() -> void:
-	$Health_bar/Health_Bar.value = round_to_1_DP(Playerstats.health)
-	$Health_bar/Bar_End.position.x = 138 + (3.0/2.0) * round_to_1_DP(Playerstats.health)
-	print($Health_bar/Bar_End.position.x)
+	if Playerstats.max_health <= 300:
+		health_bar.value = round_to_1_DP(Playerstats.health)
+		health_bar_end.position.x = 138 + (3.0/2.0) * round_to_1_DP(Playerstats.health)
 	
 ##Formats the time in the level_time variable into hours and seconds
 ##[br]then displays it in the GUI
@@ -209,7 +229,7 @@ func set_prompts() -> void:
 	$Item_Description/Prompts/Toggle.visible = false
 	
 	var prompts :Array = Playerstats.object_prompts
-	var prompt_type := ItemData.prompts
+	var prompt_type = ItemData.Prompts
 	if Playerstats.show_prompts:
 		$Item_Description/Prompts/InventoryIcon.visible = true
 		if Playerstats.object_held != null:
@@ -227,24 +247,24 @@ func set_prompts() -> void:
 				if prompt == prompt_type.TOGGLE:
 					$Item_Description/Prompts/Toggle.visible = true
 					
-			if not Playerstats.object_properties.has(ItemData.properties.CANT_DROP_THROW):
-					$Item_Description/Prompts/Drop.visible = true
-					$Item_Description/Prompts/Throw.visible = true
+#			if not Playerstats.object_properties.has(ItemData.Properties.CANT_DROP_THROW):
+#					$Item_Description/Prompts/Drop.visible = true
+#					$Item_Description/Prompts/Throw.visible = true
 			
 		elif Playerstats.object_detected != null:
 			if Playerstats.object_detected.get_parent().grabbable:
 				$Item_Description/Prompts/PickUp.visible = true
 				
-func set_ammo() -> void:
-	if Playerstats.object_properties.has(ItemData.properties.SHOOT):
-		$Ammo.visible = true
-		var ammo1 :int
-		var ammo2 :int
-		if Playerstats.object_properties.has(ItemData.properties.PISTOL):
-			ammo1 = Playerstats.ammo["Pistol"][0]
-			ammo2 = Playerstats.ammo["Pistol"][1]
-		$Ammo/Ammo.text = str(ammo1)
-		$Ammo/Ammo2.text = str(ammo2)
+#func set_ammo() -> void:
+	#if Playerstats.object_properties.has(ItemData.Properties.SHOOT):
+		#$Ammo.visible = true
+		#var ammo1 :int
+		#var ammo2 :int
+		#if Playerstats.object_properties.has(ItemData.Properties.PISTOL):
+			#ammo1 = Playerstats.ammo["Pistol"][0]
+			#ammo2 = Playerstats.ammo["Pistol"][1]
+		#$Ammo/Ammo.text = str(ammo1)
+		#$Ammo/Ammo2.text = str(ammo2)
 	
 func fire() -> void:
 	var animation_name :String = str(Playerstats.object_ID)+"_Fire"
@@ -254,18 +274,18 @@ func fire() -> void:
 	new_bullet.position = Vector2(-50,-15)
 	$Ammo.add_child(new_bullet)
 
-func set_reticle_size() -> void:
-	if Playerstats.object_properties.has(ItemData.properties.SHOOT):
-		reticle_gun.visible = true
-		if Playerstats.object_held.get_parent().attribute:
-			reticle_gun.modulate.a = 0.5
-		else:
-			reticle_gun.modulate.a = 0.1
+#func set_reticle_size() -> void:
+	#if Playerstats.object_properties.has(ItemData.Properties.SHOOT):
+	#	reticle_gun.visible = true
+	#	if Playerstats.object_held.get_parent().attribute:
+	#		reticle_gun.modulate.a = 0.5
+	#	else:
+	#		reticle_gun.modulate.a = 0.1
 
-		var scale_factor :float = abs(2.5 * player.camera_jerk) + 1
-		reticle_gun.scale = scale_factor * Vector2(1,1)
-	else:
-		reticle_gun.visible = false
+	#	var scale_factor :float = abs(2.5 * player.camera_jerk) + 1
+	#	reticle_gun.scale = scale_factor * Vector2(1,1)
+	#else:
+	#	reticle_gun.visible = false
 
 func round_to_1_DP(number :float = 0) -> float:
 	return (round(10*number)/10)
@@ -291,7 +311,7 @@ func create_number(type :String = "Damage", amt :int = 0):
 	new_number.label_settings = label_setting
 	new_number.scale = Vector2(2,2)
 	new_number.text = str(amt)
-	new_number.position = Vector2($Health_bar/Bar_End.position.x-5, 430)
+	new_number.position = Vector2(health_bar_end.global_position.x-5, 430)
 	var font
 	if type == "Damage":
 		font = load("res://Assets/Sprites/Red_Numbers.png")
@@ -302,7 +322,7 @@ func create_number(type :String = "Damage", amt :int = 0):
 		heal_number_velocity.append(Vector2(0,-5))
 		heal_numbers.append(new_number)
 	label_setting.font = font
-	$Health_bar.add_child(new_number)
+	$CornerHUD.add_child(new_number)
 	
 func process_damage_and_healing_numbers(delta :float) -> void:
 	for i in range(damage_numbers.size()):
